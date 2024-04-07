@@ -5,11 +5,11 @@ import commonNavItems from './commonUserNavBarItems.ts';
 import adminNavItens from './adminUserNavBarItems.ts';
 import './Navbar.css';
 import { NavBarLink } from '../DTOs/NavBarLink';
+import { Navbar, Nav, Container, Image } from 'react-bootstrap';
 
-const Navbar = () => {
-
-  const [isAdmin, setIsAdmin] = useState<boolean>();
-  const [navItems, setNavItems] = useState<NavBarLink[]>();
+function MenuNavbar() {
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [navItems, setNavItems] = useState<NavBarLink[]>(commonNavItems);
 
   useEffect(() => {
     setIsAdmin(true);
@@ -17,20 +17,23 @@ const Navbar = () => {
   }, [isAdmin])
 
   return (
-    <nav>
-        <div className='container nav_container'>
-          <a href="/" className='nav_logo'>
-              <img src={Logo} alt="Logo"/>
-          </a>
-          <ul className='nav_menu'>
-            {
-              navItems?.map(item => <li key={item.Id}><a style={{color: 'white', textDecoration: 'none'}} href={item.Link}>{item.Title}</a></li>)
-            }
-          </ul>
+    <Navbar expand="lg" className="">
+      <Container className='container nav_container'>
+        <Navbar.Brand href="/">
+          <Image src={Logo} alt="Logo" width="30" height="30" className="d-inline-block align-top" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+            {navItems.map(item => (
+              <Nav.Link key={item.Id} href={item.Link}>{item.Title}</Nav.Link>
+            ))}
+          </Nav>
           <button className="theme_icon"><MdOutlineShoppingCart/></button>
-        </div>
-    </nav>
-  )
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
 
-export default Navbar
+export default MenuNavbar;
