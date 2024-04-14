@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import { ProdutoComponent } from './Components/ProdutoComponent.tsx';
 import BasicButton from '../Components/Buttons/BasicButton/BasicButton.tsx';
 import FecharBotao from '../Components/Buttons/Fechar/Fechar.tsx';
+import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 
 const Home = () => {
 
@@ -47,6 +48,10 @@ const Home = () => {
         <p>Conteúdo do componente aqui</p>           
         <FecharBotao onClick={undefined} />         
       </div>
+      <div>
+      <SearchAppBar />
+      {/* Outro conteúdo da aplicação */}
+    </div>
     </div>
   )
 }
