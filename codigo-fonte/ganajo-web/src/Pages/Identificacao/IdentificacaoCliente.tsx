@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+/* import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import FormCadastro from './FormularioCadastroCliente.tsx';
@@ -149,4 +149,4 @@ const IdentificacaoCliente: React.FC = () => {
     );
 };
 
-export default IdentificacaoCliente;
+export default IdentificacaoCliente; */

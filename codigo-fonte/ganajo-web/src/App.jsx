@@ -7,7 +7,7 @@ import IdentificacaoCliente from './Pages/Identificacao/IdentificacaoCliente.tsx
 import BairrosdeEntrega from './Pages/BairrosDeEntrega/bairrosdeentrega.tsx';
 import MeusPedidos from './Pages/MeusPedidos/MeusPedidos.tsx';
 import Carrinho from './Pages/CarrinhoCompras/Carrinho.tsx';
-import FormLoginAdminComponent from './Pages/LoginAdmin/Components/LoginAdminComponent.tsx';
+import FormLoginAdminComponent from './Pages/Components/Restaurante/Admin/LoginAdminComponent.tsx';
 import Login from './Pages/LoginAdmin/LoginAdmin.tsx';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState();
 
   useEffect(() => {
-    setIsAdmin(true);
+    setIsAdmin(false);
   }, [])
 
   return (

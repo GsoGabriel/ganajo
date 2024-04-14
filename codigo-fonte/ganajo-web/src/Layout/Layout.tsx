@@ -1,5 +1,5 @@
 
-import Navbar from '../Navbar/Navbar.tsx';
+import Navbar from '../Pages/Components/Navbar/Navbar.tsx';
 import React, { ReactNode } from 'react';
 import './Layout.css'; 
 
