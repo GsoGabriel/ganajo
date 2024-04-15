@@ -5,6 +5,10 @@ import styles from './Home.module.scss';
 import { FaMotorcycle } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
 import { ProdutoComponent } from './Components/ProdutoComponent.tsx';
+import BasicButton from '../Components/Buttons/BasicButton/BasicButton.tsx';
+import FecharBotao from '../Components/Buttons/Fechar/Fechar.tsx';
+import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
+import ButtonShopping from '../Components/Buttons/Carrinho/ButtonCarrinho.tsx';
 
 const Home = () => {
 
@@ -40,6 +44,16 @@ const Home = () => {
           screenItens?.map(m => <div><ProdutoComponent Produto={m}/></div>)
         }
       </div>
+      <BasicButton value="Buscar"/>
+      <div>           
+        <p>Conteúdo do componente aqui</p>           
+        <FecharBotao onClick={undefined} />         
+      </div>
+      <div>
+      <SearchAppBar />
+      {/* Outro conteúdo da aplicação */}
+      <ButtonShopping onClick={undefined}/>
+    </div>
     </div>
   )
 }

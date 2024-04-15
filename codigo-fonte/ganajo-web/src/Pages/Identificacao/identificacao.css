@@ -1,9 +1,15 @@
 #telefoneHelpBlock {
-    grid-row-gap: 1em;
+    margin-top: 10px;
 }
 
 #tituloCadastro {
     display: grid;
+    justify-content: center;
+}
+
+#subTituloCadastro {
+    display: grid;
+    justify-content: center;
 }
 
 .box1 {

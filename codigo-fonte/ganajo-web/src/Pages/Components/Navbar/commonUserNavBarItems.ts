@@ -1,4 +1,4 @@
-import { NavBarLink } from '../DTOs/NavBarLink';
+import { NavBarLink } from '../../../DTOs/NavBarLink';
 
 const commonUserNavBarItems : NavBarLink[] = [
     {Id: 1, Link: '/', Title: 'Home'},

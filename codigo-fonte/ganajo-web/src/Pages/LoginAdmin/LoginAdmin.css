@@ -1,0 +1,52 @@
+.l-form-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 95vh;
+    background: #f4f4f4;
+  }
+  
+.l-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.form-control{
+    min-width: 20em !important;
+}
+
+.ganajo-title{
+    font-size: 3em;
+}
+
+.l-s-buttonEntrar{
+    padding-left: 5em !important;
+    padding-right: 5em !important;
+    background-color: rgb(198, 120, 12) !important;
+    border-color: rgb(198, 120, 12) !important;
+}
+
+.l-s-buttonEntrar:hover{
+    background-color: rgb(250, 164, 43) !important;
+    border-color: rgb(250, 164, 43) !important;
+    color: #FFF !important;
+}
+
+/* Efeitos */
+.error-message {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+  }
+  
+.error-message.show {
+    opacity: 1;
+}
+
+.error-message.leave {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}

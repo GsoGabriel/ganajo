@@ -1,0 +1,44 @@
+.bairro-card {
+  border: none;
+  background-color: #f8f9fa;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
+}
+
+.bairro-name {
+  font-size: 14px; 
+}
+
+.bairro-id {
+  font-size: 12px; 
+}
+
+.icon-container {
+  display: flex;
+}
+
+.icon {
+  margin-left: 10px;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: #6c757d;
+}
+
+.edit-icon:hover,
+.delete-icon:hover {
+  color: #dc3545;
+}

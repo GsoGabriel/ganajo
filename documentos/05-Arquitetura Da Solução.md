@@ -56,6 +56,8 @@ Table PedidoProduto {
   PedidoId integer
   ProdutoId integer
   Descricao string
+  Quantidade integer
+  ValorTotal integer
   EditadoPor datetime
   EditadoData datetime
 }
@@ -68,6 +70,7 @@ Table Produto {
   TempoPreparo timespan
   Valor float
   EnderecoImagem string
+  Categoria string
   UsuarioId integer
   EditadoPor datetime
   EditadoData datetime
