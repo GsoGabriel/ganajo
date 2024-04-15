@@ -7,18 +7,33 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import Logo from '../../../Assets/ganajo-logo.png';
+import ButtonClose from '../Buttons/Carrinho/ButtonCarrinho.tsx';
+import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+/* NavBarLink */
+import { NavBarLink } from '../../../DTOs/NavBarLink';
+import commonNavItems from './commonUserNavBarItems.ts';
+import adminNavItens from './adminUserNavBarItems.ts';
+import { useEffect, useState } from 'react';
+
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
+  const [navItems, setNavItems] = React.useState<NavBarLink[]>(commonNavItems);
+
+  useEffect(() => {
+    setIsAdmin(false);
+    setNavItems(isAdmin ? adminNavItens : commonNavItems);
+  }, [isAdmin]) 
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -36,10 +51,12 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className=''>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Link to="/">
+            <img src={Logo} alt="Logo" className="d-inline-block align-top"/>
+          </Link>
           <Typography
             variant="h6"
             noWrap
@@ -55,7 +72,6 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -87,9 +103,9 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {navItems.map(item => (
+                <MenuItem key={item.Id} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{item.Title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -111,16 +127,15 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {navItems.map(item => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={item.Id}
+                href={item.Link}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+              {item.Title}
               </Button>
             ))}
           </Box>
@@ -128,7 +143,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <ButtonClose onClick={undefined}/>
               </IconButton>
             </Tooltip>
             <Menu

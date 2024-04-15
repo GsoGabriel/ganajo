@@ -8,6 +8,7 @@ import { ProdutoComponent } from './Components/ProdutoComponent.tsx';
 import BasicButton from '../Components/Buttons/BasicButton/BasicButton.tsx';
 import FecharBotao from '../Components/Buttons/Fechar/Fechar.tsx';
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
+import ButtonShopping from '../Components/Buttons/Carrinho/ButtonCarrinho.tsx';
 
 const Home = () => {
 
@@ -51,6 +52,7 @@ const Home = () => {
       <div>
       <SearchAppBar />
       {/* Outro conteúdo da aplicação */}
+      <ButtonShopping onClick={undefined}/>
     </div>
     </div>
   )
