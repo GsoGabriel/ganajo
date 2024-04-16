@@ -1,63 +1,51 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import generateProducts from './Components/data.ts';
-import { Produto } from '../../DTOs/Produto';
-import styles from './Home.module.scss';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import generateProducts from './data.ts';
+import { Produto } from '../../DTOs/Produto.ts';
 import { FaMotorcycle } from "react-icons/fa6";
-import { CiSearch } from "react-icons/ci";
-import { ProdutoComponent } from './Components/ProdutoComponent.tsx';
-import BasicButton from '../Components/Buttons/BasicButton/BasicButton.tsx';
-import FecharBotao from '../Components/Buttons/Fechar/Fechar.tsx';
+import { Grid } from '@mui/material'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
-import ButtonShopping from '../Components/Buttons/Carrinho/ButtonCarrinho.tsx';
-import CardMontaPrato from '../Components/Cliente/CardMontaPrato/CardMontaPrato.tsx';
+import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 
 const Home = () => {
-
   const [itens, setItems] = useState<Produto[]>();
   const [screenItens, setScreenItems] = useState<Produto[]>();
+  const navigate = useNavigate();
 
   const searchingHandleCallBack = useCallback((value : string) => {
-    setScreenItems(itens?.filter(f => f.Nome.includes(value.toLowerCase()) || f.Descricao.includes(value.toLowerCase())));
-  }, [])
+    setScreenItems(itens?.filter(f => f.Nome.toLowerCase().includes(value.toLowerCase()) || f.Descricao.toLowerCase().includes(value.toLowerCase())));
+  }, [itens]);
 
   useEffect(() => {
     const mockItens = generateProducts();
     setItems(mockItens);
     setScreenItems(mockItens);
-  }, [])
+  }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.deliveryContainer}>
+    <div className="container"> 
+      <div className="deliveryContainer"> 
         <div>
-          <FaMotorcycle className={styles.iconTheme}/>
+          <FaMotorcycle className="iconTheme"/> 
         </div>
         <div>
-          <h1 className={styles.deliveryTime}>Tempo médio de preparo: 40 min</h1>
+          <h1 className="deliveryTime">Tempo médio de preparo: 40 min</h1> 
         </div>
-        <div className={styles.inputStyle}>
-            <CiSearch className={styles.searchIconStyle}/>
-            <input type='text' onChange={_ => searchingHandleCallBack(_.currentTarget.value)} placeholder='Busque por um item'/>
+        <div className="inputStyle"> 
+            <SearchAppBar onSearch={searchingHandleCallBack} /> 
         </div>
       </div>
-      <div className={styles.itemsStyle}>
+      <Grid container spacing={2} className="itemsStyle"> 
         {
-          screenItens?.map(m => <div><ProdutoComponent Produto={m}/></div>)
+          screenItens?.map(m => (
+            <Grid key={m.Id} item xs={12} sm={6} md={4}>
+              <ProductCard nome={m.Nome} descricao={m.Descricao} imagem={m.Imagem} preco={m.Valor}/> 
+            </Grid>
+          ))
         }
+      </Grid>
       </div>
-      <BasicButton value="Buscar"/>
-      <div>           
-        <p>Conteúdo do componente aqui</p>           
-        <FecharBotao onClick={undefined} />         
-      </div>
-      <div>
-      <SearchAppBar />
-      {/* Outro conteúdo da aplicação */}
-      <ButtonShopping onClick={undefined}/>
-      <CardMontaPrato/>
-    </div>
-    </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
