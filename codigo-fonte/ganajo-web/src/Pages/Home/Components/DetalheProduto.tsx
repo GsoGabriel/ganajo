@@ -3,6 +3,7 @@ import { Produto } from '../../../DTOs/Produto.ts';
 import styles from './DetalheProdutoComponent.module.scss';
 import formatValue from '../../../Utils/formatValue.ts';
 import formatStringLimit from '../../../Utils/formatStringLimit.ts';
+import Arroz from '../../Components/Buttons/RadioGroup/RadioGroup.tsx';
 
 interface DetalheProdutoComponentProps {
     Produto: Produto,
@@ -18,8 +19,10 @@ export const DetalheProdutoComponent = ({ Produto, onClick }: DetalheProdutoComp
                     <h1 className={styles.nomeStyle}>{formatStringLimit(Produto.Nome, 0, 70, "...")}</h1>
                     <h3 className={styles.descricaoStyle}>{formatStringLimit(Produto.Descricao, 0, 999, "...")}</h3>
                 </div>
-                <div className={styles.rightColumn}>
+                <div /* className={styles.rightColumn} */>
+                    
                     <div className={styles.observacaoItem}>
+                        <Arroz/>
                         <input type="text" className={styles.inputObservacao} placeholder="Adicione uma observação" />
                     </div>
                     <div>
