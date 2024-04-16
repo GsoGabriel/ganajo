@@ -7,7 +7,6 @@ import { Grid } from '@mui/material';
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 
-
 const Home = () => {
   const [itens, setItems] = useState<Produto[]>();
   const [screenItens, setScreenItems] = useState<Produto[]>();

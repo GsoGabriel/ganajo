@@ -13,6 +13,5 @@ export default function BasicButton({value}) {
 }
 
 /*  Exemplo de como chamar alterando o valor:
-
     <BasicButton value="Buscar"/>
 */
