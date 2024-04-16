@@ -7,10 +7,10 @@ import Arroz from '../../Components/Buttons/RadioGroup/RadioGroup.tsx';
 
 interface DetalheProdutoComponentProps {
     Produto: Produto,
-    onClick: any
+    onClose: () => void
 }
 
-export const DetalheProdutoComponent = ({ Produto, onClick }: DetalheProdutoComponentProps) => {
+export const DetalheProdutoComponent = ({ Produto, onClose }: DetalheProdutoComponentProps) => {
     return (
         <div className={styles.modalBackground}>
             <div className={styles.container}>
@@ -26,7 +26,7 @@ export const DetalheProdutoComponent = ({ Produto, onClick }: DetalheProdutoComp
                         <input type="text" className={styles.inputObservacao} placeholder="Adicione uma observação" />
                     </div>
                     <div>
-                        <button onClick={onClick} className={styles.buttonPedir}>Acrescentar {formatValue(Produto.Valor, 2, "R$")}</button>
+                        <button onClick={onClose} className={styles.buttonPedir}>Acrescentar {formatValue(Produto.Valor, 2, "R$")}</button>
                     </div>
                 </div>
             </div>
