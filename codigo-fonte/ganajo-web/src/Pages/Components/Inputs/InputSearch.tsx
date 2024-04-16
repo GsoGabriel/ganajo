@@ -46,27 +46,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+export default function SearchAppBar({ onSearch }) {
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    onSearch(value);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-        <Toolbar>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Pesquisar…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-        </Toolbar>
+      <Toolbar>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Pesquisar…"
+            inputProps={{ 'aria-label': 'search' }}
+            onChange={handleSearchChange}
+          />
+        </Search>
+      </Toolbar>
     </Box>
   );
 }
-
-
-// Exemplo de como chamar 
-//  <div>
-//   <SearchAppBar />
-//   {/* Outro conteúdo da aplicação */}
-//  </div>
