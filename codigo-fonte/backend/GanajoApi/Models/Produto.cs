@@ -18,6 +18,7 @@ public partial class Produto
     public string? EnderecoImagem { get; set; }
 
     public string? Categoria { get; set; }
+    public bool Removido {get;set;}
 
     public int UsuarioId { get; set; }
 
