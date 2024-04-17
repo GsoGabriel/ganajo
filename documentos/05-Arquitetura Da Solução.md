@@ -18,72 +18,85 @@
 
 ## Modelo Fisico
 ``` SQL
-Table Cliente {
-  Id integer [primary key]
-  CPF string
-  Nome string
-  NumeroCasa string
-  Complemento string
-  NumeroTelefone string
-  RegiaoPostalId integer
-}
+-- Criando a tabela RegiaoPostal
+CREATE TABLE RegiaoPostal (
+    Id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Bairro VARCHAR(100) NOT NULL,
+    Cep VARCHAR(20) NOT NULL,
+    PrecoDelivery FLOAT NOT NULL,
+    Removido bit NOT NULL DEFAULT 0,
+    EditadoPor INT NULL,
+    EditadoData DATETIME NULL,
+    FOREIGN KEY (EditadoPor) REFERENCES Usuario(Id)
+);
 
+-- Criando a tabela Cliente
+CREATE TABLE Cliente (
+    Id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    CPF VARCHAR(20) NOT NULL,
+    Nome VARCHAR(100) NOT NULL,
+    NumeroCasa VARCHAR(20) NOT NULL,
+    Complemento VARCHAR(100) NULL,
+    NumeroTelefone VARCHAR(20) NOT NULL,
+    RegiaoPostalId INT NOT NULL,
+    FOREIGN KEY (RegiaoPostalId) REFERENCES RegiaoPostal(Id)
+);
 
-Table RegiaoPostal {
-  Id integer [primary key]
-  Bairro string
-  Cep string
-  PrecoDelivery float
-  EditadoPor datetime
-  EditadoData datetime
-}
+-- Criando a tabela Pedido
+CREATE TABLE Pedido (
+    Id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Descricao VARCHAR(255) NULL,
+    ValorTotal FLOAT NOT NULL,
+    StatusPedido INT NULL DEFAULT 0,
+    TipoPagamento INT NULL DEFAULT 0,
+    ClienteId INT NOT NULL,
+    Removido bit NOT NULL DEFAULT 0,
+    EditadoPor INT NULL,
+    EditadoData DATETIME NULL,
+    FOREIGN KEY (ClienteId) REFERENCES Cliente(Id),
+    FOREIGN KEY (EditadoPor) REFERENCES Usuario(Id)
+);
 
+-- Criando a tabela PedidoProduto
+CREATE TABLE PedidoProduto (
+    Id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    PedidoId INT NOT NULL,
+    ProdutoId INT NOT NULL,
+    Descricao VARCHAR(255) NULL,
+    Quantidade INT NULL DEFAULT 1,
+    ValorTotal FLOAT NOT NULL,
+    EditadoPor INT NULL,
+    EditadoData DATETIME NULL,
+    FOREIGN KEY (PedidoId) REFERENCES Pedido(Id),
+    FOREIGN KEY (ProdutoId) REFERENCES Produto(Id),
+    FOREIGN KEY (EditadoPor) REFERENCES Usuario(Id)
+);
 
-Table Pedido {
-  Id integer [primary key]
-  Descricao string
-  ValorTotal float
-  StatusPedido integer
-  TipoPagamento integer
-  ClienteId integer
-  EditadoPor datetime
-  EditadoData datetime
-}
+-- Criando a tabela Produto
+CREATE TABLE Produto (
+    Id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Nome VARCHAR(100) NOT NULL,
+    Descricao VARCHAR(255) NOT NULL,
+    TempoPreparo TIME NOT NULL DEFAULT 20,
+    Valor FLOAT NOT NULL,
+    EnderecoImagem VARCHAR(255) NULL,
+    Categoria VARCHAR(100) NULL DEFAULT 'Geral',
+    Removido bit NOT NULL DEFAULT 0,
+    UsuarioId INT NOT NULL,
+    EditadoPor INT NULL,
+    EditadoData DATETIME NULL,
+    FOREIGN KEY (UsuarioId) REFERENCES Usuario(Id),
+    FOREIGN KEY (EditadoPor) REFERENCES Usuario(Id)
+);
 
-
-Table PedidoProduto {
-  Id integer [primary key]
-  PedidoId integer
-  ProdutoId integer
-  Descricao string
-  Quantidade integer
-  ValorTotal integer
-  EditadoPor datetime
-  EditadoData datetime
-}
-
-
-Table Produto {
-  Id integer [primary key]
-  Nome string
-  Descricao string
-  TempoPreparo timespan
-  Valor float
-  EnderecoImagem string
-  Categoria string
-  UsuarioId integer
-  EditadoPor datetime
-  EditadoData datetime
-}
-
-
-Table Usuario {
-  Id integer [primary key]
-  Nome string
-  Email string
-  Senha string
-  EditadoData datetime
-}
+-- Criando a tabela Usuario
+CREATE TABLE Usuario (
+    Id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Nome VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Senha VARCHAR(100) NOT NULL,
+    EditadoData DATETIME
+);
 ```
 
 Ref: Cliente.RegiaoPostalId > RegiaoPostal.Id

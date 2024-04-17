@@ -12,6 +12,7 @@ public partial class RegiaoPostal
     public string Cep { get; set; } = null!;
 
     public float PrecoDelivery { get; set; }
+    public bool Removido {get;set;}
 
     public int? EditadoPor { get; set; }
 
