@@ -1,4 +1,4 @@
-import { Bairro } from './../../../DTOs/Bairro';
+import { Bairro } from '../../DTOs/Bairro';
 
 function generateBairros() {
     const data: Bairro[] = [];
