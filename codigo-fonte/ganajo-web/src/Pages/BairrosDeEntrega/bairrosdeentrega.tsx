@@ -1,20 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
-import { MdOutlineSearch, MdSearch } from 'react-icons/md';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { FixedSizeList } from 'react-window';
+import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
+import CardBairro from '../Components/Cliente/CardBairro/CardBairro.tsx';
+import generateBairros from './data.ts';
+import { FaMotorcycle } from 'react-icons/fa6';
 import { Bairro } from '../../DTOs/Bairro.ts';
-import generateBairros from './Components/data.ts';
-import './bairrosdeentrega.css';
-import BairroComponent from './Components/bairrocomponent.tsx';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
 
-const BairrosDeEntrega: React.FC = () => {
+const Bairros = () => {
   const [bairros, setBairros] = useState<Bairro[]>([]);
   const [screenBairros, setScreenBairros] = useState<Bairro[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [newBairroName, setNewBairroName] = useState<string>('');
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedBairro, setSelectedBairro] = useState<Bairro | null>(null);
   const [editedBairroName, setEditedBairroName] = useState<string>('');
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const mockBairros = generateBairros();
@@ -22,143 +29,117 @@ const BairrosDeEntrega: React.FC = () => {
     setScreenBairros(mockBairros);
   }, []);
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchQuery(value);
-    setScreenBairros(
-      bairros?.filter(
-        (bairro) =>
-          bairro.Nome.toLowerCase().includes(value.toLowerCase())
-      ) || []
-    );
+  const searchingHandleCallBack = useCallback((value: string) => {
+    setScreenBairros(bairros.filter(bairro => bairro.Nome.toLowerCase().includes(value.toLowerCase())));
   }, [bairros]);
 
-  const handleAddBairro = useCallback(() => {
-    if (newBairroName.trim() !== '') {
-      const newBairro: Bairro = { Id: bairros.length + 1, Nome: newBairroName };
-      setBairros([...bairros, newBairro]);
-      setScreenBairros([...screenBairros, newBairro]);
-      setNewBairroName('');
-    } else {
-      alert('Por favor, insira um nome válido para o novo bairro.');
-    }
-  }, [bairros, screenBairros, newBairroName]);
-
-  const handleShowModal = useCallback((bairro: Bairro) => {
-    setSelectedBairro(bairro);
-    setEditedBairroName(bairro.Nome);
-    setShowModal(true);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setSelectedBairro(null);
-    setEditedBairroName('');
-    setShowModal(false);
-  }, []);
-
-  const handleSaveChanges = useCallback(() => {
+  const handleEditBairro = () => {
     if (selectedBairro) {
-      const updatedBairros = bairros.map((bairro) =>
+      const updatedBairros = bairros.map(bairro =>
         bairro.Id === selectedBairro.Id ? { ...bairro, Nome: editedBairroName } : bairro
       );
       setBairros(updatedBairros);
       setScreenBairros(updatedBairros);
-      setShowModal(false);
+      setEditDialogOpen(false);
     }
-  }, [bairros, selectedBairro, editedBairroName]);
+  };
 
-  const handleDeleteBairro = useCallback(() => {
+  const handleDeleteBairro = () => {
     if (selectedBairro) {
-      const updatedBairros = bairros.filter((bairro) => bairro.Id !== selectedBairro.Id);
+      const updatedBairros = bairros.filter(bairro => bairro.Id !== selectedBairro.Id);
       setBairros(updatedBairros);
       setScreenBairros(updatedBairros);
-      setShowDeleteModal(false);
+      setDeleteDialogOpen(false);
     }
-  }, [bairros, selectedBairro]);
+  };
 
   return (
-    <Container fluid className="bairros-container">
-      <Row className={'search-row'}>
-        <Col  className={'search-col'}>
-          <InputGroup>
-            <FormControl
-              type="text"
-              placeholder="Buscar bairro..."
-              value={searchQuery}
-              onChange={(e) => handleSearchChange(e.target.value)}
-            />
-            <Button variant="outline-secondary">
-              <MdSearch />
-            </Button>
-          </InputGroup>
-        </Col>
-      </Row>
-      <Row className={'add-bairro-row'}>
-        <Col xs={12} className={'add-bairro-col'}>
-          <InputGroup>
-            <FormControl
-              type="text"
-              placeholder="Novo bairro..."
-              value={newBairroName}
-              onChange={(e) => setNewBairroName(e.target.value)}
-            />            <Button onClick={handleAddBairro} variant="outline-secondary" className={'add-button'}>Adicionar</Button>
-            </InputGroup>
-          </Col>
-        </Row>
-        <Row className={'card-row'}>
-          {screenBairros.map((bairro) => (
-            <Col key={bairro.Id} xs={12} sm={6} md={4} lg={3}> 
-              <BairroComponent
-                bairro={bairro}
-                onEdit={() => handleShowModal(bairro)}
-                onDelete={() => {
-                  setSelectedBairro(bairro);
-                  setShowDeleteModal(true);
-                }}
-              />
-            </Col>
-          ))}
-        </Row>
-        <Modal show={showModal} onHide={handleCloseModal} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Editar Bairro</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form.Control
-              type="text"
-              placeholder="Novo nome do bairro..."
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Grid container spacing={1} alignItems="center">
+        <Grid item xs={1}></Grid>
+        <Grid item xs={1}>
+          <FaMotorcycle className="iconTheme" />
+        </Grid>
+        <Grid item xs={8}>
+          <h1 className="deliveryTime">Tempo médio de preparo: 40 min</h1>
+        </Grid>
+        <Grid item xs={2}>
+          <SearchAppBar onSearch={searchingHandleCallBack} />
+        </Grid>
+      </Grid>
+
+      <Card sx={{ p: 2, width: '80%', overflow: 'auto', mb: 2}}>
+        <Grid container spacing={2} alignItems="center" sx={{ width: '100%' }}>
+          <Grid item xs={12}>
+            <TextField
+              label="Nome do Bairro"
+              fullWidth
               value={editedBairroName}
               onChange={(e) => setEditedBairroName(e.target.value)}
             />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
-              Cancelar
-            </Button>
-            <Button variant="primary" onClick={handleSaveChanges}>
-              Salvar
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Confirmar Exclusão</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            Tem certeza que deseja excluir o bairro "{selectedBairro?.Nome}"?
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-              Cancelar
-            </Button>
-            <Button variant="danger" onClick={handleDeleteBairro}>
-              Excluir
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Container>
-    );
-  };
-  
-  export default BairrosDeEntrega;
-  
-           
+          </Grid>
+          <Grid item xs={12} sx={{ textAlign: 'right' }}>
+            <Button onClick={handleEditBairro}>Adicionar</Button>
+          </Grid>
+        </Grid>
+      </Card>
+      <Card sx={{ p: 2, width: '80%', overflow: 'auto', mb: 2 }}>
+        <FixedSizeList
+          width={'100%'}
+          height={700}
+          itemSize={100}
+          itemCount={screenBairros.length}
+          overscanCount={5}
+        >
+          {({ index, style }) => (
+            <div style={style}>
+              <CardBairro
+                bairro={screenBairros[index]}
+                onEdit={() => {
+                  setSelectedBairro(screenBairros[index]);
+                  setEditedBairroName(screenBairros[index].Nome);
+                  setEditDialogOpen(true);
+                }}
+                onDelete={() => {
+                  setSelectedBairro(screenBairros[index]);
+                  setDeleteDialogOpen(true);
+                }}
+              />
+            </div>
+          )}
+        </FixedSizeList>
+      </Card>
+
+      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+        <DialogTitle>Editar Bairro</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Nome do Bairro"
+            fullWidth
+            value={editedBairroName}
+            onChange={(e) => setEditedBairroName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}>Cancelar</Button>
+          <Button onClick={handleEditBairro}>Confirmar</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle>Excluir Bairro</DialogTitle>
+        <DialogContent>
+          <p>Deseja excluir o bairro selecionado?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancelar</Button>
+          <Button onClick={handleDeleteBairro}>Confirmar</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+};
+
+export default Bairros;
