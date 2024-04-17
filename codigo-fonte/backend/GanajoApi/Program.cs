@@ -1,4 +1,5 @@
 using GanajoApi.DTOs;
+using GanajoApi.Enums;
 using GanajoApi.FromModels;
 using GanajoApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ app.MapGet("/product/{id}", async ([FromRoute] int id) =>
     if (product != null)
         Results.Ok(DtoFromModels.ProductDtoFromModel(product));
 
-    return Results.NotFound();
+    return Results.NotFound("Produto não encontrado...");
 });
 
 app.MapPost("/product", async ([FromBody] ProductDTO product) =>
@@ -75,7 +76,7 @@ app.MapDelete("/product/{id}", async ([FromRoute] int id, [FromQuery] bool remov
     var product = await context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
     if(product == null)
-        return Results.NotFound();
+        return Results.NotFound("Produto não encontrado...");
 
     product.Removido = removido;
 
@@ -95,7 +96,7 @@ app.MapGet("/customers", async () => {
                                 .ToListAsync();
 
     if(!customers.Any())
-        return Results.NotFound(); 
+        return Results.NotFound("Cliente não encontrado..."); 
 
     return Results.Ok(customers);
 });
@@ -107,7 +108,7 @@ app.MapGet("/customer/{id}", async ([FromRoute] int id) => {
     var cliente = await context.Clientes.FirstOrDefaultAsync(f => f.Id == id);
 
     if(cliente == null)
-        return Results.NotFound("Região Postal não encontrada...");
+        return Results.NotFound("Cliente não encontrado...");
 
     return Results.Ok(DtoFromModels.CustomerDtoFromModel(cliente));
 });
@@ -136,7 +137,7 @@ app.MapPost("/customer", async ([FromBody] CustomerDTO customer) => {
 
     await context.SaveChangesAsync();
 
-    Results.Ok(customer);
+    return Results.Ok(customer);
 });
 
 #endregion
@@ -151,7 +152,7 @@ app.MapGet("/regiaopostais", async () => {
                                 .ToListAsync();
 
     if(!regioes.Any())
-        return Results.NotFound(); 
+        return Results.NotFound("Região Postal não encontrada..."); 
 
     return Results.Ok(regioes);
 });
@@ -191,7 +192,7 @@ app.MapPost("/regiaopostal", async ([FromBody] RegiaoPostalDTO regiaoPostal) => 
 
     await context.SaveChangesAsync();
 
-    Results.Ok(regiaoPostal);
+    return Results.Ok(regiaoPostal);
 });
 
 app.MapDelete("/regiaopostal/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
@@ -202,7 +203,7 @@ app.MapDelete("/regiaopostal/{id}", async ([FromRoute] int id, [FromQuery] bool 
     var regiaoPostalDb = await context.RegiaoPostals.FirstOrDefaultAsync(f => f.Id == id);
 
     if(regiaoPostalDb == null)
-        return Results.NotFound();
+        return Results.NotFound("Região Postal não encontrada...");
 
     regiaoPostalDb.Removido = removido;
     context.Entry(regiaoPostalDb).State = EntityState.Modified;
@@ -212,5 +213,182 @@ app.MapDelete("/regiaopostal/{id}", async ([FromRoute] int id, [FromQuery] bool 
 });
 
 #endregion
+#region Pedidos
+
+app.MapGet("/pedidos", async () => {
+
+    var pedidos = await (from pedido in context.Pedidos
+                         where !pedido.Removido
+                         select new PedidoDTO
+                         {
+                             Id = pedido.Id,
+                             Cliente = DtoFromModels.CustomerDtoFromModel(pedido.Cliente),
+                             Descricao = pedido.Descricao,
+                             StatusPedido = (StatusPedido)pedido.StatusPedido,
+                             TipoPagamento = (TipoPagamento)pedido.TipoPagamento,
+                             ValorTotal = pedido.ValorTotal,
+                             Produtos = pedido.PedidoProdutos.Select(s => new PedidoProdutoDTO()
+                             {
+                                 Id = s.Id,
+                                 PedidoId = pedido.Id,
+                                 Descricao = s.Descricao,
+                                 Quantidade = s.Quantidade,
+                                 ValorTotal = s.ValorTotal,
+                                 Produto = DtoFromModels.ProductDtoFromModel(s.Produto)
+                             }).ToList()
+                         })
+                         .OrderByDescending(o => o.StatusPedido)
+                         .ToListAsync();
+
+    if (pedidos == null || !pedidos.Any())
+        return Results.NotFound("Não há pedidos na base de dados...");
+
+    return Results.Ok(pedidos);
+});
+
+app.MapGet("/pedido/{id}", async ([FromRoute] int id) => {
+
+    if (id == 0)
+        return Results.NoContent();
+
+    var pedidoDto = await (from pedido in context.Pedidos
+                           where pedido.Id == id
+                           select new PedidoDTO
+                           {
+                                Id = pedido.Id,
+                                Cliente = DtoFromModels.CustomerDtoFromModel(pedido.Cliente),
+                                Descricao = pedido.Descricao,
+                                StatusPedido = (StatusPedido)pedido.StatusPedido,
+                                TipoPagamento = (TipoPagamento)pedido.TipoPagamento,
+                                ValorTotal = pedido.ValorTotal,
+                                Produtos = pedido.PedidoProdutos.Select(s => new PedidoProdutoDTO()
+                                {
+                                    Id = s.Id,
+                                    PedidoId = pedido.Id,
+                                    Descricao = s.Descricao,
+                                    Quantidade = s.Quantidade,
+                                    ValorTotal = s.ValorTotal,
+                                    Produto = DtoFromModels.ProductDtoFromModel(s.Produto)
+                                })
+                                .ToList()
+                           })
+                           .FirstOrDefaultAsync();
+
+    if (pedidoDto == null)
+        return Results.NotFound("Pedido não encontrado...");
+
+    return Results.Ok(pedidoDto);
+});
+
+app.MapPost("/pedido", async ([FromBody] PedidoDTO pedido) => {
+
+    if (pedido == null || !pedido.Produtos.Any())
+        Results.NoContent();
+
+    var pedidoDb = await context
+                            .Pedidos
+                            .FirstOrDefaultAsync(f => f.Id == pedido.Id);
+
+    if (pedidoDb == null)
+    {
+        pedidoDb = new Pedido();
+        context.Entry(pedidoDb).State = EntityState.Added;
+    }
+
+    pedidoDb.Descricao = pedido.Descricao;
+
+    pedidoDb.ValorTotal = pedido.Produtos.Sum(s => {
+        s.ValorTotal = s.Produto.Valor * (s.Quantidade ?? 1);
+        return s.ValorTotal;
+    });
+
+    pedidoDb.ClienteId = pedido.Cliente.Id;
+    pedidoDb.StatusPedido = (int)pedido.StatusPedido;
+    pedidoDb.TipoPagamento = (int)pedido.TipoPagamento;
+    pedidoDb.Removido = pedido.Removido;
+    pedidoDb.EditadoPor = 1;
+    pedidoDb.EditadoData = DateTime.Now;
+
+    context.SavedChanges += (s, e) => {
+        pedido.Id = pedidoDb.Id;
+    };
+
+    await context.SaveChangesAsync();
+
+    foreach (var pedidoProduto in pedido.Produtos)
+    {
+        pedidoProduto.PedidoId = pedido.Id;
+        var pedidoProdutoDto = await SavePedidoProdutoAsync(pedidoProduto);
+
+        if (pedidoProdutoDto == null)
+            continue;
+
+        pedidoProduto.Id = pedidoProdutoDto.Id;
+    }
+
+    return Results.Ok(pedido);
+});
+
+app.MapDelete("/pedido/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
+
+    if (id == 0)
+        return Results.NoContent();
+
+    var pedidoDb = await context.Pedidos.FirstOrDefaultAsync(f => f.Id == id);
+
+    if (pedidoDb == null)
+        return Results.NotFound();
+
+    pedidoDb.Removido = removido;
+    context.Entry(pedidoDb).State = EntityState.Modified;
+
+    return Results.Ok(await context.SaveChangesAsync() > 0);
+
+});
+
+#endregion
+#region Pedido Produto
+
+app.MapPost("/pedidoproduto", async ([FromBody] PedidoProdutoDTO pedidoProduto) =>
+{
+    if (pedidoProduto == null || pedidoProduto.Produto == null)
+        return Results.NoContent();
+
+    var pp = await SavePedidoProdutoAsync(pedidoProduto);
+
+    return Results.Ok(pp);
+});
+
+#endregion
+#region Utils
+async Task<PedidoProdutoDTO> SavePedidoProdutoAsync(PedidoProdutoDTO pedidoProduto)
+{
+    var pedidoProdutoDb = await context.PedidoProdutos.FirstOrDefaultAsync(pp => pp.Id == pedidoProduto.Id);
+
+    if (pedidoProdutoDb == null)
+    {
+        pedidoProdutoDb = new PedidoProduto();
+        context.Entry(pedidoProdutoDb).State = EntityState.Added;
+    }
+
+    pedidoProdutoDb.PedidoId = pedidoProduto.PedidoId;
+    pedidoProdutoDb.ProdutoId = pedidoProduto.Produto.Id;
+    pedidoProdutoDb.Descricao = pedidoProduto.Descricao;
+    pedidoProdutoDb.Quantidade = pedidoProduto.Quantidade;
+    pedidoProdutoDb.ValorTotal = pedidoProduto.ValorTotal;
+    pedidoProdutoDb.EditadoPor = 1;
+    pedidoProdutoDb.EditadoData = DateTime.Now;
+
+    context.SavedChanges += (s, e) =>
+    {
+        pedidoProduto.Id = pedidoProdutoDb.Id;
+    };
+
+    await context.SaveChangesAsync();
+
+    return pedidoProduto;
+}
+#endregion
+
 
 app.Run();
