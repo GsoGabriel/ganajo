@@ -143,7 +143,7 @@ app.MapPost("/customer", async ([FromBody] CustomerDTO customer) => {
 #endregion
 #region Regiao Postal
 
-app.MapGet("/regiaopostais", async () => {
+app.MapGet("/postalcodes", async () => {
 
     var regioes = await context.RegiaoPostals
                                 .Where(w => !w.Removido)
@@ -157,7 +157,7 @@ app.MapGet("/regiaopostais", async () => {
     return Results.Ok(regioes);
 });
 
-app.MapGet("/regiaopostal/{id}", async ([FromRoute] int id) => {
+app.MapGet("/postalcode/{id}", async ([FromRoute] int id) => {
     if(id == 0)
         return Results.NoContent();
 
@@ -169,7 +169,7 @@ app.MapGet("/regiaopostal/{id}", async ([FromRoute] int id) => {
     return Results.Ok(DtoFromModels.RegiaoDtoFromModel(regiaoPostal));
 });
 
-app.MapPost("/regiaopostal", async ([FromBody] RegiaoPostalDTO regiaoPostal) => {
+app.MapPost("/postalcode", async ([FromBody] RegiaoPostalDTO regiaoPostal) => {
     if(regiaoPostal == null)
         Results.NoContent();
 
@@ -195,7 +195,7 @@ app.MapPost("/regiaopostal", async ([FromBody] RegiaoPostalDTO regiaoPostal) => 
     return Results.Ok(regiaoPostal);
 });
 
-app.MapDelete("/regiaopostal/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
+app.MapDelete("/postalcode/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
 
     if(id == 0)
         return Results.NoContent();
@@ -215,7 +215,7 @@ app.MapDelete("/regiaopostal/{id}", async ([FromRoute] int id, [FromQuery] bool 
 #endregion
 #region Pedidos
 
-app.MapGet("/pedidos", async () => {
+app.MapGet("/orders", async () => {
 
     var pedidos = await (from pedido in context.Pedidos
                          where !pedido.Removido
@@ -246,7 +246,7 @@ app.MapGet("/pedidos", async () => {
     return Results.Ok(pedidos);
 });
 
-app.MapGet("/pedido/{id}", async ([FromRoute] int id) => {
+app.MapGet("/order/{id}", async ([FromRoute] int id) => {
 
     if (id == 0)
         return Results.NoContent();
@@ -280,7 +280,7 @@ app.MapGet("/pedido/{id}", async ([FromRoute] int id) => {
     return Results.Ok(pedidoDto);
 });
 
-app.MapPost("/pedido", async ([FromBody] PedidoDTO pedido) => {
+app.MapPost("/order", async ([FromBody] PedidoDTO pedido) => {
 
     if (pedido == null || !pedido.Produtos.Any())
         Results.NoContent();
@@ -318,7 +318,7 @@ app.MapPost("/pedido", async ([FromBody] PedidoDTO pedido) => {
     foreach (var pedidoProduto in pedido.Produtos)
     {
         pedidoProduto.PedidoId = pedido.Id;
-        var pedidoProdutoDto = await SavePedidoProdutoAsync(pedidoProduto);
+        var pedidoProdutoDto = await SaveOrderProductAsync(pedidoProduto);
 
         if (pedidoProdutoDto == null)
             continue;
@@ -329,7 +329,7 @@ app.MapPost("/pedido", async ([FromBody] PedidoDTO pedido) => {
     return Results.Ok(pedido);
 });
 
-app.MapDelete("/pedido/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
+app.MapDelete("/order/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
 
     if (id == 0)
         return Results.NoContent();
@@ -349,19 +349,19 @@ app.MapDelete("/pedido/{id}", async ([FromRoute] int id, [FromQuery] bool removi
 #endregion
 #region Pedido Produto
 
-app.MapPost("/pedidoproduto", async ([FromBody] PedidoProdutoDTO pedidoProduto) =>
+app.MapPost("/orderProduct", async ([FromBody] PedidoProdutoDTO pedidoProduto) =>
 {
     if (pedidoProduto == null || pedidoProduto.Produto == null)
         return Results.NoContent();
 
-    var pp = await SavePedidoProdutoAsync(pedidoProduto);
+    var pp = await SaveOrderProductAsync(pedidoProduto);
 
     return Results.Ok(pp);
 });
 
 #endregion
 #region Utils
-async Task<PedidoProdutoDTO> SavePedidoProdutoAsync(PedidoProdutoDTO pedidoProduto)
+async Task<PedidoProdutoDTO> SaveOrderProductAsync(PedidoProdutoDTO pedidoProduto)
 {
     var pedidoProdutoDb = await context.PedidoProdutos.FirstOrDefaultAsync(pp => pp.Id == pedidoProduto.Id);
 
