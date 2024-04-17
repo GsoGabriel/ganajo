@@ -6,14 +6,12 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import ReactDOM from 'react-dom';
-import { DetalheProdutoComponent } from '../../../Home/Components/DetalheProduto.tsx'
+import { DetalheProdutoComponent } from '../CardMontaPrato/DetalheProduto.tsx'
 import { Produto } from '../../../../DTOs/Produto.ts';
 
 export default function ProductCard({ Id, Nome, Descricao, Imagem, Valor }: Produto) {
   const [showDescription, setShowDescription] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState<Produto | null>(null);
-
-
 
   const openDescription = () => {
     setSelectedProduct({ Id, Nome, Descricao, Imagem, Valor });

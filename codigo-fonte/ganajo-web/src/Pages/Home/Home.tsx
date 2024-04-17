@@ -6,6 +6,7 @@ import { FaMotorcycle } from "react-icons/fa6";
 import { Grid } from '@mui/material'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
+import { ModalMontaPrato } from '../Components/Cliente/CardMontaPrato/CardMontaPrato.tsx';
 
 const Home = () => {
   const [itens, setItems] = useState<Produto[]>();
