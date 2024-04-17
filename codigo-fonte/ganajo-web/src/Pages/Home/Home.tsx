@@ -6,6 +6,7 @@ import { FaMotorcycle } from "react-icons/fa6";
 import { Grid } from '@mui/material'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
+import { ModalMontaPrato } from '../Components/Cliente/CardMontaPrato/CardMontaPrato.tsx';
 
 const Home = () => {
   const [itens, setItems] = useState<Produto[]>();
@@ -39,7 +40,7 @@ const Home = () => {
         {
           screenItens?.map(m => (
             <Grid key={m.Id} item xs={12} sm={6} md={4}>
-              <ProductCard nome={m.Nome} descricao={m.Descricao} imagem={m.Imagem} preco={m.Valor}/> 
+              <ProductCard Id={m.Id} Nome={m.Nome} Descricao={m.Descricao} Imagem={m.Imagem} Valor={m.Valor}/> 
             </Grid>
           ))
         }

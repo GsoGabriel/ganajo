@@ -31,7 +31,7 @@ function ResponsiveAppBar() {
   const [navItems, setNavItems] = React.useState<NavBarLink[]>(commonNavItems);
 
   useEffect(() => {
-    setIsAdmin(false);
+    setIsAdmin(true);
     setNavItems(isAdmin ? adminNavItens : commonNavItems);
   }, [isAdmin]) 
 

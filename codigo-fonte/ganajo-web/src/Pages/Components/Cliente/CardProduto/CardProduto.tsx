@@ -6,11 +6,15 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import ReactDOM from 'react-dom';
+import { DetalheProdutoComponent } from '../CardMontaPrato/DetalheProduto.tsx'
+import { Produto } from '../../../../DTOs/Produto.ts';
 
-export default function ProductCard({ nome, descricao, imagem, preco }) {
+export default function ProductCard({ Id, Nome, Descricao, Imagem, Valor }: Produto) {
   const [showDescription, setShowDescription] = React.useState(false);
+  const [selectedProduct, setSelectedProduct] = React.useState<Produto | null>(null);
 
   const openDescription = () => {
+    setSelectedProduct({ Id, Nome, Descricao, Imagem, Valor });
     setShowDescription(true);
   };
 
@@ -23,17 +27,18 @@ export default function ProductCard({ nome, descricao, imagem, preco }) {
       <ButtonBase component="div" onClick={openDescription}>
         <Card sx={{ maxWidth: 345 }}>
           <CardMedia
+            data-id={Id}
             component="img"
-            alt={nome}
+            alt={Nome}
             height="140"
-            image={imagem}
+            image={Imagem}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {nome}
+              {Nome}
             </Typography>
             <Typography variant="body2" color="text.secondary" style={{ marginBottom: '8px' }}>
-              {descricao}
+              {Descricao}
             </Typography>
             <div style={{ marginBottom: '8px' }}>
               <Chip label="Zero Lactose" variant="outlined" color="primary" size="small" style={{ marginRight: '4px' }} />
@@ -41,19 +46,14 @@ export default function ProductCard({ nome, descricao, imagem, preco }) {
               <Chip label="Zero Açúcar" variant="outlined" color="primary" size="small" style={{ marginRight: '4px' }} />
             </div>
             <div>
-              <Chip label={`R$${preco.toFixed(2)}`} variant="outlined" color="secondary" /> 
+              <Chip label={`R$${Valor.toFixed(2)}`} variant="outlined" color="secondary" /> 
             </div>
           </CardContent>
         </Card>
       </ButtonBase>
-      {showDescription &&
-        ReactDOM.createPortal(
-          <div>
-            <div>Descrição: {descricao}</div>
-            <button onClick={closeDescription}>Fechar</button>
-          </div>,
-          document.body
-        )}
+      {showDescription && selectedProduct &&
+          <DetalheProdutoComponent Produto={selectedProduct} onClose={closeDescription}/>
+        }
     </div>
   );
 }
