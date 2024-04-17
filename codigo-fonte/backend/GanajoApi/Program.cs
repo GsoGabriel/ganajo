@@ -145,6 +145,7 @@ app.MapPost("/customer", async ([FromBody] CustomerDTO customer) => {
 app.MapGet("/regiaopostais", async () => {
 
     var regioes = await context.RegiaoPostals
+                                .Where(w => !w.Removido)
                                 .OrderByDescending(o => o.Bairro)
                                 .Select(s => DtoFromModels.RegiaoDtoFromModel(s))
                                 .ToListAsync();
