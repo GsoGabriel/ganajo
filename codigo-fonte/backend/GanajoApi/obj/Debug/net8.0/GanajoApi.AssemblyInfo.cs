@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GanajoApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e3b420d732146de2e70b058062ff5d8b2c34ff77")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+38d8a3d31333788f074a0c5de15f263dfe12c237")]
 [assembly: System.Reflection.AssemblyProductAttribute("GanajoApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GanajoApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

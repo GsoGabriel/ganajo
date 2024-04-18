@@ -1,12 +1,44 @@
 using GanajoApi.DTOs;
 using GanajoApi.Enums;
 using GanajoApi.FromModels;
+using GanajoApi.Hubs;
 using GanajoApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Linq.Expressions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+const string GANAJO_ORIGIN = "ganajoOrigin";
+
+// REAL TIME HUBS
+const string PEDIDO_REALTIME = "PEDIDO_REALTIME";
+
+// ENDERECO DA APLICAÇÃO REACT (WEB)
+const string address = "http://localhost:3000";
+
+builder.Services.AddSignalR();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: GANAJO_ORIGIN,
+                      policy =>
+                      {
+                          policy.WithOrigins(address)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                      });
+});
+
 var app = builder.Build();
+
+app.UseRouting()
+   .UseCors(GANAJO_ORIGIN);
+
+app.MapHub<RealTimeHub>("/realtime");
 
 var context = new GanajoDbContext();
 
@@ -251,28 +283,7 @@ app.MapGet("/order/{id}", async ([FromRoute] int id) => {
     if (id == 0)
         return Results.NoContent();
 
-    var pedidoDto = await (from pedido in context.Pedidos
-                           where pedido.Id == id
-                           select new PedidoDTO
-                           {
-                                Id = pedido.Id,
-                                Cliente = DtoFromModels.CustomerDtoFromModel(pedido.Cliente),
-                                Descricao = pedido.Descricao,
-                                StatusPedido = (StatusPedido)pedido.StatusPedido,
-                                TipoPagamento = (TipoPagamento)pedido.TipoPagamento,
-                                ValorTotal = pedido.ValorTotal,
-                                Produtos = pedido.PedidoProdutos.Select(s => new PedidoProdutoDTO()
-                                {
-                                    Id = s.Id,
-                                    PedidoId = pedido.Id,
-                                    Descricao = s.Descricao,
-                                    Quantidade = s.Quantidade,
-                                    ValorTotal = s.ValorTotal,
-                                    Produto = DtoFromModels.ProductDtoFromModel(s.Produto)
-                                })
-                                .ToList()
-                           })
-                           .FirstOrDefaultAsync();
+    var pedidoDto = GetPedidoByIdAsync(id);
 
     if (pedidoDto == null)
         return Results.NotFound("Pedido não encontrado...");
@@ -280,7 +291,7 @@ app.MapGet("/order/{id}", async ([FromRoute] int id) => {
     return Results.Ok(pedidoDto);
 });
 
-app.MapPost("/order", async ([FromBody] PedidoDTO pedido) => {
+app.MapPost("/order", async ([FromBody] PedidoDTO pedido, IHubContext<RealTimeHub> realTimeHub) => {
 
     if (pedido == null || !pedido.Produtos.Any())
         Results.NoContent();
@@ -326,7 +337,17 @@ app.MapPost("/order", async ([FromBody] PedidoDTO pedido) => {
         pedidoProduto.Id = pedidoProdutoDto.Id;
     }
 
-    return Results.Ok(pedido);
+    var pedidoToReturn = await GetPedidoByIdAsync(pedidoDb.Id);
+
+    if (pedidoToReturn == null)
+        Results.NotFound();
+
+    var adminIds = await GetUsersIdsByPredicate(isAdmin: true);
+
+    foreach (var adminId in adminIds)
+        await SendToSignalRHub(realTimeHub, PEDIDO_REALTIME, adminId.ToString(), pedidoToReturn, new CancellationToken());
+
+    return Results.Ok(pedidoToReturn);
 });
 
 app.MapDelete("/order/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
@@ -342,8 +363,36 @@ app.MapDelete("/order/{id}", async ([FromRoute] int id, [FromQuery] bool removid
     pedidoDb.Removido = removido;
     context.Entry(pedidoDb).State = EntityState.Modified;
 
+    await context.SaveChangesAsync();
+
     return Results.Ok(await context.SaveChangesAsync() > 0);
 
+});
+
+app.MapPut("/order/{id}/status/{index}", async ([FromRoute] int id, [FromRoute] int index, IHubContext<RealTimeHub> realTimeHub) => {
+    var pedido = await context.Pedidos.FirstOrDefaultAsync(f => f.Id == id);
+
+    if (pedido == null)
+        return Results.NotFound("Não conseguimos achar o pedido...");
+
+    pedido.StatusPedido = index;
+
+    context.Entry(pedido).State = EntityState.Modified;
+
+    await context.SaveChangesAsync();
+
+    var pedidoToReturn = await GetPedidoByIdAsync(id);
+
+    if (pedidoToReturn == null)
+        return Results.Ok(true);
+
+    var customerIds = await GetUsersIdsByPredicate(isAdmin: false, c => c.Id == pedidoToReturn.Cliente.Id);
+
+    foreach (var adminId in customerIds)
+        await SendToSignalRHub(realTimeHub, PEDIDO_REALTIME, adminId.ToString(), pedidoToReturn, new CancellationToken());
+
+
+    return Results.Ok(true);
 });
 
 #endregion
@@ -388,7 +437,54 @@ async Task<PedidoProdutoDTO> SaveOrderProductAsync(PedidoProdutoDTO pedidoProdut
 
     return pedidoProduto;
 }
-#endregion
+async Task<PedidoDTO?> GetPedidoByIdAsync(int id)
+{
+    return await (from pedido in context.Pedidos
+           where pedido.Id == id
+           select new PedidoDTO
+           {
+               Id = pedido.Id,
+               Cliente = DtoFromModels.CustomerDtoFromModel(pedido.Cliente),
+               Descricao = pedido.Descricao,
+               StatusPedido = (StatusPedido)pedido.StatusPedido,
+               TipoPagamento = (TipoPagamento)pedido.TipoPagamento,
+               ValorTotal = pedido.ValorTotal,
+               Produtos = pedido.PedidoProdutos.Select(s => new PedidoProdutoDTO()
+               {
+                   Id = s.Id,
+                   PedidoId = pedido.Id,
+                   Descricao = s.Descricao,
+                   Quantidade = s.Quantidade,
+                   ValorTotal = s.ValorTotal,
+                   Produto = DtoFromModels.ProductDtoFromModel(s.Produto)
+               })
+                .ToList()
+           }).FirstOrDefaultAsync();
+}
+async Task SendToSignalRHub(IHubContext<RealTimeHub> realTimeHub, string method, string idSubscription, object arg1, CancellationToken cancellationToken)
+{
+    if (RealTimeSubscriptionManager.SubscriptionAlreadyExists(idSubscription))
+    {
+        await realTimeHub.Clients.Group(idSubscription).SendAsync(method, arg1, cancellationToken);
+        await Console.Out.WriteLineAsync("Objeto enviado realtime para o usuário:" + idSubscription);
+    }    
+}
+async Task<int[]> GetUsersIdsByPredicate(bool isAdmin = false, Expression<Func<Cliente, bool>> where = null)
+{
 
+    if (isAdmin)
+    {
+        return await context.Usuarios
+                        .Select(s => s.Id)
+                        .ToArrayAsync();
+    }
+
+    return await context.Clientes
+                        .Where(where ?? (o => true))
+                        .Select(s => s.Id)
+                        .ToArrayAsync();
+}
+
+#endregion
 
 app.Run();
