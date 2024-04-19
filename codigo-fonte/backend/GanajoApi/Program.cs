@@ -57,12 +57,12 @@ app.MapGet("/products", async () =>
 app.MapGet("/product/{id}", async ([FromRoute] int id) =>
 {
     if(id == 0)
-        Results.NoContent();
+        return Results.NoContent();
 
     var product = await context.Produtos.FirstOrDefaultAsync(f => f.Id == id);
 
     if (product != null)
-        Results.Ok(DtoFromModels.ProductDtoFromModel(product));
+        return Results.Ok(DtoFromModels.ProductDtoFromModel(product));
 
     return Results.NotFound("Produto não encontrado...");
 });
@@ -103,7 +103,7 @@ app.MapPost("/product", async ([FromBody] ProductDTO product) =>
 
 app.MapDelete("/product/{id}", async ([FromRoute] int id, [FromQuery] bool removido) => {
     if(id == 0)
-        Results.NoContent();
+        return Results.NoContent();
 
     var product = await context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -147,7 +147,7 @@ app.MapGet("/customer/{id}", async ([FromRoute] int id) => {
 
 app.MapPost("/customer", async ([FromBody] CustomerDTO customer) => {
     if(customer == null)
-        Results.NoContent();
+        return Results.NoContent();
 
     var customerDb = await context.Clientes.FirstOrDefaultAsync(f => f.Id == customer.Id);
 
@@ -203,7 +203,7 @@ app.MapGet("/postalcode/{id}", async ([FromRoute] int id) => {
 
 app.MapPost("/postalcode", async ([FromBody] RegiaoPostalDTO regiaoPostal) => {
     if(regiaoPostal == null)
-        Results.NoContent();
+        return Results.NoContent();
 
     var regiaoPostalDb = await context.RegiaoPostals.FirstOrDefaultAsync(f => f.Id == regiaoPostal.Id);
 
@@ -283,7 +283,7 @@ app.MapGet("/order/{id}", async ([FromRoute] int id) => {
     if (id == 0)
         return Results.NoContent();
 
-    var pedidoDto = GetPedidoByIdAsync(id);
+    var pedidoDto = await GetPedidoByIdAsync(id);
 
     if (pedidoDto == null)
         return Results.NotFound("Pedido não encontrado...");
@@ -294,7 +294,7 @@ app.MapGet("/order/{id}", async ([FromRoute] int id) => {
 app.MapPost("/order", async ([FromBody] PedidoDTO pedido, IHubContext<RealTimeHub> realTimeHub) => {
 
     if (pedido == null || !pedido.Produtos.Any())
-        Results.NoContent();
+        return Results.NoContent();
 
     var pedidoDb = await context
                             .Pedidos
@@ -340,7 +340,7 @@ app.MapPost("/order", async ([FromBody] PedidoDTO pedido, IHubContext<RealTimeHu
     var pedidoToReturn = await GetPedidoByIdAsync(pedidoDb.Id);
 
     if (pedidoToReturn == null)
-        Results.NotFound();
+        return Results.NotFound();
 
     var adminIds = await GetUsersIdsByPredicate(isAdmin: true);
 

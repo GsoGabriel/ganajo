@@ -5,22 +5,25 @@ import { Produto } from '../../DTOs/Produto.ts';
 import { FaMotorcycle } from "react-icons/fa6";
 import './produtos.css'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
+import { useApi } from '../../Api/useApi.tsx';
+import { Grid } from '@mui/material';
+import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
+import { getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
 
 const Home = () => {
-  const [itens, setItems] = useState<Produto[]>([]);
-  const [screenItens, setScreenItems] = useState<Produto[]>([]);
+
+  const {isLoading, data} = useApi<Produto[]>(getProductsAxiosConfig())
+  const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const searchingHandleCallBack = useCallback((value : string) => {
-    setScreenItems(itens.filter(f => f.Nome.toLowerCase().includes(value.toLowerCase()) || f.Descricao.toLowerCase().includes(value.toLowerCase())));
-  }, [itens]);
+    setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
+  }, [data]);
 
   useEffect(() => {
-    const mockItens = generateProducts();
-    setItems(mockItens);
-    setScreenItems(mockItens);
-  }, []);
+    setScreenItems(data ?? []);
+  }, [data])
 
   const handleAddNewProduct = () => {
     navigate('/add-product');
@@ -55,29 +58,19 @@ const Home = () => {
           <button className="addButton" onClick={handleAddNewProduct}>Adicionar Novo Produto</button>
         </div>
       </div>
-      <div className="productsContainer">
-        {screenItens.map(m => (
-          <div key={m.Id} className="productCard">
-            <img src={m.Imagem} alt={m.Nome} className="productImage" />
-            {editingItemId === m.Id ? (
-              <div className="productInfo editProductArea">
-                <input type="file" onChange={handleImageChange} accept="image/*" />
-                <input type="text" defaultValue={m.Nome} className="inputField" />
-                <textarea defaultValue={m.Descricao} className="inputField descriptionField"></textarea>
-                <input type="text" defaultValue={formatPrice(m.Valor)} className="inputField" />
-                <button className="editButton saveButton" onClick={() => handleSaveProduct(m)}>Salvar</button>
-              </div>
-            ) : (
-              <div className="productInfo">
-                <h3>{m.Nome}</h3>
-                <p>{m.Descricao}</p>
-                <p>{formatPrice(m.Valor)}</p>
-                <button className="editButton" onClick={() => handleEditProduct(m.Id)}>Editar</button>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      {
+        isLoading ? <div>Is Loading...</div> : 
+        <Grid container spacing={2} className="itemsStyle"> 
+        {
+          screenItens?.map(m => (
+            <Grid key={m.id} item xs={12} sm={6} md={4}>
+              <ProductCard product={m}/> 
+            </Grid>
+          ))
+        }
+      </Grid>
+      }
+      
     </div>
   );
 };

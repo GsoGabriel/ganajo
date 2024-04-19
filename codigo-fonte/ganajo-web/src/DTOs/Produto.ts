@@ -1,7 +1,12 @@
 export interface Produto {
-    Id : number,
-    Nome : string,
-    Descricao : string,
-    Valor : number,
-    Imagem : string
+    id : number,
+    nome : string,
+    descricao : string,
+    valor : number,
+    tempoPreparo: string;
+    enderecoImagem : string,
+    categoria: string,
+    usuarioId: number,
+    editadorPorNome: string,
+    editadoData: string
 }
