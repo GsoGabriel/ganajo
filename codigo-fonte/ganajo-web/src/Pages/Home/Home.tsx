@@ -12,10 +12,8 @@ import { getProductAxiosConfig, getProductsAxiosConfig } from '../../Api/ganajoC
 
 const Home = () => {
   const {isLoading, data} = useApi<Produto[]>(getProductsAxiosConfig())
-  const {isLoading : isloading2, data: data2} = useApi<Produto>(getProductAxiosConfig(5))
   const [screenItens, setScreenItems] = useState<Produto[]>();
   const navigate = useNavigate();
-  console.log(data2);
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
   }, [data]);

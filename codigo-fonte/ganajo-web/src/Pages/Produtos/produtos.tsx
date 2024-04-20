@@ -16,7 +16,7 @@ const Home = () => {
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const navigate = useNavigate();
-
+  
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
   }, [data]);

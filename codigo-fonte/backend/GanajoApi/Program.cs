@@ -161,7 +161,7 @@ app.MapPost("/customer", async ([FromBody] CustomerDTO customer) => {
     customerDb.NumeroCasa = customer.NumeroCasa;
     customerDb.Complemento = customer.Complemento;
     customerDb.NumeroTelefone = customer.NumeroTelefone;
-    customerDb.RegiaoPostalId = customer.RegiaoPostalId;
+    customerDb.RegiaoPostalId = customer.RegiaoPostal.Id;
 
     context.SavedChanges += (s, e) => {
         customer.Id = customerDb.Id;

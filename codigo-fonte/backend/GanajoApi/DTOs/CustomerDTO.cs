@@ -14,5 +14,5 @@ public partial class CustomerDTO
 
     public string NumeroTelefone { get; set; } = null!;
 
-    public int RegiaoPostalId { get; set; }
+    public RegiaoPostalDTO RegiaoPostal { get; set; }
 }

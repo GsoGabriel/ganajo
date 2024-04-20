@@ -1,11 +1,10 @@
-import axios, { AxiosRequestConfig } from "axios";
+const isLocalTest = true;
 
 const getBaseUrl = () => {
-  return 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'
+  return isLocalTest ? 'https://localhost:7245/' : 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'
 };
 
 export const BASE_URL = getBaseUrl();
-export const BASE_API_URL = `${BASE_URL}/api`;
 
 // PRODUCTS AREA
 

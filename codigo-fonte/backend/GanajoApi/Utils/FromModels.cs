@@ -5,6 +5,10 @@ namespace GanajoApi.FromModels;
 
 public static class DtoFromModels {
     public static RegiaoPostalDTO RegiaoDtoFromModel(RegiaoPostal regiaoPostal){
+
+        if (regiaoPostal == null)
+            return new RegiaoPostalDTO();
+
         return new RegiaoPostalDTO(){
             Id = regiaoPostal.Id,
             Bairro = regiaoPostal.Bairro,
@@ -40,7 +44,7 @@ public static class DtoFromModels {
             NumeroCasa =cliente.NumeroCasa,
             Complemento = cliente.Complemento,
             NumeroTelefone = cliente.NumeroTelefone,
-            RegiaoPostalId = cliente.RegiaoPostalId
+            RegiaoPostal = RegiaoDtoFromModel(cliente.RegiaoPostal)
         };
     }
 }
