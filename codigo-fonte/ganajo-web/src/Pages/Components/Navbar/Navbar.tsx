@@ -12,14 +12,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Logo from '../../../Assets/ganajo-logo.png';
-import ButtonClose from '../Buttons/Carrinho/ButtonCarrinho.tsx';
+import ButtonCarrinho from '../Buttons/Carrinho/ButtonCarrinho.tsx';
 import { Link } from 'react-router-dom';
 
 /* NavBarLink */
 import { NavBarLink } from '../../../DTOs/NavBarLink';
 import commonNavItems from './commonUserNavBarItems.ts';
 import adminNavItens from './adminUserNavBarItems.ts';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -39,7 +39,7 @@ function ResponsiveAppBar() {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+    // setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -143,7 +143,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <ButtonClose onClick={undefined}/>
+                <ButtonCarrinho onClick={undefined}/>
               </IconButton>
             </Tooltip>
             <Menu

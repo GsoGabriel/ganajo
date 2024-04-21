@@ -1,5 +1,5 @@
 import { FormaPagamento } from "./FormaPagamento";
-import { Item } from "./Item";
+import { PedidoProdutoDTO } from "./PedidoProduto";
 import { StatusPedido } from "./Status";
 
 export interface Pedido {
@@ -9,6 +9,6 @@ export interface Pedido {
     Endereco : string,
     FormaPagamento: FormaPagamento,
     Status : StatusPedido,
-    Items : Item[],
+    Items : PedidoProdutoDTO[],
     ValorTotal : number
 }

@@ -44,11 +44,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             <Typography variant="body2" color="text.secondary" style={{ marginBottom: '8px' }}>
               {selectedProduct?.descricao}
             </Typography>
-            <div style={{ marginBottom: '8px' }}>
-              <Chip label="Zero Lactose" variant="outlined" color="primary" size="small" style={{ marginRight: '4px' }} />
-              <Chip label="Zero Glúten" variant="outlined" color="primary" size="small" style={{ marginRight: '4px' }} />
-              <Chip label="Zero Açúcar" variant="outlined" color="primary" size="small" style={{ marginRight: '4px' }} />
-            </div>
             <div>
               <Chip label={`R$${selectedProduct?.valor.toFixed(2)}`} variant="outlined" color="secondary" /> 
             </div>

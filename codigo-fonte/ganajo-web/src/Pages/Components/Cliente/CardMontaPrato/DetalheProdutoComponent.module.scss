@@ -38,13 +38,13 @@
 }
 
 .rightColumn {
+    display: flex;
+    flex-direction: column;
     width: 100%; 
     padding-left: 10px;
     padding-right: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 2.2rem;
+    gap: 10px;
 
     @media (min-width: 768px) {
         width: 66%; 
@@ -92,11 +92,26 @@
 
 .inputObservacao {
     width: 100%;
-    height: 25%;
+    height: auto;
 
     @media (max-width: 768px) {
-        height: 30%;
+        height: auto;
     }
+}
+
+.quantidadeContainerStyle {
+    text-align: start;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    gap: 5px;
+}
+
+.quantidadeContainerStyle h2{
+    font-weight: 500;
+    font-size: 1.5rem;
+    margin: 0px;
+    text-align: start;
 }
 
 .buttonPedir {

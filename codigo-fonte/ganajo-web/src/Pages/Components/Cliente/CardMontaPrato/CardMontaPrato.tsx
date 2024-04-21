@@ -6,7 +6,6 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-import Arroz from '../../Buttons/RadioGroup/RadioGroup.tsx';
 import { Produto } from '../../../../DTOs/Produto.ts';
 import formatValue from '../../../../Utils/formatValue.ts';
 import formatStringLimit from '../../../../Utils/formatStringLimit.ts';
