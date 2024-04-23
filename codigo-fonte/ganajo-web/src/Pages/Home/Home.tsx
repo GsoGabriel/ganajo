@@ -1,23 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import generateProducts from './data.ts';
 import { Produto } from '../../DTOs/Produto.ts';
 import { FaMotorcycle } from "react-icons/fa6";
 import { Grid } from '@mui/material'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
-import { ModalMontaPrato } from '../Components/Cliente/CardMontaPrato/CardMontaPrato.tsx';
 import { useApi } from '../../Api/useApi.tsx';
-import { getProductAxiosConfig, getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
+import {  getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
+import { useCarrinhoContext } from '../../Context/CarrinhoContext.tsx';
 
 const Home = () => {
-  const {isLoading, data} = useApi<Produto[]>(getProductsAxiosConfig())
+  const {data} = useApi<Produto[]>(getProductsAxiosConfig())
   const [screenItens, setScreenItems] = useState<Produto[]>();
-  const navigate = useNavigate();
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
   }, [data]);
 
+  const {mostrarCarrinho} = useCarrinhoContext();
+  
   useEffect(() => {
     setScreenItems(data ?? [])
   }, [data])
@@ -43,8 +42,8 @@ const Home = () => {
             </Grid>
           ))
         }
-      </Grid>
-      </div>
+      </Grid>  
+    </div>
   );
 };
 

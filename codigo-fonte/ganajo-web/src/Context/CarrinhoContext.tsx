@@ -7,7 +7,8 @@ const pedidoProdutoInitialState :  PedidoProdutoDTO[] = []
 interface CarrinhoContextType {
     produtos : PedidoProdutoDTO[],
     setProduto(produto : PedidoProdutoDTO) : void,
-    count : number
+    count : number,
+    removerProduto(index : number) : void
 }
 
 interface CarrinhoContextProviderProps {
@@ -17,7 +18,8 @@ interface CarrinhoContextProviderProps {
 const carrinhoContextInitialState : CarrinhoContextType = {
     produtos: pedidoProdutoInitialState,
     setProduto: (produto => {}),
-    count: 0
+    count: 0,
+    removerProduto: ((index) => {})
 }
 
 export const CarrinhoContext = createContext<CarrinhoContextType>(carrinhoContextInitialState);
@@ -25,17 +27,24 @@ export const CarrinhoContext = createContext<CarrinhoContextType>(carrinhoContex
 export const CarrinhoProvider = ({children} : CarrinhoContextProviderProps) => {
     const [produtos, setProdutos] = useState<PedidoProdutoDTO[]>(pedidoProdutoInitialState);
     const [count, setCount] = useState<number>(0);
+    const [index, setIndex] = useState<number>(0);
 
-
-    function pushProdutos(produto : PedidoProdutoDTO){
+    function pushProdutos(pedidoProduto : PedidoProdutoDTO){
+        setIndex(index + 1);
         const newArray = produtos;
-        newArray.push(produto);
+        pedidoProduto.id = index;
+        newArray.push(pedidoProduto);
         setProdutos(newArray);
-
         setCount(newArray.length);
     }
 
-    return <CarrinhoContext.Provider value={{produtos, setProduto: pushProdutos, count}}>
+    function removerProdutoHandle(index : number){
+        const newArray = produtos.filter(f => f.id !== index);
+        setProdutos(newArray);
+        setCount(newArray.length);
+    }
+
+    return <CarrinhoContext.Provider value={{produtos, setProduto: pushProdutos, count, removerProduto: removerProdutoHandle}}>
         {children}
     </CarrinhoContext.Provider>
 }

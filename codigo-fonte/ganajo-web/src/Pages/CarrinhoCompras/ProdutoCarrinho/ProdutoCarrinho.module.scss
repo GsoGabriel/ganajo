@@ -1,0 +1,10 @@
+.produtoInfo {
+    display: flex;
+    justify-content: start;
+    justify-content: space-between;
+    gap: 1rem;
+
+    div {
+        display: flex;
+    }
+}

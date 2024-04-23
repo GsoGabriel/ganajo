@@ -27,7 +27,7 @@ export const DetalheProdutoComponent = ({ Produto, onClose }: DetalheProdutoComp
         descricao: ''
     }
 
-    const {produtos, setProduto} = useCarrinhoContext();
+    const {setProduto} = useCarrinhoContext();
     const [pedidoProduto, setPedidoProduto] = useState<PedidoProdutoDTO>(pedidoProdutoInitialState)
 
     const [quantidade, setQuantidade] = useState(1);
@@ -51,6 +51,7 @@ export const DetalheProdutoComponent = ({ Produto, onClose }: DetalheProdutoComp
 
     const adicionarProdutoCarrinhoCallBack = () => {
         setProduto(pedidoProduto);
+        onClose();
     };
 
     return (

@@ -8,7 +8,7 @@ import { useCarrinhoContext } from '../../../../Context/CarrinhoContext.tsx';
 function ButtonCarrinho({ onClick }) {  
     
     const {count} = useCarrinhoContext();
-
+    
     return (    
         <Badge badgeContent={count} invisible={count <= 0}>
             <IconButton onClick={onClick} size="small">       

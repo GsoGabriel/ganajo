@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Logo from '../../../Assets/ganajo-logo.png';
 import ButtonCarrinho from '../Buttons/Carrinho/ButtonCarrinho.tsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /* NavBarLink */
 import { NavBarLink } from '../../../DTOs/NavBarLink';
@@ -29,6 +29,8 @@ function ResponsiveAppBar() {
 
   const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
   const [navItems, setNavItems] = React.useState<NavBarLink[]>(commonNavItems);
+
+ const navigate = useNavigate();
 
   useEffect(() => {
     setIsAdmin(false);
@@ -48,6 +50,10 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const GoToCarrinho = () => {
+    navigate('/carrinho');
   };
 
   return (
@@ -141,11 +147,9 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <ButtonCarrinho onClick={undefined}/>
-              </IconButton>
-            </Tooltip>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <ButtonCarrinho onClick={() => GoToCarrinho()}/>
+            </IconButton>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
