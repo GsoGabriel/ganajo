@@ -28,7 +28,6 @@ const ProdutoCarrinho = ({pedidoProduto, removeHandle} : ProdutoCarrinhoProps) =
               {
                 pedidoProduto.descricao?.length !== undefined && pedidoProduto.descricao?.length > 0 && (<p>"{pedidoProduto.descricao}"</p>)
               }
-              
             </div>
             <div>
               <ButtonClose onClick={() => removeHandle(pedidoProduto.id)}/>

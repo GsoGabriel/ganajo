@@ -8,6 +8,7 @@ import MeusPedidos from './Pages/MeusPedidos/MeusPedidos.tsx';
 import Carrinho from './Pages/CarrinhoCompras/CarrinhoComponent.tsx';
 import Produtos from './Pages/Produtos/produtos.tsx';
 import Login from './Pages/LoginAdmin/LoginAdmin.tsx';
+import TelephoneComponent from './Pages/Identificacao/TelephoneComponent.tsx';
 
 function App() {
 
@@ -18,11 +19,12 @@ function App() {
   }, [])
 
   return (
-      <BrowserRouter>
+    <BrowserRouter>
         <Layout>
           <Routes>
             <Route path="/" element={ isAdmin ? <MeusPedidos isAdmin={isAdmin}/> : <Home />} />
             <Route path="/bairrosdeentrega" element={<BairrosdeEntrega/>} />
+            <Route path="/identificacao" element={<TelephoneComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />
             <Route path="/Admin" element={<Login/>} />

@@ -1,3 +1,7 @@
+import axios, { AxiosResponse } from "axios";
+import { ClienteDTO } from "../DTOs/Cliente";
+import { toast } from "react-toastify";
+
 const isLocalTest = true;
 
 const getBaseUrl = () => {
@@ -19,5 +23,26 @@ export function getProductAxiosConfig(id : number){
   return {
     method: 'GET',
     url: `${BASE_URL}product/${id}`
+  }
+}
+
+// CUSTOMER AREA
+
+export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : string) => {
+  try {
+    const options = {
+      method: 'GET',
+      url: `${BASE_URL}customer/${telephone}`
+    };
+    const response: AxiosResponse<ClienteDTO> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error){
+    if (axios.isAxiosError(error)) {
+        toast.error(error.message, {
+          toastId: 'useProductsId',
+          position: 'top-right',
+          autoClose: false,
+        });
+    }
   }
 }

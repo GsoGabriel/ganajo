@@ -5,11 +5,13 @@ import ProdutoCarrinho from './ProdutoCarrinho/ProdutoCarrinho.tsx';
 import { Pedido } from '../../DTOs/Pedido.ts';
 import formatValue from '../../Utils/formatValue.ts';
 import { Button, List, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const CarrinhoComponent = () => {
 
     const {produtos, removerProduto} = useCarrinhoContext();
 
+    const navigate = useNavigate();
 
     const [pedido, setPedido] = useState<Pedido>();
     const [descricao, setDescricao] = useState<string>('');
@@ -22,6 +24,10 @@ const CarrinhoComponent = () => {
 
     const removeProductHandler = (index : number) => {
         removerProduto(index);
+    }
+
+    const goToIdentificacao = () => {
+        navigate('/identificacao', {state:{openAfter: '/formularioPedido'}});
     }
 
     return (
@@ -43,7 +49,7 @@ const CarrinhoComponent = () => {
                                 <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)} className={styles.inputObservacao} placeholder="Adicione uma observação ao pedido" />
                             </div>
                             <h1>Valor total: {formatValue(valorTotal, 2, "R$")}</h1>
-                            <Button className={styles.buttonPedir}>Prosseguir</Button>
+                            <button className={styles.buttonPedir} onClick={goToIdentificacao}>Prosseguir</button>
                         </div>
                     </div>
                 ) : <h3>Não há produtos em seu carrinho :(</h3>

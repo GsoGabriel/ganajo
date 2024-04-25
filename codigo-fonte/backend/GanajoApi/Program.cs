@@ -132,13 +132,25 @@ app.MapGet("/customers", async ([FromServices] GanajoDbContext _context) => {
     return Results.Ok(customers);
 });
 
-app.MapGet("/customer/{id}", async ([FromRoute] int id, [FromServices] GanajoDbContext _context) => {
-    if(id == 0)
+//app.MapGet("/customer/{id}", async ([FromRoute] int id, [FromServices] GanajoDbContext _context) => {
+//    if(id == 0)
+//        return Results.NoContent();
+
+//    var cliente = await _context.Clientes.FirstOrDefaultAsync(f => f.Id == id);
+
+//    if(cliente == null)
+//        return Results.NotFound("Cliente não encontrado...");
+
+//    return Results.Ok(DtoFromModels.CustomerDtoFromModel(cliente));
+//});
+
+app.MapGet("/customer/{telephone}", async ([FromRoute] string telephone, [FromServices] GanajoDbContext _context) => {
+    if (string.IsNullOrEmpty(telephone))
         return Results.NoContent();
 
-    var cliente = await _context.Clientes.FirstOrDefaultAsync(f => f.Id == id);
+    var cliente = await _context.Clientes.FirstOrDefaultAsync(f => f.NumeroTelefone.Equals(telephone));
 
-    if(cliente == null)
+    if (cliente == null)
         return Results.NotFound("Cliente não encontrado...");
 
     return Results.Ok(DtoFromModels.CustomerDtoFromModel(cliente));

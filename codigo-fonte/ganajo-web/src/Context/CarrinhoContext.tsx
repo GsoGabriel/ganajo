@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import React from 'react'
 import { PedidoProdutoDTO } from "../DTOs/PedidoProduto";
 
@@ -29,6 +29,8 @@ export const CarrinhoProvider = ({children} : CarrinhoContextProviderProps) => {
     const [count, setCount] = useState<number>(0);
     const [index, setIndex] = useState<number>(0);
 
+    const localStorageCarrinhoKey = 'carrinho';
+
     function pushProdutos(pedidoProduto : PedidoProdutoDTO){
         setIndex(index + 1);
         const newArray = produtos;
@@ -36,6 +38,7 @@ export const CarrinhoProvider = ({children} : CarrinhoContextProviderProps) => {
         newArray.push(pedidoProduto);
         setProdutos(newArray);
         setCount(newArray.length);
+        localStorage.setItem(localStorageCarrinhoKey, JSON.stringify(newArray));
     }
 
     function removerProdutoHandle(index : number){
@@ -43,6 +46,12 @@ export const CarrinhoProvider = ({children} : CarrinhoContextProviderProps) => {
         setProdutos(newArray);
         setCount(newArray.length);
     }
+
+    useEffect(() => {
+        const produtosCache = JSON.parse(localStorage.getItem(localStorageCarrinhoKey) ?? '[]') as PedidoProdutoDTO[];
+        setProdutos(produtosCache);
+        setCount(produtosCache.length);
+    }, [])
 
     return <CarrinhoContext.Provider value={{produtos, setProduto: pushProdutos, count, removerProduto: removerProdutoHandle}}>
         {children}

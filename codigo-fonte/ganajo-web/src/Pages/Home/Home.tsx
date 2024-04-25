@@ -6,7 +6,6 @@ import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 import { useApi } from '../../Api/useApi.tsx';
 import {  getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
-import { useCarrinhoContext } from '../../Context/CarrinhoContext.tsx';
 
 const Home = () => {
   const {data} = useApi<Produto[]>(getProductsAxiosConfig())
@@ -14,8 +13,6 @@ const Home = () => {
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
   }, [data]);
-
-  const {mostrarCarrinho} = useCarrinhoContext();
   
   useEffect(() => {
     setScreenItems(data ?? [])
