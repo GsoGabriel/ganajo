@@ -11,25 +11,6 @@ function onSubmit(values, actions) {
     console.log('SUBMIT', values);
 }
 
-function onBlurCep(ev, setFieldValue) {
-    const { value } = ev.target;
-
-    const cep = value?.replace(/[^0-9]/g, '');
-
-    if (cep?.length !== 8) {
-        return;
-    }
-
-    fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then((res) => res.json())
-        .then((data) => {
-            setFieldValue('logradouro', data.logradouro);
-            setFieldValue('bairro', data.bairro);
-            setFieldValue('cidade', data.localidade);
-            setFieldValue('uf', data.uf);
-        });
-}
-
 const FormCadastro = () => {
     const { Formik } = formik;
 
@@ -66,25 +47,6 @@ const FormCadastro = () => {
             {({ handleSubmit, handleChange, values, touched, errors, setFieldValue }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                     <Stack gap={1} className="col-md-6 mx-auto">
-                        <div className="p-1">
-                            <Form.Group as={Col}>
-                                <Form.Label>CEP</Form.Label>
-                                <Form.Control
-                                    as={IMaskInput}
-                                    mask="00000-000"
-                                    onBlur={(ev) => onBlurCep(ev, setFieldValue)}
-                                    type="text"
-                                    name="cep"
-                                    value={values.cep}
-                                    isInvalid={!!errors.cep}
-                                    onChange={handleChange}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.cep}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </div>
-
                         <div className="p-1">
                             <Form.Group as={Col} controlId="validationFormik03">
                                 <Form.Label>Endereço</Form.Label>
@@ -227,4 +189,4 @@ const FormCadastro = () => {
     );
 }
 
-export default FormCadastro;
+export default FormCadastro

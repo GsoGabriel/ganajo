@@ -7,10 +7,14 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { CarrinhoProvider } from './Context/CarrinhoContext.tsx';
+import { PedidoProvider } from './Context/PedidoContext.tsx';
 
 const root = createRoot(document.querySelector('#root'));
 root.render(
-    <CarrinhoProvider>
-        <App/>
-    </CarrinhoProvider>
+    <PedidoProvider>
+        <CarrinhoProvider>
+            <App/>
+        </CarrinhoProvider>
+    </PedidoProvider>
+    
 );

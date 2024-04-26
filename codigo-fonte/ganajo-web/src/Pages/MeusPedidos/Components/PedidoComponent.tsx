@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Pedido } from '../../../DTOs/Pedido.ts'
+import { PedidoDTO } from '../../../DTOs/Pedido.ts'
 import styles from './PedidoComponent.module.scss'
 import { FormaPagamento } from '../../../DTOs/FormaPagamento.ts';
 import { Item } from '../../../DTOs/Item.ts';
@@ -7,7 +7,7 @@ import { StatusDropdown } from '../../../Share/StatusDropdown.tsx';
 import { KeyValue } from './../../../DTOs/KeyValue';
 
 interface PedidoProps {
-  Pedido : Pedido,
+  Pedido : PedidoDTO,
   isAdmin : boolean
 }
 

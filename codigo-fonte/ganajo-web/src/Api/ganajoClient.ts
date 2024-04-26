@@ -26,6 +26,15 @@ export function getProductAxiosConfig(id : number){
   }
 }
 
+// BAIRROS AREA
+
+export function getBairrosAxiosConfig(){
+  return {
+    method: 'GET',
+    url: `${BASE_URL}postalcodes`
+  }
+}
+
 // CUSTOMER AREA
 
 export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : string) => {
@@ -38,11 +47,12 @@ export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : strin
     return response.data;
   } catch(error){
     if (axios.isAxiosError(error)) {
-        toast.error(error.message, {
-          toastId: 'useProductsId',
-          position: 'top-right',
-          autoClose: false,
-        });
+      console.log(error)
+      toast.error(error.response?.data, {
+        toastId: 'getCustomerByTelephone',
+        position: 'top-right',
+        autoClose: false,
+      });
     }
   }
 }

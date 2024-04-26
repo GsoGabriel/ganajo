@@ -14,6 +14,7 @@ export function useApi<T>(options?: AxiosRequestConfig){
             const response: AxiosResponse<T> = await axios(options?.url ?? '', options);
             setData(response.data);
         } catch(error){
+            console.log(error)
             if (axios.isAxiosError(error)) {
                 toast.error(error.message, {
                   toastId: 'useProductsId',

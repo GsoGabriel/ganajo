@@ -1,6 +1,6 @@
 import { FormaPagamento } from "../../../DTOs/FormaPagamento.ts";
 import { Item } from "../../../DTOs/Item.ts";
-import { Pedido } from "../../../DTOs/Pedido.ts";
+import { PedidoDTO } from "../../../DTOs/Pedido.ts";
 import { StatusPedido } from "../../../DTOs/Status.ts";
 
 const items : Item[] = [
@@ -11,7 +11,7 @@ const items : Item[] = [
 
 const valorTotal = 87.80;
 
-const pedidos : Array<Pedido> = [
+const pedidos : Array<PedidoDTO> = [
     { Id: 1, NomeCliente: 'Cliente 1', CPF: '160.187.022-30', Endereco: 'Endereço Cliente 1', FormaPagamento: FormaPagamento.Cartao, Status: StatusPedido.SaiuParaEntrega, ValorTotal: valorTotal, Items: items},
     { Id: 2, NomeCliente: 'Cliente 2', CPF: '180.150.045-31', Endereco: 'Endereço Cliente 2', FormaPagamento: FormaPagamento.Dinheiro, Status: StatusPedido.Analise, ValorTotal: valorTotal, Items: items},
     { Id: 3, NomeCliente: 'Cliente 3', CPF: '160.197.079-30', Endereco: 'Endereço Cliente 3', FormaPagamento: FormaPagamento.Pix, Status: StatusPedido.EmPreparo, ValorTotal: valorTotal, Items: items},

@@ -8,7 +8,9 @@ import MeusPedidos from './Pages/MeusPedidos/MeusPedidos.tsx';
 import Carrinho from './Pages/CarrinhoCompras/CarrinhoComponent.tsx';
 import Produtos from './Pages/Produtos/produtos.tsx';
 import Login from './Pages/LoginAdmin/LoginAdmin.tsx';
-import TelephoneComponent from './Pages/Identificacao/TelephoneComponent.tsx';
+import PedidoFullComponent from './Pages/Pedido/PedidoFullComponent.tsx';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
@@ -19,12 +21,12 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter>
+      <BrowserRouter>
         <Layout>
           <Routes>
             <Route path="/" element={ isAdmin ? <MeusPedidos isAdmin={isAdmin}/> : <Home />} />
             <Route path="/bairrosdeentrega" element={<BairrosdeEntrega/>} />
-            <Route path="/identificacao" element={<TelephoneComponent/>} />
+            <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />
             <Route path="/Admin" element={<Login/>} />
@@ -33,7 +35,9 @@ function App() {
             }
           </Routes>
         </Layout>
+        <ToastContainer />
       </BrowserRouter>
+    
   );
 }
 

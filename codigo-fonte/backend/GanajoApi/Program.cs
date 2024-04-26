@@ -122,6 +122,7 @@ app.MapDelete("/product/{id}", async ([FromRoute] int id, [FromQuery] bool remov
 app.MapGet("/customers", async ([FromServices] GanajoDbContext _context) => {
 
     var customers = await _context.Clientes
+                                .Include(i => i.RegiaoPostal)
                                 .OrderByDescending(o => o.Nome)
                                 .Select(s => DtoFromModels.CustomerDtoFromModel(s))
                                 .ToListAsync();
@@ -148,7 +149,9 @@ app.MapGet("/customer/{telephone}", async ([FromRoute] string telephone, [FromSe
     if (string.IsNullOrEmpty(telephone))
         return Results.NoContent();
 
-    var cliente = await _context.Clientes.FirstOrDefaultAsync(f => f.NumeroTelefone.Equals(telephone));
+    var cliente = await _context.Clientes
+                            .Include(i => i.RegiaoPostal)
+                            .FirstOrDefaultAsync(f => f.NumeroTelefone.Equals(telephone));
 
     if (cliente == null)
         return Results.NotFound("Cliente não encontrado...");
@@ -160,7 +163,9 @@ app.MapPost("/customer", async ([FromBody] CustomerDTO customer, [FromServices] 
     if(customer == null)
         return Results.NoContent();
 
-    var customerDb = await _context.Clientes.FirstOrDefaultAsync(f => f.Id == customer.Id);
+    var customerDb = await _context.Clientes
+                                    .Include(i => i.RegiaoPostal)
+                                    .FirstOrDefaultAsync(f => f.Id == customer.Id);
 
     if(customerDb == null){
         customerDb = new Cliente();
@@ -491,6 +496,7 @@ async Task<int[]> GetUsersIdsByPredicate([FromServices] GanajoDbContext _context
     }
 
     return await _context.Clientes
+                        .Include(i => i.RegiaoPostal)
                         .Where(where ?? (o => true))
                         .Select(s => s.Id)
                         .ToArrayAsync();
