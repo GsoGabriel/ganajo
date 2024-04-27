@@ -45,6 +45,7 @@ export const CarrinhoProvider = ({children} : CarrinhoContextProviderProps) => {
         const newArray = produtos.filter(f => f.id !== index);
         setProdutos(newArray);
         setCount(newArray.length);
+        localStorage.setItem(localStorageCarrinhoKey, JSON.stringify(newArray));
     }
 
     useEffect(() => {

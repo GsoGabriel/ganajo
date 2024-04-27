@@ -8,23 +8,22 @@
     aspect-ratio: 1/1;
 }
 
-.container {
-    text-align: center;
-    padding: 15px 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.autoCompleteInput {
+.buttonPedir {
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: rgb(34, 34, 34);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
     width: 25em;
 }
 
 @media screen and (max-width: 600px){
-    .autoCompleteInput {
-        width: 15em;
-    }
 
     .container {
         padding: 5px 0px;

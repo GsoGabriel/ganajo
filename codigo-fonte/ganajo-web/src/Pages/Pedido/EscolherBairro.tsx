@@ -61,13 +61,12 @@ const EscolherBairro = ({bairro} : EscolherBairroProps) => {
                     <h1>Confirme seu bairro</h1>
                     <h4>Você pode escolher um dos bairros disponiveis abaixo para o delivery :D</h4>
                     <Autocomplete
-                        className={styles.autoCompleteInput}
+                        fullWidth
                         disablePortal
                         value={selectedBairro}
                         onChange={(e, o) => handleSelectedBairro(o ?? defaultBairroAutoCompleteProp)}
                         id="combo-box-demo"
                         options={bairrosAutoComplete}
-                        sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Escolha seu Bairro" />}
                     />
                 </div>

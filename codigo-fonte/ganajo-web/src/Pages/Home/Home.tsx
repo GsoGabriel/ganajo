@@ -25,13 +25,13 @@ const Home = () => {
           <FaMotorcycle className="iconTheme"/> 
         </div>
         <div>
-          <h1 className="deliveryTime">Tempo médio de preparo: 40 min</h1> 
+          <h1 className="deliveryTime">Tempo médio de preparo: 40 min</h1>
         </div>
         <div className="inputStyle"> 
             <SearchAppBar onSearch={searchingHandleCallBack} /> 
         </div>
       </div>
-      <Grid container spacing={2} className="itemsStyle"> 
+      <Grid container spacing={2} className="itemsStyle">
         {
           screenItens?.map(m => (
             <Grid key={m.id} item xs={12} sm={6} md={4}>

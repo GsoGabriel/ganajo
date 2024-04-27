@@ -9,21 +9,15 @@ import { usePedidoContext } from '../../Context/PedidoContext.tsx';
 
 const CarrinhoComponent = () => {
 
-    const {descricao : test, setDescricao : updatePedidoDescricao, setValorTotal : updatePedidoVt} = usePedidoContext();
-
-    console.log(test)
+    const {descricao, setDescricao, valorTotal, setValorTotal} = usePedidoContext();
 
     const {produtos, removerProduto} = useCarrinhoContext();
 
     const navigate = useNavigate();
 
-    const [descricao, setDescricao] = useState<string>('');
-    const [valorTotal, setValorTotal] = useState<number>(0);
-
     useEffect(() => {
         const sum = produtos.reduce((partialSum, a) => partialSum + a.valorTotal, 0);
         setValorTotal(sum)
-        updatePedidoVt(sum);
     }, [produtos, setValorTotal])
 
     const removeProductHandler = (index : number) => {
@@ -52,7 +46,6 @@ const CarrinhoComponent = () => {
                             <div className={styles.observacaoItem}>
                                 <input type="text" value={descricao} onChange={(e) => {
                                     setDescricao(e.target.value);
-                                    updatePedidoDescricao(e.target.value);
                                 }} className={styles.inputObservacao} placeholder="Adicione uma observação ao pedido" />
                             </div>
                             <h1>Valor total: {formatValue(valorTotal, 2, "R$")}</h1>

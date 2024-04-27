@@ -11,7 +11,7 @@ function onSubmit(values, actions) {
     console.log('SUBMIT', values);
 }
 
-const FormCadastro = () => {
+const ClienteFormComponent = () => {
     const { Formik } = formik;
 
     const schema = yup.object().shape({
@@ -189,4 +189,4 @@ const FormCadastro = () => {
     );
 }
 
-export default FormCadastro
+export default ClienteFormComponent
