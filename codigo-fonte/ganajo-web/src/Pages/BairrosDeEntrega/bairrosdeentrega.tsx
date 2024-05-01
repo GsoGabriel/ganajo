@@ -14,6 +14,7 @@ import { FaMotorcycle } from 'react-icons/fa6';
 import { Bairro } from '../../DTOs/Bairro.ts';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
+import { getBairrosAxiosConfig } from '../../Api/ganajoClient.ts';
 
 const Bairros = () => {
   const [bairros, setBairros] = useState<Bairro[]>([]);
@@ -24,19 +25,22 @@ const Bairros = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const mockBairros = generateBairros();
-    setBairros(mockBairros);
-    setScreenBairros(mockBairros);
+    const fetchData = async () => {
+      const bairrosData = await getBairrosAxiosConfig();
+      setBairros(bairrosData);
+      setScreenBairros(bairrosData);
+    }
+    fetchData();
   }, []);
 
   const searchingHandleCallBack = useCallback((value: string) => {
-    setScreenBairros(bairros.filter(bairro => bairro.Nome.toLowerCase().includes(value.toLowerCase())));
+    setScreenBairros(bairros.filter(bairro => bairro.bairro.toLowerCase().includes(value.toLowerCase())));
   }, [bairros]);
 
   const handleEditBairro = () => {
     if (selectedBairro) {
       const updatedBairros = bairros.map(bairro =>
-        bairro.Id === selectedBairro.Id ? { ...bairro, Nome: editedBairroName } : bairro
+        bairro.id === selectedBairro.id ? { ...bairro, Nome: editedBairroName } : bairro
       );
       setBairros(updatedBairros);
       setScreenBairros(updatedBairros);
@@ -46,7 +50,7 @@ const Bairros = () => {
 
   const handleDeleteBairro = () => {
     if (selectedBairro) {
-      const updatedBairros = bairros.filter(bairro => bairro.Id !== selectedBairro.Id);
+      const updatedBairros = bairros.filter(bairro => bairro.id !== selectedBairro.id);
       setBairros(updatedBairros);
       setScreenBairros(updatedBairros);
       setDeleteDialogOpen(false);
@@ -97,7 +101,7 @@ const Bairros = () => {
                 bairro={screenBairros[index]}
                 onEdit={() => {
                   setSelectedBairro(screenBairros[index]);
-                  setEditedBairroName(screenBairros[index].Nome);
+                  setEditedBairroName(screenBairros[index].bairro);
                   setEditDialogOpen(true);
                 }}
                 onDelete={() => {

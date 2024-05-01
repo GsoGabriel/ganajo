@@ -14,10 +14,16 @@ interface CardBairroProps {
 }
 
 const CardBairro: React.FC<CardBairroProps> = ({ bairro, onEdit, onDelete }) => {
+  var nomeLabel = `Nome: ${bairro.bairro}`;
+  var precoLabel = `Taxa Entrega: R$ ${bairro.precoDelivery.toFixed(2)}`.replace('.',',');
+  var cepLabel = `Cep: ${bairro.cep}`
+
   return (
-    <ListItem key={bairro.Id} component="div" disablePadding>
+    <ListItem key={bairro.id} component="div" disablePadding>
       <ListItemButton>
-        <ListItemText primary={bairro.Nome} />
+        <ListItemText primary={nomeLabel} />
+        <ListItemText primary={precoLabel} />
+        <ListItemText primary={cepLabel} />
         <IconButton aria-label="edit" onClick={onEdit}>
           <EditIcon />
         </IconButton>

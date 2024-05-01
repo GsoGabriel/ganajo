@@ -1,11 +1,12 @@
 import axios, { AxiosResponse } from "axios";
 import { ClienteDTO } from "../DTOs/Cliente";
+import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
 
 const isLocalTest = true;
 
 const getBaseUrl = () => {
-  return isLocalTest ? 'https://localhost:7245/' : 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'
+  return isLocalTest ? 'http://localhost:5022/' : 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'
 };
 
 export const BASE_URL = getBaseUrl();
@@ -27,12 +28,19 @@ export function getProductAxiosConfig(id : number){
 }
 
 // BAIRROS AREA
-
-export function getBairrosAxiosConfig(){
-  return {
-    method: 'GET',
-    url: `${BASE_URL}postalcodes`
+export const getBairrosAxiosConfig = async () => {
+  try {
+    const options = {
+      method: 'GET',
+      url: `${BASE_URL}postalcodes/`
+    };
+    const response: AxiosResponse<Bairro[]> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw new Error('Erro no get de bairros');
   }
+
 }
 
 // CUSTOMER AREA
