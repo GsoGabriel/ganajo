@@ -33,7 +33,7 @@ function ResponsiveAppBar() {
  const navigate = useNavigate();
 
   useEffect(() => {
-    setIsAdmin(false);
+    setIsAdmin(true);
     setNavItems(isAdmin ? adminNavItens : commonNavItems);
   }, [isAdmin]) 
 
