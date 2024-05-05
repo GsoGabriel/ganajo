@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate,  } from 'react-router-dom';
 import generateProducts from './../Home/data.ts';
 import { Produto } from '../../DTOs/Produto.ts';
 import { FaMotorcycle } from "react-icons/fa6";
@@ -10,12 +10,13 @@ import { Grid } from '@mui/material';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 import { getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
 
-const Home = () => {
+const ProductsAdmin = () => {
 
   const {isLoading, data} = useApi<Produto[]>(getProductsAxiosConfig())
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const navigate = useNavigate();
+  const [showAddProducts, setShowAddProducts] = React.useState(false);
   
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
@@ -26,7 +27,7 @@ const Home = () => {
   }, [data])
 
   const handleAddNewProduct = () => {
-    navigate('/add-product');
+    navigate('/addProdutos')
   };
 
   const handleEditProduct = (productId: number) => {
@@ -70,9 +71,8 @@ const Home = () => {
         }
       </Grid>
       }
-      
     </div>
   );
 };
 
-export default Home;
+export default ProductsAdmin;
