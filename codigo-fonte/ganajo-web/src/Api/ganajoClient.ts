@@ -40,7 +40,49 @@ export const getBairrosAxiosConfig = async () => {
     console.log(error);
     throw new Error('Erro no get de bairros');
   }
+}
 
+export const getBairroByIdAxiosConfig = async (idBairro: number) => {
+  try {
+    const options = {
+      method: 'GET',
+      url: `${BASE_URL}postalcode/${idBairro}`
+    };
+    const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw new Error('Erro no get de bairro');
+  }
+}
+
+export const postBairroAxiosConfig = async (bairroData: Bairro) => {
+  try {
+    const options = {
+      method: 'POST',
+      url: `${BASE_URL}postalcode/`,
+      data: bairroData
+    };
+    const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw new Error('Erro ao criar bairro');
+  }
+}
+
+export const deleteBairroByIdAxiosConfig = async (idBairro: number) => {
+  try {
+    const options = {
+      method: 'DELETE',
+      url: `${BASE_URL}postalcode/${idBairro}?removido=true`
+    };
+    const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    console.log(error);
+    throw new Error('Erro no delete de bairro');
+  }
 }
 
 // CUSTOMER AREA

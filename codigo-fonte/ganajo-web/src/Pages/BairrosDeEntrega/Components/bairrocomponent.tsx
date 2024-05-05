@@ -17,8 +17,8 @@ const BairroComponent: React.FC<BairroComponentProps> = ({ bairro, onEdit, onDel
       <Card.Body className={styles['card-body']}>
         <div className={styles['content-container']}>
           <div>
-            <h1 className={styles['bairro-name']}>{bairro.Nome}</h1>
-            <p className={styles['bairro-id']}>ID: {bairro.Id}</p>
+            <h1 className={styles['bairro-name']}>{bairro.bairro}</h1>
+            <p className={styles['bairro-id']}>ID: {bairro.id}</p>
           </div>
           <div className={styles['icon-container']}>
             {onEdit && (
