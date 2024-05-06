@@ -7,7 +7,11 @@ import { List } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { usePedidoContext } from '../../Context/PedidoContext.tsx';
 
-const CarrinhoComponent = () => {
+interface CarrinhoComponentProps {
+    readOnly : boolean
+}
+
+const CarrinhoComponent = ({readOnly} :CarrinhoComponentProps) => {
 
     const {descricao, setDescricao, valorTotal, setValorTotal} = usePedidoContext();
 
@@ -37,9 +41,9 @@ const CarrinhoComponent = () => {
                     <div>
                         <List sx={{ mb: 2 }} className={styles.produtos}>
                         {
-                        produtos.map(p => 
-                            <ProdutoCarrinho pedidoProduto={p} removeHandle={removeProductHandler}/>
-                            )
+                            produtos.map(p => 
+                                <ProdutoCarrinho pedidoProduto={p} removeHandle={removeProductHandler}/>
+                                )
                         }
                         </List>
                         <div className={styles.pedidoInfo}>
@@ -49,7 +53,11 @@ const CarrinhoComponent = () => {
                                 }} className={styles.inputObservacao} placeholder="Adicione uma observação ao pedido" />
                             </div>
                             <h1>Valor total: {formatValue(valorTotal, 2, "R$")}</h1>
-                            <button className={styles.buttonPedir} onClick={goToIdentificacao}>Prosseguir</button>
+                            {
+                                !readOnly && 
+                                    <button className={styles.buttonPedir} onClick={goToIdentificacao}>Prosseguir</button>
+                            
+                            }
                         </div>
                     </div>
                 ) : <h3>Não há produtos em seu carrinho :(</h3>

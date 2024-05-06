@@ -4,38 +4,38 @@ import { PedidoProdutoDTO } from "./PedidoProduto";
 import { StatusPedido } from "./Status";
 
 export interface PedidoDTO {
-    Id : number,
-    NomeCliente : string,
-    CPF : string,
-    Endereco : string,
-    Descricao : string,
-    FormaPagamento: FormaPagamento,
-    Status : StatusPedido,
-    Items : PedidoProdutoDTO[],
-    Cliente : ClienteDTO,
-    ValorTotal : number
+    id: number;
+    descricao: string | null;
+    valorTotal: number;
+    statusPedido: StatusPedido;
+    tipoPagamento: FormaPagamento;
+    removido: boolean;
+    cliente: ClienteDTO;
+    produtos: PedidoProdutoDTO[];
 }
 
 export const PedidoDTODefaultProps: PedidoDTO = {
-    Cliente: {
+    cliente: {
         id: 0,
         complemento: '',
         cpf: '',
         nome: '',
-        numeroCasa: 0,
+        numeroCasa: '',
         numeroTelefone: '',
         regiaoPostal: {
-            Id: 0,
-            Nome: ''
+            id: 0,
+            bairro: '',
+            cep: '',
+            editadoData: '',
+            editadoPor: 1,
+            precoDelivery: 0,
         }
     },
-    CPF: '',
-    Descricao: '',
-    Endereco: '',
-    FormaPagamento: 0,
-    Id: 0,
-    Items: [],
-    NomeCliente: '',
-    Status: 0,
-    ValorTotal: 0
+    descricao: '',
+    tipoPagamento: 0,
+    id: 0,
+    produtos: [],
+    statusPedido: 0,
+    valorTotal: 0,
+    removido: false
  }

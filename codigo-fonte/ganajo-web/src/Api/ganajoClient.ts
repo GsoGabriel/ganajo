@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { ClienteDTO } from "../DTOs/Cliente";
 import { toast } from "react-toastify";
+import { PedidoDTO } from './../DTOs/Pedido';
 
 const isLocalTest = true;
 
@@ -50,6 +51,26 @@ export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : strin
       console.log(error)
       toast.error(error.response?.data, {
         toastId: 'getCustomerByTelephone',
+        position: 'top-right',
+        autoClose: false,
+      });
+    }
+  }
+}
+
+// PEDIDO AREA 
+
+// CUSTOMER AREA
+
+export const postPedidoAsync = async (pedido : PedidoDTO) => {
+  try {
+    const response: AxiosResponse<PedidoDTO> = await axios.post(`${BASE_URL}order`, pedido);
+    return response.data;
+  } catch(error){
+    if (axios.isAxiosError(error)) {
+      console.log(error)
+      toast.error(error.response?.data, {
+        toastId: 'postPedidoAsync',
         position: 'top-right',
         autoClose: false,
       });

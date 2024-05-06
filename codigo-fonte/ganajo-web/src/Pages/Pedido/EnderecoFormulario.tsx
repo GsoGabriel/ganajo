@@ -8,7 +8,7 @@ const EnderecoFormulario = () => {
 
     const [nome, setNome] = useState<string>(cliente.nome);
     const [cpf, setCpf] = useState<string>(cliente.cpf);
-    const [numeroCasa, setNumeroCasa] = useState<number>(cliente.numeroCasa);
+    const [numeroCasa, setNumeroCasa] = useState<string>(cliente.numeroCasa);
     const [complemento, setComplemento] = useState<string>(cliente.complemento ?? '');
     const [numeroTelefone, setNumeroTelefone] = useState<string>(cliente.numeroTelefone);
 
@@ -48,9 +48,9 @@ const EnderecoFormulario = () => {
             value={numeroCasa}
             onChange={(e) => {
                 const updateCLiente = cliente;
-                updateCLiente.numeroCasa = Number(e.target.value);
+                updateCLiente.numeroCasa = e.target.value;
                 setCliente(updateCLiente);
-                setNumeroCasa(Number(e.target.value))
+                setNumeroCasa(e.target.value)
             }}
             fullWidth
         />
@@ -63,7 +63,6 @@ const EnderecoFormulario = () => {
                 const updateCLiente = cliente;
                 updateCLiente.complemento = e.target.value;
                 setCliente(updateCLiente);
-                setNome(e.target.value)
                 setComplemento(e.target.value)
             }}
             fullWidth

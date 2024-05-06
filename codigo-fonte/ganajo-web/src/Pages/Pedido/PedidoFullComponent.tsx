@@ -1,7 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import styles from './PedidoFullComponent.module.scss'
-import {  getCustomerByTelephoneNumberAxiosRequest } from '../../Api/ganajoClient.ts';
+import {  getCustomerByTelephoneNumberAxiosRequest, postPedidoAsync } from '../../Api/ganajoClient.ts';
 import { toast } from 'react-toastify';
 import { ClienteDTO, ClienteDTODefaultProps } from '../../DTOs/Cliente.ts';
 import EscolherBairro from './EscolherBairro.tsx';
@@ -10,9 +10,12 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import EnderecoFormulario from './EnderecoFormulario.tsx';
 import FormaPagamentoComponent from './FormaPagamentoComponent.tsx';
 import CarrinhoComponent from '../CarrinhoCompras/CarrinhoComponent.tsx';
+import { PedidoDTO } from './../../DTOs/Pedido';
+import { useCarrinhoContext } from '../../Context/CarrinhoContext.tsx';
 
 const PedidoFullComponent = () => {
-    const {setCliente} = usePedidoContext();
+    const {setCliente, cliente, descricao, statusPedido, tipoPagamento, bairro} = usePedidoContext();
+    const {produtos} = useCarrinhoContext();
     const [telephone, setTelephone] = useState<string>();
     const [customer, setCustomer] = useState<ClienteDTO>();
     const [showFormulario, setShowFormulario] = useState<boolean>(false);
@@ -22,6 +25,23 @@ const PedidoFullComponent = () => {
         const telephoneCached = localStorage.getItem(localStorageTelephone);
         setTelephone(telephoneCached ?? '');
     }, [])
+
+    const enviarPedido = async () => {
+        const clienteAtualizado = cliente;
+        clienteAtualizado.regiaoPostal = bairro;
+        const pedido : PedidoDTO = {
+            id: 0,
+            cliente: clienteAtualizado,
+            descricao: descricao,
+            produtos: produtos,
+            removido: false,
+            statusPedido: statusPedido,
+            tipoPagamento: tipoPagamento,
+            valorTotal: 0
+        }
+
+        await postPedidoAsync(pedido);
+    }
 
     const getClienteByTelephoneNumber = async (telephone : string) => {
         if(telephone === undefined || telephone.length <= 0) {
@@ -93,9 +113,10 @@ const PedidoFullComponent = () => {
                                 <h4>Etapa 4 - Informações do pedido</h4>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <CarrinhoComponent />
+                                <CarrinhoComponent readOnly={true}/>
                             </AccordionDetails>
                         </Accordion>
+                        <button className={styles.buttonPedir} onClick={enviarPedido}>Enviar pedido</button>
                     </div>)
             }   
         </div>
