@@ -8,10 +8,10 @@ export interface Bairro {
 }
 
 export const BairroDTODefaultProps : Bairro = {
+    id: 0,
     bairro: '',
     cep: '',
-    editadoData: '',
+    precoDelivery: 0,
     editadoPor: 0, 
-    id: 0,
-    precoDelivery: 0
+    editadoData: '',
 }

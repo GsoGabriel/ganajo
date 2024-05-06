@@ -14,41 +14,97 @@ import { FaMotorcycle } from 'react-icons/fa6';
 import { Bairro } from '../../DTOs/Bairro.ts';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
+import { getBairrosAxiosConfig, postBairroAxiosConfig, deleteBairroByIdAxiosConfig } from '../../Api/ganajoClient.ts';
 
 const Bairros = () => {
   const [bairros, setBairros] = useState<Bairro[]>([]);
   const [screenBairros, setScreenBairros] = useState<Bairro[]>([]);
   const [selectedBairro, setSelectedBairro] = useState<Bairro | null>(null);
   const [editedBairroName, setEditedBairroName] = useState<string>('');
+  const [editedBairroCep, setEditedBairroCep] = useState<string>('');
+  const [editedBairroTaxaEntrega, setEditedBairroTaxaEntrega] = useState<number>(0);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const mockBairros = generateBairros();
-    setBairros(mockBairros);
-    setScreenBairros(mockBairros);
+    const fetchData = async () => {
+      const bairrosData = await getBairrosAxiosConfig();
+      setBairros(bairrosData);
+      setScreenBairros(bairrosData);
+    }
+      fetchData();
   }, []);
 
+  const resetEditedItens = () => {
+    setEditedBairroName('');
+    setEditedBairroCep('');
+    setEditedBairroTaxaEntrega(0);
+  };
+
   const searchingHandleCallBack = useCallback((value: string) => {
-    setScreenBairros(bairros.filter(bairro => bairro.Nome.toLowerCase().includes(value.toLowerCase())));
+    setScreenBairros(bairros.filter(bairro => bairro.bairro.toLowerCase().includes(value.toLowerCase())));
   }, [bairros]);
 
-  const handleEditBairro = () => {
+  const handleEditBairro = async () => {
+    const currentDate = new Date();
+
+    // fluxo de update
     if (selectedBairro) {
       const updatedBairros = bairros.map(bairro =>
-        bairro.Id === selectedBairro.Id ? { ...bairro, Nome: editedBairroName } : bairro
+        bairro.id === selectedBairro.id ? { ...bairro, bairro: editedBairroName, cep: editedBairroCep, precoDelivery: editedBairroTaxaEntrega } : bairro
       );
       setBairros(updatedBairros);
       setScreenBairros(updatedBairros);
-      setEditDialogOpen(false);
+
+      const bairroFormData: Bairro = {
+        id: selectedBairro.id,
+        bairro: editedBairroName,
+        cep: editedBairroCep,
+        precoDelivery: editedBairroTaxaEntrega,
+        editadoPor: 1, // fixo no admin
+        editadoData: currentDate.toISOString()
+      }
+
+      const updateBairroData = async() => {
+        const _ = await postBairroAxiosConfig(bairroFormData);
+      }
+      updateBairroData();
+    } 
+    // fluxo de create
+    else {
+      const bairroFormData: Bairro = {
+        id: 9999999, // id inexistente pra criar um novo registro
+        bairro: editedBairroName,
+        cep: editedBairroCep,
+        precoDelivery: editedBairroTaxaEntrega,
+        editadoPor: 1, // fixo no admin
+        editadoData: currentDate.toISOString()
+      }
+
+      const updateBairroData = async() => {
+        const _ = await postBairroAxiosConfig(bairroFormData);
+      }
+      updateBairroData();
+
+      setBairros(bairros.concat(bairroFormData));
+      setScreenBairros(bairros.concat(bairroFormData));
     }
+
+    resetEditedItens();
+    setEditDialogOpen(false);
   };
 
-  const handleDeleteBairro = () => {
+  const handleDeleteBairro = async () => {
     if (selectedBairro) {
-      const updatedBairros = bairros.filter(bairro => bairro.Id !== selectedBairro.Id);
+      const deleteBairroData = async() => {
+        const _ = await deleteBairroByIdAxiosConfig(selectedBairro.id);
+      }
+      deleteBairroData();
+
+      const updatedBairros = bairros.filter(bairro => bairro.id !== selectedBairro.id);
       setBairros(updatedBairros);
       setScreenBairros(updatedBairros);
+      resetEditedItens();
       setDeleteDialogOpen(false);
     }
   };
@@ -71,15 +127,35 @@ const Bairros = () => {
       <Card sx={{ p: 2, width: '80%', overflow: 'auto', mb: 2}}>
         <Grid container spacing={2} alignItems="center" sx={{ width: '100%' }}>
           <Grid item xs={12}>
-            <TextField
-              label="Nome do Bairro"
-              fullWidth
-              value={editedBairroName}
-              onChange={(e) => setEditedBairroName(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sx={{ textAlign: 'right' }}>
-            <Button onClick={handleEditBairro}>Adicionar</Button>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <TextField
+                  label="Nome do Bairro"
+                  fullWidth
+                  value={editedBairroName}
+                  onChange={(e) => setEditedBairroName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="CEP"
+                  fullWidth
+                  value={editedBairroCep}
+                  onChange={(e) => setEditedBairroCep(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Taxa Entrega"
+                  fullWidth
+                  value={editedBairroTaxaEntrega === 0 ? '' : editedBairroTaxaEntrega}
+                  onChange={(e) => setEditedBairroTaxaEntrega(parseFloat(e.target.value))}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12} sx={{ textAlign: 'right' }}>
+                <Button onClick={handleEditBairro}>Adicionar</Button>
+            </Grid>
           </Grid>
         </Grid>
       </Card>
@@ -97,7 +173,9 @@ const Bairros = () => {
                 bairro={screenBairros[index]}
                 onEdit={() => {
                   setSelectedBairro(screenBairros[index]);
-                  setEditedBairroName(screenBairros[index].Nome);
+                  setEditedBairroName(screenBairros[index].bairro);
+                  setEditedBairroCep(screenBairros[index].cep);
+                  setEditedBairroTaxaEntrega(screenBairros[index].precoDelivery);
                   setEditDialogOpen(true);
                 }}
                 onDelete={() => {
@@ -121,9 +199,25 @@ const Bairros = () => {
             value={editedBairroName}
             onChange={(e) => setEditedBairroName(e.target.value)}
           />
+          <TextField
+            autoFocus
+            margin="dense"
+            label="CEP"
+            fullWidth
+            value={editedBairroCep}
+            onChange={(e) => setEditedBairroCep(e.target.value)}
+          />
+          <TextField
+              autoFocus
+              margin="dense"
+              label="Taxa Entrega"
+              fullWidth
+              value={editedBairroTaxaEntrega}
+              onChange={(e) => setEditedBairroTaxaEntrega(parseFloat(e.target.value))}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)}>Cancelar</Button>
+          <Button onClick={() => {setEditDialogOpen(false); resetEditedItens()}}>Cancelar</Button>
           <Button onClick={handleEditBairro}>Confirmar</Button>
         </DialogActions>
       </Dialog>
