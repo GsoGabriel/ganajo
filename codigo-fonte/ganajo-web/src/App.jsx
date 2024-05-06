@@ -14,11 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
-  const [isAdmin, setIsAdmin] = useState();
-
-  useEffect(() => {
-    setIsAdmin(true);
-  }, [])
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
       <BrowserRouter>
@@ -29,7 +25,7 @@ function App() {
             <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />
-            <Route path="/Admin" element={<Login/>} />
+            <Route path="/Admin" element={<Login setIsAdmin={setIsAdmin} />} />
             {
               !isAdmin ? <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin}/>}/> : ''
             }
