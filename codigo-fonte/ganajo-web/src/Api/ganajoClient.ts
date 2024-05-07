@@ -29,18 +29,11 @@ export function getProductAxiosConfig(id : number){
 }
 
 // BAIRROS AREA
-export const getBairrosAxiosConfig = async () => {
-  try {
-    const options = {
-      method: 'GET',
-      url: `${BASE_URL}postalcodes/`
-    };
-    const response: AxiosResponse<Bairro[]> = await axios(options?.url ?? '', options);
-    return response.data;
-  } catch(error) {
-    console.log(error);
-    throw new Error('Erro no get de bairros');
-  }
+export const getBairrosAxiosConfig = () => {
+  return {
+    method: 'GET',
+    url: `${BASE_URL}postalcodes/`
+  };
 }
 
 export const getBairroByIdAxiosConfig = async (idBairro: number) => {
