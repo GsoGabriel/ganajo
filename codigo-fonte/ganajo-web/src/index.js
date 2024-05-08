@@ -8,13 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { CarrinhoProvider } from './Context/CarrinhoContext.tsx';
 import { PedidoProvider } from './Context/PedidoContext.tsx';
+import { AdminProvider } from './Context/AdminContext.tsx';
 
 const root = createRoot(document.querySelector('#root'));
 root.render(
-    <PedidoProvider>
-        <CarrinhoProvider>
-            <App/>
-        </CarrinhoProvider>
-    </PedidoProvider>
-    
+    <AdminProvider>
+        <PedidoProvider>
+            <CarrinhoProvider>
+                <App/>
+            </CarrinhoProvider>
+        </PedidoProvider>
+    </AdminProvider>
 );

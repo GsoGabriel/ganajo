@@ -3,8 +3,13 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../../../LoginAdmin/LoginAdmin.css';
 import { loginAxiosRequest } from '../../../../Api/ganajoClient.ts';
+import { useAdminContext } from './../../../../Context/AdminContext.tsx';
+import { useNavigate } from 'react-router-dom';
 
-function FormLoginAdminComponent({ setIsAdmin }) {
+function FormLoginAdminComponent() {
+
+  const {setAdminInStorage} = useAdminContext();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -14,10 +19,11 @@ function FormLoginAdminComponent({ setIsAdmin }) {
 
     try {
       const usuario = await loginAxiosRequest(email, password);
-      localStorage.setItem('isAdmin', 'true');
-      setIsAdmin(true);
+      if(usuario !== undefined){
+        setAdminInStorage(usuario);
+        navigate('/homeAdmin');
+      }
     } catch (error) {
-      console.error('Erro de login:', error.message);
       setErrorMessage('Erro de login: Credenciais inválidas');
     }
   };

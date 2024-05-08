@@ -6,9 +6,11 @@ import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 import { useApi } from '../../Api/useApi.tsx';
 import {  getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
+import { useAdminContext } from '../../Context/AdminContext.tsx';
 
 const Home = () => {
   const {data} = useApi<Produto[]>(getProductsAxiosConfig())
+  const {setAdminInStorage} = useAdminContext();
   const [screenItens, setScreenItems] = useState<Produto[]>();
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
@@ -16,7 +18,8 @@ const Home = () => {
   
   useEffect(() => {
     setScreenItems(data ?? [])
-  }, [data])
+    setAdminInStorage(undefined);
+  }, [data, setAdminInStorage])
 
   return (
     <div className="container"> 
@@ -31,7 +34,7 @@ const Home = () => {
             <SearchAppBar onSearch={searchingHandleCallBack} /> 
         </div>
       </div>
-      <Grid container spacing={2} className="itemsStyle">
+      <Grid container spacing={1} className="itemsStyle">
         {
           screenItens?.map(m => (
             <Grid key={m.id} item xs={12} sm={6} md={4}>

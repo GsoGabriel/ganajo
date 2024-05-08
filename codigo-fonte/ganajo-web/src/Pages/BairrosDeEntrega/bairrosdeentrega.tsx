@@ -15,9 +15,12 @@ import { Bairro } from '../../DTOs/Bairro.ts';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import { getBairrosAxiosConfig, postBairroAxiosConfig, deleteBairroByIdAxiosConfig } from '../../Api/ganajoClient.ts';
+import { useApi } from '../../Api/useApi.tsx';
 
 const Bairros = () => {
-  const [bairros, setBairros] = useState<Bairro[]>([]);
+
+  const {data} = useApi<Bairro[]>(getBairrosAxiosConfig())
+  const [bairros, setBairros] = useState<Bairro[]>(data ?? []);
   const [screenBairros, setScreenBairros] = useState<Bairro[]>([]);
   const [selectedBairro, setSelectedBairro] = useState<Bairro | null>(null);
   const [editedBairroName, setEditedBairroName] = useState<string>('');
@@ -27,13 +30,9 @@ const Bairros = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const bairrosData = await getBairrosAxiosConfig();
-      setBairros(bairrosData);
-      setScreenBairros(bairrosData);
-    }
-      fetchData();
-  }, []);
+    setBairros(data ?? []);
+    setScreenBairros(data ?? []);
+  }, [data])
 
   const resetEditedItens = () => {
     setEditedBairroName('');

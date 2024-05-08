@@ -6,13 +6,18 @@ import { toast } from 'react-toastify'
 import { getCustomerByTelephoneNumberAxiosRequest, getPedidoByUserAxiosRequest } from '../../Api/ganajoClient.ts'
 import { TextField } from '@mui/material'
 import { PedidoDTO } from '../../DTOs/Pedido.ts'
-
-interface MeusPedidosParams {
-    isAdmin: boolean
-}
+import { useAdminContext } from '../../Context/AdminContext.tsx'
   
-const MeusPedidos = ({isAdmin} : MeusPedidosParams) => {
-  const [telephone, setTelephone] = useState<string>();
+const MeusPedidos = () => {
+
+    const {admin} = useAdminContext();
+    const [isAdmin, setIsAdmin] = useState<boolean>(admin !== undefined);
+
+    useEffect(() => {
+      setIsAdmin(admin !== undefined);
+    }, [admin])
+
+    const [telephone, setTelephone] = useState<string>();
     const [showPedidos, setShowPedidos] = useState<boolean>(false);
     const [pedidos, setPedidos] = useState<PedidoDTO[]>([]);
     const [cliente, setCliente] = useState<ClienteDTO>(ClienteDTODefaultProps);

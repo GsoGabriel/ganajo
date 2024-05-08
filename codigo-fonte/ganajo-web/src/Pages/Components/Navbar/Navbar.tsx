@@ -20,22 +20,22 @@ import { NavBarLink } from '../../../DTOs/NavBarLink';
 import commonNavItems from './commonUserNavBarItems.ts';
 import adminNavItens from './adminUserNavBarItems.ts';
 import { useEffect } from 'react';
+import { useAdminContext } from '../../../Context/AdminContext.tsx';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
-  const [isAdmin, setIsAdmin] = React.useState<boolean>(false);
   const [navItems, setNavItems] = React.useState<NavBarLink[]>(commonNavItems);
 
  const navigate = useNavigate();
+ const {admin} = useAdminContext();
+
 
   useEffect(() => {
-    setIsAdmin(false);
-    setNavItems(isAdmin ? adminNavItens : commonNavItems);
-  }, [isAdmin]) 
+    setNavItems(admin !== undefined ? adminNavItens : commonNavItems);
+  }, [admin]) 
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -60,7 +60,7 @@ function ResponsiveAppBar() {
     <AppBar position="static" className=''>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/">
+          <Link to={admin !== undefined ? '/homeAdmin' : '/'}>
             <img src={Logo} alt="Logo" className="d-inline-block align-top"/>
           </Link>
           <Typography
@@ -147,9 +147,9 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <ButtonCarrinho onClick={() => GoToCarrinho()}/>
-            </IconButton>
+            {
+              admin === undefined ? <ButtonCarrinho onClick={() => GoToCarrinho()}/> : ''
+            }
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

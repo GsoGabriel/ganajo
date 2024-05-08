@@ -12,38 +12,26 @@ import Login from './Pages/LoginAdmin/LoginAdmin.tsx';
 import PedidoFullComponent from './Pages/Pedido/PedidoFullComponent.tsx';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useAdminContext } from './Context/AdminContext.tsx';
 
 function App() {
 
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    const storedAdminStatus = localStorage.getItem('isAdmin'); 
-    setIsAdmin(storedAdminStatus === 'true');
-  }, []);
+  const {admin} = useAdminContext();
   
   return (
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={ isAdmin ? <MeusPedidos isAdmin={isAdmin}/> : <Home />} />
+            <Route path="/homeAdmin" element={<MeusPedidos isAdmin={admin !== undefined}/>}/>
+            <Route path="/" element={<Home />}/>
             <Route path="/bairrosdeentrega" element={<BairrosdeEntrega/>} />
             <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />
-            <Route path="/Admin" element={<Login setIsAdmin={setIsAdmin} />} />
-            {isAdmin ? (
-            <>
-              <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin} />} />
-              <Route path="/Produto/novo" element={<ProductForm />} /> {}
-            </>
-          ) : (
-            <Route path="/meuspedidos" element={<Navigate to="/" replace />} />
-          )}
-        </Routes>
+            <Route path="/Admin" element={<Login />} />
+            <Route path="/meuspedidos" element={<MeusPedidos/>} />
+            <Route path="/Produto/novo" element={<ProductForm />} />
             <Route path="/addProdutos" element={<ProductForm />} />
-            <Route path="/Admin" element={<Login/>} />
-            <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin}/>}/>
           </Routes>
         </Layout>
         <ToastContainer />

@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { ClienteDTO } from "../DTOs/Cliente";
 import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
-import { Admin } from "../DTOs/Admim";
+import { Admin } from "../DTOs/Admin";
 import { PedidoDTO } from "../DTOs/Pedido";
 
 const isLocalTest = true;
@@ -38,7 +38,7 @@ export function getProductAxiosConfig(id : number){
 export const getBairrosAxiosConfig = () => {
   return {
     method: 'GET',
-    url: `${BASE_URL}postalcodes/`
+    url: `${BASE_URL}postalcodes`
   };
 }
 
@@ -119,7 +119,6 @@ export const loginAxiosRequest = async (email: string, senha: string) => {
     return response.data;
   } catch(error) {
     if (axios.isAxiosError(error)) {
-      console.log(error)
       toast.error(error.response?.data, {
         toastId: 'login',
         position: 'top-right',
