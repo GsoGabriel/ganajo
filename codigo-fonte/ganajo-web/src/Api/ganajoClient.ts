@@ -103,6 +103,25 @@ export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : strin
 
 // PEDIDO AREA 
 
+export const getPedidoByUserAxiosRequest = async (admin : boolean, idUser : number | undefined) => {
+  try {
+    const options = {
+      method: 'GET',
+      url: `${BASE_URL}orders/${admin}?idUser=${idUser}`
+    };
+    const response: AxiosResponse<PedidoDTO[]> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error){
+    if (axios.isAxiosError(error)) {
+      toast.error(error.response?.data, {
+        toastId: 'getPedidoByUser',
+        position: 'top-right',
+        autoClose: false,
+      });
+    }
+  }
+}
+
 // CUSTOMER AREA
 
 export const postPedidoAsync = async (pedido : PedidoDTO) => {

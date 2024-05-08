@@ -14,6 +14,7 @@ namespace GanajoApi.DTOs
 
         public TipoPagamento TipoPagamento { get; set; }
         public bool Removido { get; set; }
+        public DateTime EditadoData { get; set; }
 
         public CustomerDTO Cliente { get; set; }
 

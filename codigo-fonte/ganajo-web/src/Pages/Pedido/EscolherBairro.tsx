@@ -5,6 +5,7 @@ import { Bairro } from '../../DTOs/Bairro.ts';
 import { Autocomplete, CircularProgress, Select, TextField } from '@mui/material';
 import styles from './EscolherBairro.module.scss'
 import { usePedidoContext } from '../../Context/PedidoContext.tsx';
+import formatValue from '../../Utils/formatValue.ts';
 
 interface BairroCompleteOption {
     label: string,
@@ -32,7 +33,7 @@ interface EscolherBairroProps {
 const convertBairroToAutoCompleteBairroProp = (bairro: Bairro) => {
     const bairroAutoComplete : BairroCompleteOption = {
         bairro: bairro,
-        label: bairro.bairro
+        label: (bairro.bairro + " - " + formatValue(bairro.precoDelivery, 2, 'R$'))
     }
     return bairroAutoComplete;
 }
@@ -45,6 +46,7 @@ const EscolherBairro = ({bairro} : EscolherBairroProps) => {
     console.log()
     useEffect(() => {
         setBairrosAutoComplete(data?.map(m => convertBairroToAutoCompleteBairroProp(m)) ?? []);
+        setBairro(bairro ?? defaultBairroProp);
     }, [data])
 
     const handleSelectedBairro = (bairro : BairroCompleteOption) => {

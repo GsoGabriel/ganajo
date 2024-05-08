@@ -13,16 +13,16 @@ interface CarrinhoComponentProps {
 
 const CarrinhoComponent = ({readOnly} :CarrinhoComponentProps) => {
 
-    const {descricao, setDescricao, valorTotal, setValorTotal} = usePedidoContext();
+    const {descricao, setDescricao, valorTotal, setValorTotal, bairro} = usePedidoContext();
 
     const {produtos, removerProduto} = useCarrinhoContext();
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        const sum = produtos.reduce((partialSum, a) => partialSum + a.valorTotal, 0);
+        const sum = produtos.reduce((partialSum, a) => partialSum + a.valorTotal, 0) + (readOnly ? bairro.precoDelivery : 0);
         setValorTotal(sum)
-    }, [produtos, setValorTotal])
+    }, [bairro.precoDelivery, produtos, readOnly, setValorTotal])
 
     const removeProductHandler = (index : number) => {
         removerProduto(index);

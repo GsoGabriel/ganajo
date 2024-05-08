@@ -228,14 +228,31 @@ app.MapDelete("/postalcode/{id}", async ([FromRoute] int id, [FromQuery] bool re
 #endregion
 #region Pedidos
 
-app.MapGet("/orders", async ([FromServices] GanajoDbContext _context) => {
+app.MapGet("/orders/{admin}", async ([FromRoute] bool admin, [FromQuery] int idUser, [FromServices] GanajoDbContext _context) => {
 
     var pedidos = await (from pedido in _context.Pedidos
-                         where !pedido.Removido
+                         where !pedido.Removido && (admin) ? true : pedido.ClienteId == idUser
                          select new PedidoDTO
                          {
                              Id = pedido.Id,
-                             Cliente = DtoFromModels.CustomerDtoFromModel(pedido.Cliente),
+                             Cliente = new CustomerDTO()
+                             {
+                                 Id = pedido.Cliente.Id,
+                                 Cpf = pedido.Cliente.Cpf,
+                                 Nome = pedido.Cliente.Nome,
+                                 NumeroCasa = pedido.Cliente.NumeroCasa,
+                                 Complemento = pedido.Cliente.Complemento,
+                                 NumeroTelefone = pedido.Cliente.NumeroTelefone,
+                                 RegiaoPostal = new RegiaoPostalDTO()
+                                 {
+                                     Id = pedido.Cliente.RegiaoPostal.Id,
+                                     Bairro = pedido.Cliente.RegiaoPostal.Bairro,
+                                     Cep = pedido.Cliente.RegiaoPostal.Cep,
+                                     PrecoDelivery = pedido.Cliente.RegiaoPostal.PrecoDelivery,
+                                     EditadoPor = pedido.Cliente.RegiaoPostal.EditadoPor,
+                                     EditadoData = pedido.Cliente.RegiaoPostal.EditadoData
+                                 }
+                             },
                              Descricao = pedido.Descricao,
                              StatusPedido = (StatusPedido)pedido.StatusPedido,
                              TipoPagamento = (TipoPagamento)pedido.TipoPagamento,
@@ -248,9 +265,10 @@ app.MapGet("/orders", async ([FromServices] GanajoDbContext _context) => {
                                  Quantidade = s.Quantidade,
                                  ValorTotal = s.ValorTotal,
                                  Produto = DtoFromModels.ProductDtoFromModel(s.Produto)
-                             }).ToList()
+                             }).ToList(),
+                             EditadoData = pedido.EditadoData ?? DateTime.Now
                          })
-                         .OrderByDescending(o => o.StatusPedido)
+                         .OrderByDescending(o => o.EditadoData)
                          .ToListAsync();
 
     if (pedidos == null || !pedidos.Any())
@@ -295,7 +313,7 @@ app.MapPost("/order", async ([FromBody] PedidoDTO pedido, IHubContext<RealTimeHu
     pedidoDb.ValorTotal = pedido.Produtos.Sum(s => {
         s.ValorTotal = s.Produto.Valor * (s.Quantidade ?? 1);
         return s.ValorTotal;
-    });
+    }) + pedido.Cliente.RegiaoPostal.PrecoDelivery;
 
     pedidoDb.StatusPedido = (int)pedido.StatusPedido;
     pedidoDb.TipoPagamento = (int)pedido.TipoPagamento;

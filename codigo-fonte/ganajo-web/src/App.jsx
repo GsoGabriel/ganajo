@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from './Layout/Layout.tsx';
 import Home from './Pages/Home/Home.tsx';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import BairrosdeEntrega from './Pages/BairrosDeEntrega/bairrosdeentrega.tsx';
 import MeusPedidos from './Pages/MeusPedidos/MeusPedidos.tsx';
@@ -32,9 +32,7 @@ function App() {
             <Route path="/Produtos" element={<Produtos />} />
             <Route path="/addProdutos" element={<ProductForm />} />
             <Route path="/Admin" element={<Login/>} />
-            {
-              !isAdmin ? <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin}/>}/> : ''
-            }
+            <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin}/>}/>
           </Routes>
         </Layout>
         <ToastContainer />

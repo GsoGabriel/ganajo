@@ -24,7 +24,7 @@
 }
 
 p {
-    line-height: 12px;
+    line-height: 20px;
 }
 
 .orderInfo {
@@ -97,17 +97,17 @@ p {
     }
 
     .container {
-        padding: 10 15;
+        padding: 10px 15px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 30px;
+        gap: 10px;
         background-color: var(--color-secondary);
         border-radius: 10px;
     }
 
     .orderInfo {
-        gap: 3rem;
+        gap: 0px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -153,7 +153,7 @@ p {
     .primaryColorStyle {
         font-weight: bolder;
         font-size: 1.5rem;
-        color: white;
+        color: black;
         background-color: var(--color-primary);
         padding: 5px;
         border-radius: 5px;

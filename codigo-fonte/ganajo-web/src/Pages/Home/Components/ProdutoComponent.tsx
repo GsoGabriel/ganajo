@@ -25,12 +25,12 @@ export const ProdutoComponent = ({ Produto }: ProdutoProps) => {
   const cardProduto = (
     <div className={styles.container} onClick={openModalDetailPedido}>
       <div>
-        <h1 className={styles.nomeStyle}>{formatStringLimit(Produto.Nome, 0, 70, "...")}</h1>
-        <h3 className={styles.descricaoStyle}>{formatStringLimit(Produto.Descricao, 0, 70, "...")}</h3>
-        <h2 className={styles.valorStyle}>A partir de {formatValue(Produto.Valor, 2, "R$")}</h2>
+        <h1 className={styles.nomeStyle}>{formatStringLimit(Produto.nome, 0, 70, "...")}</h1>
+        <h3 className={styles.descricaoStyle}>{formatStringLimit(Produto.descricao, 0, 70, "...")}</h3>
+        <h2 className={styles.valorStyle}>A partir de {formatValue(Produto.valor, 2, "R$")}</h2>
       </div>
       <div>
-        <img src={Produto.Imagem} alt={Produto.Nome} />
+        <img src={Produto.enderecoImagem} alt={Produto.nome} />
       </div>
     </div>
   );
