@@ -4,7 +4,7 @@ export interface ClienteDTO {
     id: number;
     cpf: string;
     nome: string;
-    numeroCasa: number;
+    numeroCasa: string;
     complemento: string | null;
     numeroTelefone: string;
     regiaoPostal: Bairro;
@@ -15,7 +15,7 @@ export const ClienteDTODefaultProps: ClienteDTO = {
     complemento: '',
     cpf: '',
     nome: '',
-    numeroCasa: 0,
+    numeroCasa: '',
     numeroTelefone: '',
     regiaoPostal: BairroDTODefaultProps
 }

@@ -4,7 +4,7 @@ import FormLoginAdminComponent from "../Components/Restaurante/Admin/LoginAdminC
 function Login() {
   return (
     <div>
-        <FormLoginAdminComponent />
+        <FormLoginAdminComponent setIsAdmin={undefined} />
     </div>
   );
 }

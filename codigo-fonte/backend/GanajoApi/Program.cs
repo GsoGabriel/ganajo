@@ -6,6 +6,7 @@ using GanajoApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using MySqlX.XDevAPI;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -160,32 +161,13 @@ app.MapGet("/customer/{telephone}", async ([FromRoute] string telephone, [FromSe
 });
 
 app.MapPost("/customer", async ([FromBody] CustomerDTO customer, [FromServices] GanajoDbContext _context) => {
-    if(customer == null)
-        return Results.NoContent();
 
-    var customerDb = await _context.Clientes
-                                    .Include(i => i.RegiaoPostal)
-                                    .FirstOrDefaultAsync(f => f.Id == customer.Id);
+    if (customer == null)
+        return Results.NotFound();
 
-    if(customerDb == null){
-        customerDb = new Cliente();
-        _context.Entry(customerDb).State = EntityState.Added;    
-    }
+    var customerSaved = SaveCustomerAsync(customer, _context);
 
-    customerDb.Nome = customer.Nome;
-    customerDb.Cpf = customer.Cpf;
-    customerDb.NumeroCasa = customer.NumeroCasa;
-    customerDb.Complemento = customer.Complemento;
-    customerDb.NumeroTelefone = customer.NumeroTelefone;
-    customerDb.RegiaoPostalId = customer.RegiaoPostal.Id;
-
-    _context.SavedChanges += (s, e) => {
-        customer.Id = customerDb.Id;
-    };
-
-    await _context.SaveChangesAsync();
-
-    return Results.Ok(customer);
+    return Results.Ok(customerSaved);
 });
 
 #endregion
@@ -221,24 +203,7 @@ app.MapPost("/postalcode", async ([FromBody] RegiaoPostalDTO regiaoPostal, [From
     if(regiaoPostal == null)
         return Results.NoContent();
 
-    var regiaoPostalDb = await _context.RegiaoPostals.FirstOrDefaultAsync(f => f.Id == regiaoPostal.Id);
-
-    if(regiaoPostalDb == null){
-        regiaoPostalDb = new RegiaoPostal();
-        _context.Entry(regiaoPostalDb).State = EntityState.Added;    
-    }
-
-    regiaoPostalDb.Bairro = regiaoPostal.Bairro;
-    regiaoPostalDb.Cep = regiaoPostal.Cep;
-    regiaoPostalDb.PrecoDelivery = regiaoPostal.PrecoDelivery;
-    regiaoPostalDb.EditadoData = DateTime.Now;
-    regiaoPostalDb.EditadoPor = 1;
-
-    _context.SavedChanges += (s, e) => {
-        regiaoPostal.Id = regiaoPostalDb.Id;
-    };
-
-    await _context.SaveChangesAsync();
+    var regiaoPostalAfterSave = await SaveRegiaoPostalAsync(regiaoPostal, _context);
 
     return Results.Ok(regiaoPostal);
 });
@@ -312,6 +277,9 @@ app.MapPost("/order", async ([FromBody] PedidoDTO pedido, IHubContext<RealTimeHu
     if (pedido == null || !pedido.Produtos.Any())
         return Results.NoContent();
 
+    var customerUpdated = await SaveCustomerAsync(pedido.Cliente, _context);
+    pedido.Cliente = customerUpdated;
+
     var pedidoDb = await _context
                             .Pedidos
                             .FirstOrDefaultAsync(f => f.Id == pedido.Id);
@@ -329,12 +297,12 @@ app.MapPost("/order", async ([FromBody] PedidoDTO pedido, IHubContext<RealTimeHu
         return s.ValorTotal;
     });
 
-    pedidoDb.ClienteId = pedido.Cliente.Id;
     pedidoDb.StatusPedido = (int)pedido.StatusPedido;
     pedidoDb.TipoPagamento = (int)pedido.TipoPagamento;
     pedidoDb.Removido = pedido.Removido;
     pedidoDb.EditadoPor = 1;
     pedidoDb.EditadoData = DateTime.Now;
+    pedidoDb.ClienteId = pedido.Cliente.Id;
 
     _context.SavedChanges += (s, e) => {
         pedido.Id = pedidoDb.Id;
@@ -460,7 +428,24 @@ async Task<PedidoDTO?> GetPedidoByIdAsync(int id, [FromServices] GanajoDbContext
            select new PedidoDTO
            {
                Id = pedido.Id,
-               Cliente = DtoFromModels.CustomerDtoFromModel(pedido.Cliente),
+               Cliente = new CustomerDTO()
+               {
+                   Id = pedido.Cliente.Id,
+                   Cpf = pedido.Cliente.Cpf,
+                   Nome = pedido.Cliente.Nome,
+                   NumeroCasa = pedido.Cliente.NumeroCasa,
+                   Complemento = pedido.Cliente.Complemento,
+                   NumeroTelefone = pedido.Cliente.NumeroTelefone,
+                   RegiaoPostal = new RegiaoPostalDTO()
+                   {
+                       Id = pedido.Cliente.RegiaoPostal.Id,
+                       Bairro = pedido.Cliente.RegiaoPostal.Bairro,
+                       Cep = pedido.Cliente.RegiaoPostal.Cep,
+                       PrecoDelivery = pedido.Cliente.RegiaoPostal.PrecoDelivery,
+                       EditadoPor = pedido.Cliente.RegiaoPostal.EditadoPor,
+                       EditadoData = pedido.Cliente.RegiaoPostal.EditadoData
+                   }
+               },
                Descricao = pedido.Descricao,
                StatusPedido = (StatusPedido)pedido.StatusPedido,
                TipoPagamento = (TipoPagamento)pedido.TipoPagamento,
@@ -474,7 +459,7 @@ async Task<PedidoDTO?> GetPedidoByIdAsync(int id, [FromServices] GanajoDbContext
                    ValorTotal = s.ValorTotal,
                    Produto = DtoFromModels.ProductDtoFromModel(s.Produto)
                })
-                .ToList()
+               .ToList()
            }).FirstOrDefaultAsync();
 }
 async Task SendToSignalRHub(IHubContext<RealTimeHub> realTimeHub, string method, string idSubscription, object arg1, CancellationToken cancellationToken)
@@ -501,7 +486,62 @@ async Task<int[]> GetUsersIdsByPredicate([FromServices] GanajoDbContext _context
                         .Select(s => s.Id)
                         .ToArrayAsync();
 }
+async Task<CustomerDTO> SaveCustomerAsync(CustomerDTO customer, GanajoDbContext _context)
+{
 
+    var customerDb = await _context.Clientes
+                                    .Include(i => i.RegiaoPostal)
+                                    .FirstOrDefaultAsync(f => f.Id == customer.Id);
+
+    if (customerDb == null)
+    {
+        customerDb = new Cliente();
+        _context.Entry(customerDb).State = EntityState.Added;
+    }
+
+    customerDb.Nome = customer.Nome;
+    customerDb.Cpf = customer.Cpf;
+    customerDb.NumeroCasa = customer.NumeroCasa;
+    customerDb.Complemento = customer.Complemento;
+    customerDb.NumeroTelefone = customer.NumeroTelefone;
+    customerDb.RegiaoPostalId = customer.RegiaoPostal.Id;
+
+    var rPostal = await _context.RegiaoPostals.FirstOrDefaultAsync(f => f.Id == customer.RegiaoPostal.Id);
+    if(rPostal != null)
+        customer.RegiaoPostal = DtoFromModels.RegiaoDtoFromModel(rPostal);
+
+    _context.SavedChanges += (s, e) => {
+        customer.Id = customerDb.Id;
+    };
+
+    await _context.SaveChangesAsync();
+
+    return customer;
+}
+async Task<RegiaoPostalDTO> SaveRegiaoPostalAsync(RegiaoPostalDTO regiaoPostal, GanajoDbContext _context)
+{
+    var regiaoPostalDb = await _context.RegiaoPostals.FirstOrDefaultAsync(f => f.Id == regiaoPostal.Id);
+
+    if (regiaoPostalDb == null)
+    {
+        regiaoPostalDb = new RegiaoPostal();
+        _context.Entry(regiaoPostalDb).State = EntityState.Added;
+    }
+
+    regiaoPostalDb.Bairro = regiaoPostal.Bairro;
+    regiaoPostalDb.Cep = regiaoPostal.Cep;
+    regiaoPostalDb.PrecoDelivery = regiaoPostal.PrecoDelivery;
+    regiaoPostalDb.EditadoData = DateTime.Now;
+    regiaoPostalDb.EditadoPor = 1;
+
+    _context.SavedChanges += (s, e) => {
+        regiaoPostal.Id = regiaoPostalDb.Id;
+    };
+
+    await _context.SaveChangesAsync();
+
+    return regiaoPostal;
+}
 #endregion
 
 app.Run();

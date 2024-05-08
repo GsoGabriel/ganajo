@@ -3,6 +3,7 @@ import { ClienteDTO } from "../DTOs/Cliente";
 import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
 import { Admin } from "../DTOs/Admim";
+import { PedidoDTO } from "../DTOs/Pedido";
 
 const isLocalTest = true;
 
@@ -34,18 +35,11 @@ export function getProductAxiosConfig(id : number){
 }
 
 // BAIRROS AREA
-export const getBairrosAxiosConfig = async () => {
-  try {
-    const options = {
-      method: 'GET',
-      url: `${BASE_URL}postalcodes/`
-    };
-    const response: AxiosResponse<Bairro[]> = await axios(options?.url ?? '', options);
-    return response.data;
-  } catch(error) {
-    console.log(error);
-    throw new Error('Erro no get de bairros');
-  }
+export const getBairrosAxiosConfig = () => {
+  return {
+    method: 'GET',
+    url: `${BASE_URL}postalcodes/`
+  };
 }
 
 export const getBairroByIdAxiosConfig = async (idBairro: number) => {
@@ -134,5 +128,22 @@ export const loginAxiosRequest = async (email: string, senha: string) => {
     }
   }
 }
+// PEDIDO AREA 
 
+// CUSTOMER AREA
 
+export const postPedidoAsync = async (pedido : PedidoDTO) => {
+  try {
+    const response: AxiosResponse<PedidoDTO> = await axios.post(`${BASE_URL}order`, pedido);
+    return response.data;
+  } catch(error){
+    if (axios.isAxiosError(error)) {
+      console.log(error)
+      toast.error(error.response?.data, {
+        toastId: 'postPedidoAsync',
+        position: 'top-right',
+        autoClose: false,
+      });
+    }
+  }
+}

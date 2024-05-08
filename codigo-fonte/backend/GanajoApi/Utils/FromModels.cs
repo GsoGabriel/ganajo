@@ -41,7 +41,7 @@ public static class DtoFromModels {
             Id = cliente.Id,
             Cpf = cliente.Cpf,
             Nome = cliente.Nome,
-            NumeroCasa =cliente.NumeroCasa,
+            NumeroCasa = cliente.NumeroCasa,
             Complemento = cliente.Complemento,
             NumeroTelefone = cliente.NumeroTelefone,
             RegiaoPostal = RegiaoDtoFromModel(cliente.RegiaoPostal)
