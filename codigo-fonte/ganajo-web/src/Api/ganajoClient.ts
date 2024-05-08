@@ -4,7 +4,7 @@ import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
 import { Admin } from "../DTOs/Admim";
 
-const isLocalTest = false;
+const isLocalTest = true;
 
 const getBaseUrl = () => {
   return isLocalTest ? 'http://localhost:5022/' : 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'

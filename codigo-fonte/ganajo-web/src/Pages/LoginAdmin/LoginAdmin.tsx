@@ -1,5 +1,5 @@
 import React from 'react';
-import FormLoginAdminComponent from "../Components/Restaurante/Admin/LoginAdminComponent.tsx"
+import FormLoginAdminComponent from "../Components/Restaurante/Admin/LoginAdminComponent.tsx";
 
 function Login() {
   return (

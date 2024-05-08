@@ -17,6 +17,11 @@ function App() {
 
   const [isAdmin, setIsAdmin] = useState(false);
 
+  useEffect(() => {
+    const storedAdminStatus = localStorage.getItem('isAdmin'); 
+    setIsAdmin(storedAdminStatus === 'true');
+  }, []);
+  
   return (
       <BrowserRouter>
         <Layout>
@@ -26,16 +31,16 @@ function App() {
             <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />
-<<<<<<< HEAD
             <Route path="/Admin" element={<Login setIsAdmin={setIsAdmin} />} />
-=======
-            <Route path="/addProdutos" element={<ProductForm />} />
-            <Route path="/Admin" element={<Login/>} />
->>>>>>> 8580aac8d912041b35d9b3a49da2fa1c5ae5a3f1
-            {
-              !isAdmin ? <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin}/>}/> : ''
-            }
-          </Routes>
+            {isAdmin ? (
+            <>
+              <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin} />} />
+              <Route path="/Produto/novo" element={<ProductForm />} /> {}
+            </>
+          ) : (
+            <Route path="/meuspedidos" element={<Navigate to="/" replace />} />
+          )}
+        </Routes>
         </Layout>
         <ToastContainer />
       </BrowserRouter>

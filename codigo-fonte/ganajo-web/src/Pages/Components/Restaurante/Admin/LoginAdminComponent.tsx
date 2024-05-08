@@ -14,6 +14,7 @@ function FormLoginAdminComponent({ setIsAdmin }) {
 
     try {
       const usuario = await loginAxiosRequest(email, password);
+      localStorage.setItem('isAdmin', 'true');
       setIsAdmin(true);
     } catch (error) {
       console.error('Erro de login:', error.message);
