@@ -2,7 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import { ClienteDTO } from "../DTOs/Cliente";
 import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
-import { PedidoDTO } from './../DTOs/Pedido';
+import { Admin } from "../DTOs/Admim";
+import { PedidoDTO } from "../DTOs/Pedido";
 
 const isLocalTest = true;
 
@@ -10,7 +11,12 @@ const getBaseUrl = () => {
   return isLocalTest ? 'http://localhost:5022/' : 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'
 };
 
+const getBaseUrlAuthApi = () => {
+  return isLocalTest ? 'http://localhost:5082/' : 'https://ganajoauthapi-s3e6uywyma-rj.a.run.app/'
+}
+
 export const BASE_URL = getBaseUrl();
+export const BASE_URL_AUTH = getBaseUrlAuthApi();
 
 // PRODUCTS AREA
 
@@ -101,6 +107,27 @@ export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : strin
   }
 }
 
+// LOGIN AREA
+
+export const loginAxiosRequest = async (email: string, senha: string) => {
+  try {
+    const options = {
+      method: 'GET',
+      url: `${BASE_URL_AUTH}login?email=${email}&senha=${senha}`
+    };
+    const response: AxiosResponse<Admin> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error)
+      toast.error(error.response?.data, {
+        toastId: 'login',
+        position: 'top-right',
+        autoClose: false,
+      });
+    }
+  }
+}
 // PEDIDO AREA 
 
 export const getPedidoByUserAxiosRequest = async (admin : boolean, idUser : number | undefined) => {

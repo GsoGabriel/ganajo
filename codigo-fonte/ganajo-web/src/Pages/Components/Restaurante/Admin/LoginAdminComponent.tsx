@@ -2,29 +2,24 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../../../LoginAdmin/LoginAdmin.css';
+import { loginAxiosRequest } from '../../../../Api/ganajoClient.ts';
 
-function FormLoginAdminComponent() {
+function FormLoginAdminComponent({ setIsAdmin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // Verifica se os campos estão vazios
-    if (!email || !password) {
-      setErrorMessage('Por favor, preencha todos os campos.');
 
-      // Limpa a mensagem de erro após 3 segundos
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 3000);
-
-      return;
+    try {
+      const usuario = await loginAxiosRequest(email, password);
+      localStorage.setItem('isAdmin', 'true');
+      setIsAdmin(true);
+    } catch (error) {
+      console.error('Erro de login:', error.message);
+      setErrorMessage('Erro de login: Credenciais inválidas');
     }
-
-    // Se os campos não estiverem vazios, faça o que precisar aqui, como enviar o formulário
-    console.log('Formulário enviado com sucesso!');
   };
 
   return (

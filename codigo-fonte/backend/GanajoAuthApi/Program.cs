@@ -3,7 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+const string GANAJO_ORIGIN_AUTH = "ganajoOriginAuth";
+
+// ENDERECO DA APLICAÇÃO REACT (WEB)
+const string address = "http://localhost:3000";
+
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(name: GANAJO_ORIGIN_AUTH,
+					  policy =>
+					  {
+						  policy.WithOrigins(address)
+							.AllowAnyHeader()
+							.AllowAnyMethod()
+							.AllowCredentials();
+					  });
+});
+
 var app = builder.Build();
+
+app.UseRouting()
+   .UseCors(GANAJO_ORIGIN_AUTH);
 
 var ganajoMiniContext = new GanajoMiniDbContext();
 

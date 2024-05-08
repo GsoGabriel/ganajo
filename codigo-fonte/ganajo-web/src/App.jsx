@@ -15,12 +15,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
-  const [isAdmin, setIsAdmin] = useState();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    setIsAdmin(false);
-  }, [])
-
+    const storedAdminStatus = localStorage.getItem('isAdmin'); 
+    setIsAdmin(storedAdminStatus === 'true');
+  }, []);
+  
   return (
       <BrowserRouter>
         <Layout>
@@ -30,6 +31,16 @@ function App() {
             <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />
+            <Route path="/Admin" element={<Login setIsAdmin={setIsAdmin} />} />
+            {isAdmin ? (
+            <>
+              <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin} />} />
+              <Route path="/Produto/novo" element={<ProductForm />} /> {}
+            </>
+          ) : (
+            <Route path="/meuspedidos" element={<Navigate to="/" replace />} />
+          )}
+        </Routes>
             <Route path="/addProdutos" element={<ProductForm />} />
             <Route path="/Admin" element={<Login/>} />
             <Route path="/meuspedidos" element={<MeusPedidos isAdmin={isAdmin}/>}/>
