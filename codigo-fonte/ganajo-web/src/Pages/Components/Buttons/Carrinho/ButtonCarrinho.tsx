@@ -11,7 +11,7 @@ function ButtonCarrinho({ onClick }) {
     
     return (    
         <Badge badgeContent={count} invisible={count <= 0}>
-            <IconButton onClick={onClick} size="small">       
+            <IconButton onClick={onClick} size="small" color='inherit' >       
                 <ShoppingCartCheckoutRoundedIcon />     
             </IconButton>   
         </Badge> 

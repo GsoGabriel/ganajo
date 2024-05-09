@@ -56,8 +56,12 @@ function ResponsiveAppBar() {
     navigate('/carrinho');
   };
 
+  const GoTo = (rote:string) => {
+    navigate(rote);
+  };
+
   return (
-    <AppBar position="static" className=''>
+    <AppBar position="static" color="warning" className='' sx={{position: 'relative' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={admin !== undefined ? '/homeAdmin' : '/'}>
@@ -80,7 +84,7 @@ function ResponsiveAppBar() {
           >
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, position: 'absolute', right: 30}}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -110,13 +114,12 @@ function ResponsiveAppBar() {
               }}
             >
               {navItems.map(item => (
-                <MenuItem key={item.Id} onClick={handleCloseNavMenu}>
+                <MenuItem key={item.Id} onClick={() => GoTo(item.Link)}>
                   <Typography textAlign="center">{item.Title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -146,32 +149,10 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0}}>
             {
               admin === undefined ? <ButtonCarrinho onClick={() => GoToCarrinho()}/> : ''
             }
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
         </Toolbar>
       </Container>
