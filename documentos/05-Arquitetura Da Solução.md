@@ -36,9 +36,11 @@ CREATE TABLE Cliente (
     CPF VARCHAR(20) NOT NULL,
     Nome VARCHAR(100) NOT NULL,
     NumeroCasa VARCHAR(20) NOT NULL,
+    Endereco VARCHAR(100) NOT NULL,
     Complemento VARCHAR(100) NULL,
     NumeroTelefone VARCHAR(20) NOT NULL,
     RegiaoPostalId INT NOT NULL,
+    EditadoData DATETIME NULL,
     FOREIGN KEY (RegiaoPostalId) REFERENCES RegiaoPostal(Id)
 );
 

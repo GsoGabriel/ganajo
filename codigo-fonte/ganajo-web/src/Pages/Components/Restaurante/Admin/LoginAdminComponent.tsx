@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../../../LoginAdmin/LoginAdmin.css';
 import { loginAxiosRequest } from '../../../../Api/ganajoClient.ts';
 import { useAdminContext } from './../../../../Context/AdminContext.tsx';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
 
 function FormLoginAdminComponent() {
@@ -36,8 +36,7 @@ function FormLoginAdminComponent() {
   return (
     <Form className='l-form-login mb-3' onSubmit={handleSubmit}>
       <div className='l-logo  mb-4'>
-        {/* <img src={LogoLogin} alt="Logo Ganajo" /> */}
-        <h2 className="ganajo-title mb-4" >Ganajo Admin</h2>
+        <h2 className="ganajo-title mb-4">Ganajo Admin</h2>
         <h4>Entrar</h4>
       </div>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -62,7 +61,7 @@ function FormLoginAdminComponent() {
         {errorMessage}
       </div>
       
-      <Button className='l-s-buttonEntrar' variant="primary" type="submit">
+      <Button className='l-s-buttonEntrar' color="warning" variant="contained" type="submit">
         Entrar
       </Button>
     </Form>

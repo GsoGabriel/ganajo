@@ -1,11 +1,15 @@
+/* A cor warning é #fd7e14 */
+body {
+    background: #f4f4f4;
+}
 .l-form-login {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 95vh;
+    min-height: 85vh;
     background: #f4f4f4;
-  }
+}
   
 .l-logo {
     display: flex;
@@ -26,13 +30,9 @@
 .l-s-buttonEntrar{
     padding-left: 5em !important;
     padding-right: 5em !important;
-    background-color: rgb(198, 120, 12) !important;
-    border-color: rgb(198, 120, 12) !important;
 }
 
 .l-s-buttonEntrar:hover{
-    background-color: rgb(250, 164, 43) !important;
-    border-color: rgb(250, 164, 43) !important;
     color: #FFF !important;
 }
 
