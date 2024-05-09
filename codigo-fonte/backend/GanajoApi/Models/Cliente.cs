@@ -19,6 +19,10 @@ public partial class Cliente
 
     public int RegiaoPostalId { get; set; }
 
+    public string Endereco { get; set; } = null!;
+
+    public DateTime? EditadoData { get; set; }
+
     public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
 
     public virtual RegiaoPostal RegiaoPostal { get; set; } = null!;

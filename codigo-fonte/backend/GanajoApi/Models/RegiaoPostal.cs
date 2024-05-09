@@ -12,11 +12,12 @@ public partial class RegiaoPostal
     public string Cep { get; set; } = null!;
 
     public float PrecoDelivery { get; set; }
-    public bool Removido {get;set;}
 
     public int? EditadoPor { get; set; }
 
     public DateTime? EditadoData { get; set; }
+
+    public bool Removido { get; set; }
 
     public virtual ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
 

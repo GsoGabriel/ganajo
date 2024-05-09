@@ -1,11 +1,15 @@
 export interface Admin {
-    Id: number,
-    Email : string,
-    Senha : string,
+    id: number
+    nome: string,
+    email: string
+    senha: string,
+    editadoData: string
 }
 
 export const defaultAdminProp : Admin = {
-    Email: 'ganajoadmin@gmail.com',
-    Id: 1,
-    Senha: ''
+    email: 'ganajoadmin@gmail.com',
+    id: 1,
+    senha: '',
+    editadoData: '',
+    nome: ''
 }

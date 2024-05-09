@@ -1,0 +1,14 @@
+.container {
+    text-align: center;
+    width: 100%;
+
+    h1 {
+        margin: 20px 0px;
+    }
+}
+
+@media screen and (max-width: 800px){
+    .statistics {
+        flex-direction: column;
+    }
+}

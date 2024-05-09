@@ -13,6 +13,7 @@ import PedidoFullComponent from './Pages/Pedido/PedidoFullComponent.tsx';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useAdminContext } from './Context/AdminContext.tsx';
+import StatisticsComponent from './Pages/Statistics/StatisticsComponent.tsx';
 
 function App() {
 
@@ -25,6 +26,9 @@ function App() {
             <Route path="/homeAdmin" element={<MeusPedidos isAdmin={admin !== undefined}/>}/>
             <Route path="/" element={<Home />}/>
             <Route path="/bairrosdeentrega" element={<BairrosdeEntrega/>} />
+            {
+              admin !== undefined && <Route path="/statistics" element={<StatisticsComponent/>} />
+            }
             <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
             <Route path="/Produtos" element={<Produtos />} />

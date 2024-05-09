@@ -5,6 +5,7 @@ import '../../../LoginAdmin/LoginAdmin.css';
 import { loginAxiosRequest } from '../../../../Api/ganajoClient.ts';
 import { useAdminContext } from './../../../../Context/AdminContext.tsx';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function FormLoginAdminComponent() {
 
@@ -19,10 +20,14 @@ function FormLoginAdminComponent() {
 
     try {
       const usuario = await loginAxiosRequest(email, password);
-      if(usuario !== undefined){
+      if(usuario !== null && usuario !== undefined && usuario.id > 0){
+        console.log(usuario);
         setAdminInStorage(usuario);
         navigate('/homeAdmin');
+        return;
       }
+
+      toast.error("Usuario ou senha inválido.");
     } catch (error) {
       setErrorMessage('Erro de login: Credenciais inválidas');
     }

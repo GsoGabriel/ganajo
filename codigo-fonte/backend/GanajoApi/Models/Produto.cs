@@ -18,13 +18,14 @@ public partial class Produto
     public string? EnderecoImagem { get; set; }
 
     public string? Categoria { get; set; }
-    public bool Removido {get;set;}
 
     public int UsuarioId { get; set; }
 
     public int? EditadoPor { get; set; }
 
     public DateTime? EditadoData { get; set; }
+
+    public bool Removido { get; set; }
 
     public virtual Usuario? EditadoPorNavigation { get; set; }
 

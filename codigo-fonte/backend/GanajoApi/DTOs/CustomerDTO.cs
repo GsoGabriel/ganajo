@@ -11,6 +11,7 @@ public partial class CustomerDTO
     public string NumeroCasa { get; set; } = null!;
 
     public string? Complemento { get; set; }
+    public string? Endereco { get; set; }
 
     public string NumeroTelefone { get; set; } = null!;
 

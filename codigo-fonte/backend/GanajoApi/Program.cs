@@ -519,10 +519,12 @@ async Task<CustomerDTO> SaveCustomerAsync(CustomerDTO customer, GanajoDbContext 
 
     customerDb.Nome = customer.Nome;
     customerDb.Cpf = customer.Cpf;
+    customerDb.Endereco = customer.Endereco;
     customerDb.NumeroCasa = customer.NumeroCasa;
     customerDb.Complemento = customer.Complemento;
     customerDb.NumeroTelefone = customer.NumeroTelefone;
     customerDb.RegiaoPostalId = customer.RegiaoPostal.Id;
+    customerDb.EditadoData = DateTime.Now;
 
     var rPostal = await _context.RegiaoPostals.FirstOrDefaultAsync(f => f.Id == customer.RegiaoPostal.Id);
     if(rPostal != null)

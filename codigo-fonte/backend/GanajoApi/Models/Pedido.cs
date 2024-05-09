@@ -16,11 +16,12 @@ public partial class Pedido
     public int? TipoPagamento { get; set; }
 
     public int ClienteId { get; set; }
-    public bool Removido { get; set; }
 
     public int? EditadoPor { get; set; }
 
     public DateTime? EditadoData { get; set; }
+
+    public bool Removido { get; set; }
 
     public virtual Cliente Cliente { get; set; } = null!;
 
