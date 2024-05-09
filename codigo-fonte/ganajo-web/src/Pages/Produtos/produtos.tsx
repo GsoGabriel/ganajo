@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Navigate, useNavigate,  } from 'react-router-dom';
 import generateProducts from './../Home/data.ts';
 import { Produto } from '../../DTOs/Produto.ts';
-import { FaMotorcycle } from "react-icons/fa6";
 import './produtos.css'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import { useApi } from '../../Api/useApi.tsx';
@@ -49,9 +48,6 @@ const ProductsAdmin = () => {
   return (
     <div className="container"> 
       <div className="deliveryContainer"> 
-        <div>
-          <FaMotorcycle className="iconTheme"/> 
-        </div>
         <div className="inputStyle"> 
           <SearchAppBar onSearch={searchingHandleCallBack} /> 
         </div>

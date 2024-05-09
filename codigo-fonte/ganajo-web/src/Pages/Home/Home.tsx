@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Produto } from '../../DTOs/Produto.ts';
-import { FaMotorcycle } from "react-icons/fa6";
 import { Grid } from '@mui/material'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 import { useApi } from '../../Api/useApi.tsx';
 import {  getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
 import { useAdminContext } from '../../Context/AdminContext.tsx';
+import styles from './Home.module.scss'
 
 const Home = () => {
   const {data} = useApi<Produto[]>(getProductsAxiosConfig())
@@ -25,10 +25,7 @@ const Home = () => {
     <div className="container"> 
       <div className="deliveryContainer"> 
         <div>
-          <FaMotorcycle className="iconTheme"/> 
-        </div>
-        <div>
-          <h1 className="deliveryTime">Tempo médio de preparo: 40 min</h1>
+          <h1 className= {styles.deliveryTime}>Tempo médio de preparo: 40 min</h1>
         </div>
         <div className="inputStyle"> 
             <SearchAppBar onSearch={searchingHandleCallBack} /> 
