@@ -8,6 +8,8 @@ import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface CustomProps {
     onChange: (event: { target: { name: string; value: string } }) => void;
@@ -42,18 +44,21 @@ const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
 
 export default function ProductForm() {
 
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         nome: '',
         descricao: '',
         valor: 0,
         enderecoImagem: '',
-        usuarioId: 1
+        usuarioId: 1,
+        categoria: ''
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         let numericValue;
-        if (name == "valor") {
+        if (name === "valor") {
             numericValue = parseFloat(value);
             setFormData({
                 ...formData,
@@ -82,19 +87,21 @@ export default function ProductForm() {
             body: JSON.stringify(formData)
           });
           if (response.ok) {
-            console.log('Produto salvo com sucesso!');
+            toast.success("Produto adicionado com sucesso!")
             setFormData({
                 nome: '',
                 descricao: '',
                 valor: 0,
                 enderecoImagem: '',
-                usuarioId: 1
+                usuarioId: 1,
+                categoria: ''
             });
+            navigate('/produtos');
           } else {
-            console.error('Erro ao salvar o produto.');
+            toast.error("Erro ao salvar o produto.");
           }
         } catch (error) {
-          console.error('Erro ao conectar ao servidor:', error);
+          toast.error(error);
         }
       };
     
@@ -152,6 +159,30 @@ export default function ProductForm() {
                 fullWidth
                 rows={4}
                 defaultValue={formData.descricao}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <InputLabel
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  fontWeight: 700
+                }}
+              >
+                Categoria
+              </InputLabel>
+            </Grid>
+            <Grid item xs={12} sm={10}>
+              <TextField
+                required
+                id="categoria"
+                name="categoria"
+                label="Categoria"
+                multiline
+                fullWidth
+                rows={4}
+                defaultValue={formData.categoria}
                 onChange={handleInputChange}
               />
             </Grid>

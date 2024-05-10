@@ -49,7 +49,7 @@ app.MapGet("/", () => "Hello World!");
 app.MapGet("/products", async ([FromServices] GanajoDbContext _context) =>
 {
     return await _context.Produtos.Where(w => !w.Removido)
-                                .OrderByDescending(o => o.Categoria)
+                                .OrderByDescending(o => o.Nome)
                                 .Select(s => DtoFromModels.ProductDtoFromModel(s))
                                 .ToListAsync();
 });
