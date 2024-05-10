@@ -4,7 +4,7 @@ import styles from './MeusPedidos.module.scss'
 import { ClienteDTO, ClienteDTODefaultProps } from '../../DTOs/Cliente.ts'
 import { toast } from 'react-toastify'
 import { getCustomerByTelephoneNumberAxiosRequest, getPedidoByUserAxiosRequest } from '../../Api/ganajoClient.ts'
-import { TextField } from '@mui/material'
+import { CircularProgress, TextField } from '@mui/material'
 import { PedidoDTO } from '../../DTOs/Pedido.ts'
 import { useAdminContext } from '../../Context/AdminContext.tsx'
   
@@ -16,6 +16,9 @@ const MeusPedidos = () => {
     useEffect(() => {
       setIsAdmin(admin !== undefined);
     }, [admin])
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
     const [telephone, setTelephone] = useState<string>();
     const [showPedidos, setShowPedidos] = useState<boolean>(false);
@@ -61,14 +64,23 @@ const MeusPedidos = () => {
     }, [cliente, isAdmin])
 
     const getPedidosByUserAsync = async (isAdmin : boolean, idUser : number | undefined) => {
-      const pedidos = await getPedidoByUserAxiosRequest(isAdmin, idUser);
-      if(pedidos === undefined) {
-        toast.error("Não foi encontrado pedidos para esse usuário...")
-        return;
-      }
+      try {
+        setIsLoading(true)
 
-      setPedidos(pedidos);
-      setShowPedidos(true);
+        const pedidos = await getPedidoByUserAxiosRequest(isAdmin, idUser);
+        if(pedidos === undefined) {
+          toast.error("Não foi encontrado pedidos para esse usuário...")
+          return;
+        }
+  
+        setPedidos(pedidos);
+        setShowPedidos(true);
+
+      }catch(ex){
+        toast.error(ex);
+      }finally{
+        setIsLoading(false);
+      }
     }
 
   return (
@@ -80,6 +92,7 @@ const MeusPedidos = () => {
             <h1 style={{textAlign: 'center'}}>Meus Pedidos</h1>
             <div style={{display: 'flex', flexDirection:'column', gap: '15px'}}>
             {
+                isLoading ? <CircularProgress size={'10rem'}/> :
                 pedidos.map(m => <PedidoComponent key={m.id} Pedido={m} isAdmin={isAdmin}/> )
             }   
             </div>
@@ -109,6 +122,7 @@ const MeusPedidos = () => {
                   <h1 style={{textAlign: 'center'}}>Meus Pedidos</h1>
                   <div style={{display: 'flex', flexDirection:'column', gap: '15px'}}>
                   {
+                    isLoading ? <CircularProgress size={'10rem'}/> :
                       pedidos.map(m => <PedidoComponent key={m.id} Pedido={m} isAdmin={isAdmin}/> )
                   }   
                   </div>

@@ -4,6 +4,7 @@ import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
 import { Admin } from "../DTOs/Admin";
 import { PedidoDTO } from "../DTOs/Pedido";
+import { StatusPedido } from "../DTOs/Status";
 
 const isLocalTest = true;
 
@@ -141,6 +142,25 @@ export const getPedidoByUserAxiosRequest = async (admin : boolean, idUser : numb
     if (axios.isAxiosError(error)) {
       toast.error(error.response?.data, {
         toastId: 'getPedidoByUser',
+        position: 'top-right',
+        autoClose: false,
+      });
+    }
+  }
+}
+
+export const updateStatusPedido = async (id : number, status : StatusPedido) => {
+  try {
+    const options = {
+      method: 'PUT',
+      url: `${BASE_URL}order/${id}/status/${status}`
+    };
+    const response: AxiosResponse<boolean> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error){
+    if (axios.isAxiosError(error)) {
+      toast.error(error.response?.data, {
+        toastId: 'updateStatusPedido',
         position: 'top-right',
         autoClose: false,
       });

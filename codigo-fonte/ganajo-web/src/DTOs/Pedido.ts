@@ -22,6 +22,7 @@ export const PedidoDTODefaultProps: PedidoDTO = {
         nome: '',
         numeroCasa: '',
         numeroTelefone: '',
+        endereco: '',
         regiaoPostal: {
             id: 0,
             bairro: '',

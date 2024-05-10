@@ -134,18 +134,6 @@ app.MapGet("/customers", async ([FromServices] GanajoDbContext _context) => {
     return Results.Ok(customers);
 });
 
-//app.MapGet("/customer/{id}", async ([FromRoute] int id, [FromServices] GanajoDbContext _context) => {
-//    if(id == 0)
-//        return Results.NoContent();
-
-//    var cliente = await _context.Clientes.FirstOrDefaultAsync(f => f.Id == id);
-
-//    if(cliente == null)
-//        return Results.NotFound("Cliente não encontrado...");
-
-//    return Results.Ok(DtoFromModels.CustomerDtoFromModel(cliente));
-//});
-
 app.MapGet("/customer/{telephone}", async ([FromRoute] string telephone, [FromServices] GanajoDbContext _context) => {
     if (string.IsNullOrEmpty(telephone))
         return Results.NoContent();
@@ -243,6 +231,7 @@ app.MapGet("/orders/{admin}", async ([FromRoute] bool admin, [FromQuery] int idU
                                  NumeroCasa = pedido.Cliente.NumeroCasa,
                                  Complemento = pedido.Cliente.Complemento,
                                  NumeroTelefone = pedido.Cliente.NumeroTelefone,
+                                 Endereco = pedido.Cliente.Endereco,
                                  RegiaoPostal = new RegiaoPostalDTO()
                                  {
                                      Id = pedido.Cliente.RegiaoPostal.Id,
@@ -454,6 +443,7 @@ async Task<PedidoDTO?> GetPedidoByIdAsync(int id, [FromServices] GanajoDbContext
                    NumeroCasa = pedido.Cliente.NumeroCasa,
                    Complemento = pedido.Cliente.Complemento,
                    NumeroTelefone = pedido.Cliente.NumeroTelefone,
+                   Endereco = pedido.Cliente.Endereco,
                    RegiaoPostal = new RegiaoPostalDTO()
                    {
                        Id = pedido.Cliente.RegiaoPostal.Id,

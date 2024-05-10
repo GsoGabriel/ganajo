@@ -11,6 +11,7 @@ const EnderecoFormulario = () => {
     const [numeroCasa, setNumeroCasa] = useState<string>(cliente.numeroCasa);
     const [complemento, setComplemento] = useState<string>(cliente.complemento ?? '');
     const [numeroTelefone, setNumeroTelefone] = useState<string>(cliente.numeroTelefone);
+    const [endereco, setEndereco] = useState<string>(cliente.endereco);
 
   return (
     <div>
@@ -51,6 +52,19 @@ const EnderecoFormulario = () => {
                 updateCLiente.numeroCasa = e.target.value;
                 setCliente(updateCLiente);
                 setNumeroCasa(e.target.value)
+            }}
+            fullWidth
+        />
+        <TextField
+            autoFocus
+            margin="dense"
+            label="Endereço"
+            value={endereco}
+            onChange={(e) => {
+                const updateCLiente = cliente;
+                updateCLiente.endereco = e.target.value;
+                setCliente(updateCLiente);
+                setEndereco(e.target.value)
             }}
             fullWidth
         />

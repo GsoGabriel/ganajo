@@ -44,7 +44,8 @@ public static class DtoFromModels {
             NumeroCasa = cliente.NumeroCasa,
             Complemento = cliente.Complemento,
             NumeroTelefone = cliente.NumeroTelefone,
-            RegiaoPostal = RegiaoDtoFromModel(cliente.RegiaoPostal)
+            RegiaoPostal = RegiaoDtoFromModel(cliente.RegiaoPostal),
+            Endereco = cliente.Endereco,
         };
     }
 }
