@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MySqlX.XDevAPI;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -400,6 +401,66 @@ app.MapPost("/orderProduct", async ([FromBody] PedidoProdutoDTO pedidoProduto, [
 });
 
 #endregion
+#region Overview Statistics
+app.MapGet("/statistics", async ([FromServices] GanajoDbContext _context) =>
+{
+    StatisticsDTO statistics = new StatisticsDTO();
+
+    var values = await _context.Pedidos
+                            .Where(w => !w.Removido)
+                            .Include(i => i.PedidoProdutos)
+                            .ThenInclude(i => i.Produto)
+                            .ToListAsync();
+
+    statistics.Vendas = values.Sum(s => s.ValorTotal);
+
+    List<PedidoProduto> pedidoProdutos = new List<PedidoProduto>();
+
+    foreach (var value in values)
+        pedidoProdutos.AddRange(value.PedidoProdutos);
+
+    var categoriasGrouped = pedidoProdutos.GroupBy(g => g.Produto.Categoria);
+
+    var topCategorias = new List<Statistic>();
+    foreach (var grouped in categoriasGrouped)
+    {
+        topCategorias.Add(new Statistic()
+        {
+            Key = grouped.Key,
+            Value = grouped.Sum(o => o.Quantidade).ToString()
+        });
+    }
+
+    statistics.TopCategorias = topCategorias
+                                .OrderBy(o => o.Value)
+                                .Take(3)
+                                .ToArray();
+
+    var pedidosStatusGrouped = values.GroupBy(g => g.StatusPedido);
+
+    var statusPedidos = new List<Statistic>();
+    foreach (var grouped in pedidosStatusGrouped)
+    {
+        statusPedidos.Add(new Statistic()
+        {
+            Key = ((StatusPedido)grouped.Key).ToString(),
+            Value = grouped.Count().ToString()
+        });
+    }
+
+    statistics.TopPedidos = statusPedidos
+                                .OrderBy(o => o.Value)
+                                .ToArray();
+
+    statistics.QtdBairros = _context.RegiaoPostals.Count();
+    statistics.QtdClientes = _context.Clientes.Count();
+    statistics.QtdProdutos = _context.Produtos.Count();
+    statistics.PrecoMedio = _context.Produtos.Average(p => p.Valor);
+
+    return statistics;
+
+});
+#endregion
 #region Utils
 async Task<PedidoProdutoDTO> SaveOrderProductAsync(PedidoProdutoDTO pedidoProduto, [FromServices] GanajoDbContext _context)
 {
@@ -553,5 +614,6 @@ async Task<RegiaoPostalDTO> SaveRegiaoPostalAsync(RegiaoPostalDTO regiaoPostal, 
     return regiaoPostal;
 }
 #endregion
+
 
 app.Run();
