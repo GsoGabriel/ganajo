@@ -31,14 +31,14 @@ const Home = () => {
             <SearchAppBar onSearch={searchingHandleCallBack} /> 
         </div>
       </div>
+      <div className={styles.products}>
       {
-          isLoading ? <CircularProgress size={'10rem'} /> :
-          screenItens?.map(m => (
-            <Grid key={m.id} item xs={12} sm={6} md={4}>
-              <ProductCard product={m}/> 
-            </Grid>
-          ))
-      } 
+        isLoading ? <CircularProgress size={'10rem'} /> :
+        screenItens?.map(m => (
+            <ProductCard product={m}/> 
+        ))
+      }
+      </div>
     </div>
   );
 };

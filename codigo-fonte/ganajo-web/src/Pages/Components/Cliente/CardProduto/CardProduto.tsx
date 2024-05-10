@@ -5,9 +5,10 @@ import CardMedia from '@mui/material/CardMedia';
 import ButtonBase from '@mui/material/ButtonBase'; 
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
-import ReactDOM from 'react-dom';
 import { DetalheProdutoComponent } from '../CardMontaPrato/DetalheProduto.tsx'
 import { Produto } from '../../../../DTOs/Produto.ts';
+import styles from './CardProduto.module.scss'
+import truncateString from './../../../../Utils/truncateString.ts';
 
 interface ProductCardProps {
   product: Produto
@@ -16,6 +17,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [showDescription, setShowDescription] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState<Produto | null>(product);
+  const maxLengthToTruncate = 60;
 
   const openDescription = () => {
     setSelectedProduct(product);
@@ -27,9 +29,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div>
-      <ButtonBase component="div" onClick={openDescription}>
-        <Card sx={{ maxWidth: 345 }}>
+    <div className={styles.container}>
+      <ButtonBase className={styles.container} sx={{width: '100%'}} component="div" onClick={openDescription}>
+        <Card sx={{width: '100%'}}>
           <CardMedia
             data-id={selectedProduct?.id}
             component="img"
@@ -39,13 +41,13 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              {selectedProduct?.nome}
+              {truncateString(selectedProduct?.nome ?? '',maxLengthToTruncate)}
             </Typography>
             <Typography variant="body2" color="text.secondary" style={{ marginBottom: '8px' }}>
-              {selectedProduct?.descricao}
+              {truncateString(selectedProduct?.descricao ?? '',maxLengthToTruncate)}
             </Typography>
             <div>
-              <Chip label={`R$${selectedProduct?.valor.toFixed(2)}`} variant="outlined" color="secondary" /> 
+              <Chip style={{fontSize: '1.2rem'}} label={`R$ ${selectedProduct?.valor.toFixed(2)}`} color="warning" /> 
             </div>
           </CardContent>
         </Card>

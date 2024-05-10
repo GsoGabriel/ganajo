@@ -61,6 +61,13 @@
     border-radius: 8px;
 }
 
+.products {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
 @media screen and (max-width: 1024px) {
 
     .itemsStyle > div {
