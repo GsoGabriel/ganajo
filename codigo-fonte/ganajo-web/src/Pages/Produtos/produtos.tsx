@@ -5,7 +5,7 @@ import { Produto } from '../../DTOs/Produto.ts';
 import './produtos.css'; 
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import { useApi } from '../../Api/useApi.tsx';
-import { Grid } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
 import { getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
 
@@ -15,7 +15,6 @@ const ProductsAdmin = () => {
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const [showAddProducts, setShowAddProducts] = React.useState(false);
   
   const searchingHandleCallBack = useCallback((value : string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
@@ -55,18 +54,14 @@ const ProductsAdmin = () => {
           <button className="addButton" onClick={handleAddNewProduct}>Adicionar Novo Produto</button>
         </div>
       </div>
+      <div className="products">
       {
-        isLoading ? <div>Is Loading...</div> : 
-        <Grid container spacing={2} className="itemsStyle"> 
-        {
-          screenItens?.map(m => (
-            <Grid key={m.id} item xs={12} sm={6} md={4}>
-              <ProductCard product={m}/> 
-            </Grid>
-          ))
-        }
-      </Grid>
+        isLoading ? <CircularProgress size={'10rem'} /> :
+        screenItens?.map(m => (
+            <ProductCard product={m}/> 
+        ))
       }
+      </div>
     </div>
   );
 };
