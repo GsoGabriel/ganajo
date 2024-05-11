@@ -9,7 +9,7 @@ import { StatusPedido } from "../DTOs/Status";
 const isLocalTest = true;
 
 const getBaseUrl = () => {
-  return isLocalTest ? 'http://localhost:5022/' : 'https://ganajoapi-s3e6uywyma-uc.a.run.app/'
+  return isLocalTest ? 'http://localhost:5022/' : 'https://ganajoapi-s3e6uywyma-rj.a.run.app/'
 };
 
 const getBaseUrlAuthApi = () => {
