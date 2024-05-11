@@ -4,6 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// DEPLOY
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+var url = $"http://0.0.0.0:{port}";
+var target = Environment.GetEnvironmentVariable("TARGET") ?? "World";
+
 const string GANAJO_ORIGIN_AUTH = "ganajoOriginAuth";
 
 // ENDERECO DA APLICAÇÃO REACT (WEB)
@@ -99,4 +104,12 @@ app.MapGet("/login", async ([FromQuery] string email, [FromQuery] string senha) 
     return Results.Ok(usuario);
 });
 
-app.Run();
+
+if (app.Environment.IsDevelopment())
+{
+    app.Run();
+}
+else
+{
+    app.Run(url);
+}
