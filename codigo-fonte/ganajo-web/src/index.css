@@ -1,7 +1,3 @@
-body {
-    background-color: #F6F6F6;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -10,35 +6,8 @@ body {
     list-style: none;
     text-decoration: none;
     box-sizing: border-box;
+    
 }
-
-/* :root {
-    --primary-hue: 50;
-    --black-lightness: 0%;
-    --dark-lightness: 100%;
-    --light-lightness: 100%;
-    --white-lightness: 100%;
-    --color-primary: hsl(var(--primary-hue), 100%, 0%);
-    --color-secondary: hsl(var(--primary-hue), 100%, 80%);
-    --color-background: hsl(var(--primary-hue), 60%, 85%);
-    --color-white: hsl(0, 5%, var(--white-lightness));
-    --color-light: hsl(var(--primary-hue), 5%, var(--light-lightness));
-    --color-black: hsl(var(--primary-hue), 5%, var(--black-lightness));
-    --color-dark: hsl(var(--primary-hue), 5%, var(--dark-lightness));
-
-    #GENERAL CONTAINER VARIABLES
-    --container-width-lg: 76%;
-    --container-width-md: 90%;
-
-    #BORDER RADIUS VARIABLES
-    --border-radius-1: 1.2rem;
-    --border-radius-2: 0.8rem;
-    --border-radius-3: 0.5rem;
-
-    #GENERAL TRANSITION VARIABLE
-    --transition: all 500ms ease ;
-}
-*/
 
 html {
     scroll-behavior: smooth;
@@ -181,10 +150,6 @@ h6 {
         font-size: 2rem;
     }
 }
-
-
-
-
 
 /* MEDIA QUERIES (phones) */
 @media screen and (max-width: 600px) {

@@ -1,14 +1,10 @@
 /* A cor warning é #fd7e14 */
-body {
-    background: #f4f4f4;
-}
 .l-form-login {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 85vh;
-    background: #f4f4f4;
 }
   
 .l-logo {

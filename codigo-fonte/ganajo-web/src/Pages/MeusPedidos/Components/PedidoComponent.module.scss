@@ -11,16 +11,9 @@
     justify-content: space-between;
     align-items: center;
     gap: 50px;
-    background-color: var(--color-secondary);
+    background-color: #F4F4F4;
     border-radius: 15px;
     box-shadow: 1px 2px 3px gray;
-}
-
-.imageContainer {
-    width: 5.5rem;
-    height: 5.5rem;
-    border-radius: 50%;
-    overflow: hidden;
 }
 
 p {
@@ -54,7 +47,7 @@ p {
     font-weight: bolder;
     font-size: 1rem;
     color: white;
-    background-color: green;
+    background-color: #f4f4f4;
     padding: 5px;
     border-radius: 5px;
 }
@@ -69,22 +62,33 @@ p {
 }
 
 .primaryColorStyle {
-    font-weight: bolder;
-    font-size: 1rem;
-    color: #000;
-    background-color: var(--color-primary);
-    padding: 5px;
-    border-radius: 5px;
+    font-size: 1.4em;
 }
 
 .greenItemStyle {
     font-weight: bolder;
     font-size: 1rem;
-    color: white;
-    background-color: green;
+    background-color: #f4f4f4;
     padding: 8px;
     border-radius: 3px;
     margin: 6px 0px
+}
+
+.centerGridOnSmallScreen {
+    @media (max-width: 600px) {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+/* Card */
+.title{
+    color: #ed6c02
+}
+
+.layout{
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (max-width: 1024px) {
@@ -119,7 +123,8 @@ p {
         text-align: center;
     }
 
-    h2, h3 {
+    h2,
+    h3 {
         text-align: center;
     }
 
@@ -131,16 +136,16 @@ p {
         padding: 5px;
         border-radius: 5px;
     }
-    
+
     .greenStyle {
         font-weight: bolder;
         font-size: 1.5rem;
         color: white;
-        background-color: green;
+        background-color: #f4f4f4;
         padding: 5px;
         border-radius: 5px;
     }
-    
+
     .redStyle {
         font-weight: bolder;
         font-size: 1.5rem;
@@ -154,7 +159,6 @@ p {
         font-weight: bolder;
         font-size: 1.5rem;
         color: black;
-        background-color: var(--color-primary);
         padding: 5px;
         border-radius: 5px;
     }

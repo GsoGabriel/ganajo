@@ -90,7 +90,8 @@ const MeusPedidos = () => {
         (
           <div>
             <h1 style={{textAlign: 'center'}}>Meus Pedidos</h1>
-            <div style={{display: 'flex', flexDirection:'column', gap: '15px'}}>
+            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px', justifyContent: 'center'}}>
+
             {
                 isLoading ? <CircularProgress size={'10rem'}/> :
                 pedidos.map(m => <PedidoComponent key={m.id} Pedido={m} isAdmin={isAdmin}/> )
