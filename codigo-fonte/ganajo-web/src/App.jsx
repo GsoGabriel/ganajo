@@ -26,16 +26,19 @@ function App() {
             <Route path="/homeAdmin" element={<MeusPedidos isAdmin={admin !== undefined}/>}/>
             <Route path="/" element={<Home />}/>
             <Route path="/bairrosdeentrega" element={<BairrosdeEntrega/>} />
+            <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
+            <Route path="/Carrinho" element={<Carrinho />} />
+            <Route path="/Admin" element={<Login />} />
+            <Route path="/meuspedidos" element={<MeusPedidos/>} />
             {
               admin !== undefined && <Route path="/statistics" element={<StatisticsComponent/>} />
             }
-            <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
-            <Route path="/Carrinho" element={<Carrinho />} />
-            <Route path="/Produtos" element={<Produtos />} />
-            <Route path="/Admin" element={<Login />} />
-            <Route path="/meuspedidos" element={<MeusPedidos/>} />
-            <Route path="/Produto/novo" element={<ProductForm />} />
-            <Route path="/addProdutos" element={<ProductForm />} />
+            {
+              admin !== undefined && <Route path="/Produtos" element={<Produtos />} />
+            }
+            {
+              admin !== undefined && <Route path="/addProdutos" element={<ProductForm />} />
+            }
           </Routes>
         </Layout>
         <ToastContainer />
