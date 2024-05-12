@@ -47,8 +47,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               {truncateString(selectedProduct?.descricao ?? '',maxLengthToTruncate)}
             </Typography>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', gap: '5px'}}>
-              <Chip style={{fontSize: '1.2rem'}} label={`R$ ${selectedProduct?.valor.toFixed(2)}`} color="warning" /> 
-              <Chip style={{fontSize: '1.2rem'}} label={selectedProduct?.categoria} color="info" /> 
+              <Chip style={{fontSize: '1rem'}} label={`R$ ${selectedProduct?.valor.toFixed(2)}`} color="warning" /> 
+              <Chip style={{fontSize: '1rem'}} label={selectedProduct?.categoria} color="info" /> 
             </div>
           </CardContent>
         </Card>
