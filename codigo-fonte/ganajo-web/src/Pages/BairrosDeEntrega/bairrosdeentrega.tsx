@@ -9,13 +9,12 @@ import Button from '@mui/material/Button';
 import { FixedSizeList } from 'react-window';
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import CardBairro from '../Components/Cliente/CardBairro/CardBairro.tsx';
-import generateBairros from './data.ts';
 import { Bairro } from '../../DTOs/Bairro.ts';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import { getBairrosAxiosConfig, postBairroAxiosConfig, deleteBairroByIdAxiosConfig } from '../../Api/ganajoClient.ts';
 import { useApi } from '../../Api/useApi.tsx';
-import styles from '../Home/Home.module.scss'
+
 
 const Bairros = () => {
 
@@ -113,9 +112,6 @@ const Bairros = () => {
       <Grid container spacing={1} alignItems="center">
         <Grid item xs={1}></Grid>
         <Grid item xs={2}>
-        </Grid>
-        <Grid item xs={4}>
-          <h1 className={styles.deliveryTime}>Tempo médio de preparo: 40 min</h1>
         </Grid>
         <Grid item xs={3}>
           <SearchAppBar onSearch={searchingHandleCallBack} />

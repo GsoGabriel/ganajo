@@ -24,9 +24,6 @@ const Home = () => {
   return (
     <div className="container"> 
       <div className="deliveryContainer"> 
-        <div>
-          <h1 className= {styles.deliveryTime}>Tempo médio de preparo: 40 min</h1>
-        </div>
         <div className="inputStyle"> 
             <SearchAppBar onSearch={searchingHandleCallBack} /> 
         </div>
