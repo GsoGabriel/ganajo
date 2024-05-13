@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PedidoFullComponent = () => {
     const {setCliente, cliente, descricao, statusPedido, tipoPagamento, bairro} = usePedidoContext();
-    const {produtos} = useCarrinhoContext();
+    const {produtos, removerProdutos} = useCarrinhoContext();
     const [telephone, setTelephone] = useState<string>();
     const [customer, setCustomer] = useState<ClienteDTO>();
     const [showFormulario, setShowFormulario] = useState<boolean>(false);
@@ -54,7 +54,8 @@ const PedidoFullComponent = () => {
                     position: 'top-right',
                     autoClose: false,
                 });
-
+                
+                removerProdutos();
                 navigate('/');
             }
 

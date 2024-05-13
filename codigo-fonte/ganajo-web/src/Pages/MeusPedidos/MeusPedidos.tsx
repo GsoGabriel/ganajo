@@ -7,11 +7,19 @@ import { getCustomerByTelephoneNumberAxiosRequest, getPedidoByUserAxiosRequest }
 import { CircularProgress, TextField } from '@mui/material'
 import { PedidoDTO } from '../../DTOs/Pedido.ts'
 import { useAdminContext } from '../../Context/AdminContext.tsx'
+import { useGanajoRealTime } from './../../Api/ganajoRealTime.ts';
   
 const MeusPedidos = () => {
 
     const {admin} = useAdminContext();
+
     const [isAdmin, setIsAdmin] = useState<boolean>(admin !== undefined);
+    const [cliente, setCliente] = useState<ClienteDTO>(ClienteDTODefaultProps);
+
+    useGanajoRealTime({
+      pedidoCallBack: pedidoRealTime,
+      id: isAdmin ? admin?.id ?? 1 : cliente.id
+    });
 
     useEffect(() => {
       setIsAdmin(admin !== undefined);
@@ -23,7 +31,7 @@ const MeusPedidos = () => {
     const [telephone, setTelephone] = useState<string>();
     const [showPedidos, setShowPedidos] = useState<boolean>(false);
     const [pedidos, setPedidos] = useState<PedidoDTO[]>([]);
-    const [cliente, setCliente] = useState<ClienteDTO>(ClienteDTODefaultProps);
+    
 
     const localStorageTelephone = 'localStorageTelephone';
 
@@ -31,6 +39,16 @@ const MeusPedidos = () => {
         const telephoneCached = localStorage.getItem(localStorageTelephone);
         setTelephone(telephoneCached ?? '');
     }, [])
+
+    function pedidoRealTime(pedido : PedidoDTO){
+      console.log(pedido)
+      const index = pedidos.findIndex((f) => f.id === pedido.id);
+      const copy = [...pedidos];
+      if (index === -1) copy.push(pedido);
+      else copy[index] = pedido;
+      setPedidos(copy);
+      console.log(copy)
+    }
 
     const getClienteByTelephoneNumber = async (telephone : string) => {
         if(telephone === undefined || telephone.length <= 0) {
@@ -82,7 +100,6 @@ const MeusPedidos = () => {
         setIsLoading(false);
       }
     }
-
   return (
     <div className={styles.container}>
       {

@@ -16,7 +16,11 @@ interface PedidoProps {
 
 const PedidoComponent = ({ Pedido, isAdmin }: PedidoProps) => {
   const [pedido, setPedido] = useState<PedidoDTO>(Pedido);
-  const [pedidoStatus, setPedidoStatus] = useState<number>(pedido.statusPedido);
+  const [pedidoStatus, setPedidoStatus] = useState<number>(Pedido.statusPedido);
+  
+  useEffect(() => {
+    setPedidoStatus(Pedido.statusPedido)
+  }, [pedido, Pedido])
 
   const options = [
     { Id: 0, Value: 'Analise' },
@@ -59,7 +63,7 @@ const PedidoComponent = ({ Pedido, isAdmin }: PedidoProps) => {
         <CardMedia
           component="img"
           height="200"
-          image={Pedido.produtos[0].produto?.enderecoImagem}
+          image={pedido.produtos[0].produto?.enderecoImagem}
           alt="ui ui ui"
         />
         <CardContent>
