@@ -6,7 +6,7 @@ import './produtos.css';
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import { useApi } from '../../Api/useApi.tsx';
 import { CircularProgress, Grid } from '@mui/material';
-import ProductCard from '../Components/Cliente/CardProduto/CardProduto.tsx';
+import ProductCard from '../Components/Cliente/CardProduto/CardADM.tsx';
 import { getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
 
 const ProductsAdmin = () => {
