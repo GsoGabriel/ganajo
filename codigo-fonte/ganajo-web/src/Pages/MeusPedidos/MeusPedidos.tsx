@@ -89,7 +89,7 @@ const MeusPedidos = () => {
         isAdmin ? 
         (
           <div>
-            <h1 style={{textAlign: 'center'}}>Meus Pedidos</h1>
+            <h1 style={{textAlign: 'center'}}>Pedidos</h1>
             <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '20px', justifyContent: 'center'}}>
 
             {
