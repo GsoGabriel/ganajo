@@ -1,6 +1,7 @@
 import { HubConnection, HubConnectionBuilder, HubConnectionState, IHttpConnectionOptions, JsonHubProtocol } from "@microsoft/signalr";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PedidoDTO } from "../DTOs/Pedido";
+import { Admin } from "../DTOs/Admin";
 
 export const setupSignalRConnection = async (connectionHub: string) => {
   const options : IHttpConnectionOptions = {
@@ -31,30 +32,47 @@ export const setupSignalRConnection = async (connectionHub: string) => {
 
 export interface GanajoRealTimeProps {
   pedidoCallBack(pedido : PedidoDTO) : void;
-  id: number
 }
 
-export const useGanajoRealTime = ({pedidoCallBack, id} : GanajoRealTimeProps) => {
+export const useGanajoRealTime = ({pedidoCallBack} : GanajoRealTimeProps) => {
   const connexaRealTimeAddress = "https://localhost:7245/realtime";
   const pedidoRealTimeHub = "PEDIDO_REALTIME";
   const connecting = useRef(false);
   const delaySeconds = useRef(10);
   const timeoutId = useRef<NodeJS.Timeout>();
   let connection : HubConnection | null = null;
+  const [currentUserId, setCurrentUserId] = useState<number>(1)
 
+  useEffect(() => {
+    setCurrentUserId(getCurrentUserIdHandle() ?? 1);
+  }, []);
+
+  function getCurrentUserIdHandle(){
+    const currentCustomerId = sessionStorage.getItem('currentCustomer');
+    console.log(currentCustomerId)
+    if(currentCustomerId){
+      return Number(currentCustomerId);
+    }
+    const currentAdmin = JSON.parse(sessionStorage.getItem('admin') ?? '') as Admin;
+    console.log(currentAdmin)
+
+    if(currentAdmin){
+      return currentAdmin.id;
+    }
+  }
 
   const connect = useCallback(async () => {
       if (!connection || connection?.state === HubConnectionState.Disconnected) {
         connection = await setupSignalRConnection(connexaRealTimeAddress);
 
         connection?.on(pedidoRealTimeHub, (pedido) => {
-          console.log(pedido)
           pedidoCallBack(pedido);
         });
       }
   }, [])
 
   const subscribe = useCallback(async () => {
+    setCurrentUserId(-1)
     if (connecting.current) return;
     connecting.current = true;
     await connect();
@@ -67,11 +85,10 @@ export const useGanajoRealTime = ({pedidoCallBack, id} : GanajoRealTimeProps) =>
     }
 
     if(connection?.state === HubConnectionState.Connected){
-      console.log(id)
-      await connection.invoke('Subscribe', id);
+      await connection.invoke('Subscribe', getCurrentUserIdHandle());
     }
       
-  }, [connect, connection, id]);
+  }, [connect, connection]);
 
   const disconnect = useCallback(async () => {
     if (connection?.state !== HubConnectionState.Connected) return;
@@ -81,12 +98,12 @@ export const useGanajoRealTime = ({pedidoCallBack, id} : GanajoRealTimeProps) =>
 
   const unsubscribe = useCallback(async () => {
     if (connection?.state !== HubConnectionState.Connected) return;
-    await connection.invoke('Unsubscribe', id);
+    await connection.invoke('Unsubscribe', getCurrentUserIdHandle);
     await disconnect();
-  },[connection, disconnect, id]);
+  },[connection, disconnect]);
 
   useEffect(() => {
-    if (id) {
+    if (getCurrentUserIdHandle()) {
       subscribe();
     }
     return () => {
@@ -94,5 +111,5 @@ export const useGanajoRealTime = ({pedidoCallBack, id} : GanajoRealTimeProps) =>
       clearTimeout(timeoutId.current);
     };
 
-  }, [id, subscribe, unsubscribe]);
+  }, [subscribe, unsubscribe]);
 }

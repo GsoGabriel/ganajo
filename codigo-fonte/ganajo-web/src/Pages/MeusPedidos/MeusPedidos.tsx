@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PedidoComponent from './Components/PedidoComponent.tsx'
 import styles from './MeusPedidos.module.scss'
 import { ClienteDTO, ClienteDTODefaultProps } from '../../DTOs/Cliente.ts'
@@ -15,11 +15,17 @@ const MeusPedidos = () => {
 
     const [isAdmin, setIsAdmin] = useState<boolean>(admin !== undefined);
     const [cliente, setCliente] = useState<ClienteDTO>(ClienteDTODefaultProps);
+    const [pedidos, setPedidos] = useState<PedidoDTO[]>([]);
+    
+    const pedidoRealTime = async (pedido : PedidoDTO) => {
+        const currentCustomerId = sessionStorage.getItem('currentCustomer');
+        await getPedidosByUserAsync(admin !== undefined, Number(currentCustomerId), true);
+    }
 
     useGanajoRealTime({
       pedidoCallBack: pedidoRealTime,
-      id: isAdmin ? admin?.id ?? 1 : cliente.id
     });
+
 
     useEffect(() => {
       setIsAdmin(admin !== undefined);
@@ -30,25 +36,17 @@ const MeusPedidos = () => {
 
     const [telephone, setTelephone] = useState<string>();
     const [showPedidos, setShowPedidos] = useState<boolean>(false);
-    const [pedidos, setPedidos] = useState<PedidoDTO[]>([]);
     
 
     const localStorageTelephone = 'localStorageTelephone';
+    const localStorageCurrentCustomer = `currentCustomer`;
 
     useEffect(() => {
         const telephoneCached = localStorage.getItem(localStorageTelephone);
+
         setTelephone(telephoneCached ?? '');
     }, [])
 
-    function pedidoRealTime(pedido : PedidoDTO){
-      console.log(pedido)
-      const index = pedidos.findIndex((f) => f.id === pedido.id);
-      const copy = [...pedidos];
-      if (index === -1) copy.push(pedido);
-      else copy[index] = pedido;
-      setPedidos(copy);
-      console.log(copy)
-    }
 
     const getClienteByTelephoneNumber = async (telephone : string) => {
         if(telephone === undefined || telephone.length <= 0) {
@@ -67,31 +65,25 @@ const MeusPedidos = () => {
           toast.error("Usuário não encontrado...")
           return;
         }
-
+        sessionStorage.setItem(localStorageCurrentCustomer, customer.id.toString());
         setShowPedidos(true);
         setCliente(customer ?? ClienteDTODefaultProps);
     }
 
-    useEffect(() => {
-      
-      if((isAdmin === false && cliente.id === 0) || isAdmin === undefined)
-        return;
-
-      getPedidosByUserAsync(isAdmin, cliente.id);
-
-    }, [cliente, isAdmin])
-
-    const getPedidosByUserAsync = async (isAdmin : boolean, idUser : number | undefined) => {
+    
+    const getPedidosByUserAsync = useCallback(async (isAdmin : boolean, idUser : number | undefined, hideLoading : boolean) => {
       try {
-        setIsLoading(true)
 
-        const pedidos = await getPedidoByUserAxiosRequest(isAdmin, idUser);
-        if(pedidos === undefined) {
+        if(!hideLoading)
+          setIsLoading(true)
+
+        const pedidosByApi = await getPedidoByUserAxiosRequest(isAdmin, idUser);
+        if(pedidosByApi === undefined) {
           toast.error("Não foi encontrado pedidos para esse usuário...")
           return;
         }
-  
-        setPedidos(pedidos);
+            
+        setPedidos(pedidosByApi);
         setShowPedidos(true);
 
       }catch(ex){
@@ -99,7 +91,16 @@ const MeusPedidos = () => {
       }finally{
         setIsLoading(false);
       }
-    }
+    }, []);
+
+    useEffect(() => {
+      
+      if((isAdmin === false && cliente.id === 0) || isAdmin === undefined)
+        return;
+
+      getPedidosByUserAsync(isAdmin, cliente.id, false);
+
+    }, [cliente, getPedidosByUserAsync, isAdmin])
   return (
     <div className={styles.container}>
       {

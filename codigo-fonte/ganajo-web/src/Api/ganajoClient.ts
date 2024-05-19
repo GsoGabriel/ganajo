@@ -5,15 +5,20 @@ import { toast } from "react-toastify";
 import { Admin } from "../DTOs/Admin";
 import { PedidoDTO } from "../DTOs/Pedido";
 import { StatusPedido } from "../DTOs/Status";
+import { StatisticsDTO } from './../DTOs/Statistics';
 
 const isLocalTest = true;
 
 const getBaseUrl = () => {
-  return isLocalTest ? 'http://localhost:5022/' : 'https://ganajoapi-s3e6uywyma-rj.a.run.app/'
+  return isLocalTest ? 'https://localhost:7245/' : 'https://ganajoapi-s3e6uywyma-rj.a.run.app/'
 };
 
 const getBaseUrlAuthApi = () => {
-  return isLocalTest ? 'http://localhost:5082/' : 'https://ganajoauthapi-s3e6uywyma-rj.a.run.app/'
+  return isLocalTest ? 'https://localhost:7161/' : 'https://ganajoauthapi-s3e6uywyma-rj.a.run.app/'
+}
+
+export const getHubUrl = () => {
+  return getBaseUrl() + 'realtime';
 }
 
 export const BASE_URL = getBaseUrl();
@@ -52,7 +57,6 @@ export const getBairroByIdAxiosConfig = async (idBairro: number) => {
     const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
     return response.data;
   } catch(error) {
-    console.log(error);
     throw new Error('Erro no get de bairro');
   }
 }
@@ -67,7 +71,6 @@ export const postBairroAxiosConfig = async (bairroData: Bairro) => {
     const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
     return response.data;
   } catch(error) {
-    console.log(error);
     throw new Error('Erro ao criar bairro');
   }
 }
@@ -81,7 +84,6 @@ export const deleteBairroByIdAxiosConfig = async (idBairro: number) => {
     const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
     return response.data;
   } catch(error) {
-    console.log(error);
     throw new Error('Erro no delete de bairro');
   }
 }
@@ -98,7 +100,6 @@ export const getCustomerByTelephoneNumberAxiosRequest = async (telephone : strin
     return response.data;
   } catch(error){
     if (axios.isAxiosError(error)) {
-      console.log(error)
       toast.error(error.response?.data, {
         toastId: 'getCustomerByTelephone',
         position: 'top-right',
@@ -176,9 +177,29 @@ export const postPedidoAsync = async (pedido : PedidoDTO) => {
     return response.data;
   } catch(error){
     if (axios.isAxiosError(error)) {
-      console.log(error)
       toast.error(error.response?.data, {
         toastId: 'postPedidoAsync',
+        position: 'top-right',
+        autoClose: false,
+      });
+    }
+  }
+}
+
+// STATISTICS AREA
+
+export const getStatistics = async (start : string, end : string) => {
+  try {
+    const options = {
+      method: 'GET',
+      url: `${BASE_URL}statistics?start=${start}&end=${end}`
+    };
+    const response: AxiosResponse<StatisticsDTO> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error){
+    if (axios.isAxiosError(error)) {
+      toast.error(error.response?.data, {
+        toastId: 'getStatistics',
         position: 'top-right',
         autoClose: false,
       });

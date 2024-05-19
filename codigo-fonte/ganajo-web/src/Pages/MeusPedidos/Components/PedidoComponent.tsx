@@ -80,9 +80,13 @@ const PedidoComponent = ({ Pedido, isAdmin }: PedidoProps) => {
           <Typography>{pedido.cliente.regiaoPostal.bairro}</Typography>
           <Typography>{pedido.cliente.regiaoPostal.cep}</Typography>
           <Typography>{formatValue(pedido.cliente.regiaoPostal.precoDelivery, 2, 'R$')}</Typography>
-
+          
           <Typography className={styles.title} style={{fontSize: '1.2em'}}>
-            Informações do Pedido
+            Observação Geral
+          </Typography>
+          <Typography>{pedido.descricao}</Typography>
+          <Typography className={styles.title} style={{fontSize: '1.2em'}}>
+            Informações
           </Typography>
           {
             pedido.produtos.map(m => <Typography key={m.id}>{m.quantidade}x {m.produto?.nome} - {m.produto?.valor} R$ unidade {m.descricao && `(obs: ${m.descricao})`}</Typography>)
