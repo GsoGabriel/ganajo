@@ -1,6 +1,7 @@
 using GanajoAuthApi.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ var target = Environment.GetEnvironmentVariable("TARGET") ?? "World";
 
 const string GANAJO_ORIGIN_AUTH = "ganajoOriginAuth";
 
-// ENDERECO DA APLICAÇÃO REACT (WEB)
+// ENDERECO DA APLICAï¿½ï¿½O REACT (WEB)
 const string address = "http://localhost:3000";
 
 builder.Services.AddCors(options =>
@@ -60,7 +61,7 @@ app.MapPost("/user", async ([FromBody] UsuarioDTO usuario) =>
 
     usuarioDb.Nome = usuario.Nome;
     usuarioDb.Email = usuario.Email;
-    usuarioDb.Senha = string.IsNullOrEmpty(usuario.Senha) ? string.Empty : usuario.Senha;
+    usuarioDb.Senha = BCrypt.Net.BCrypt.HashPassword(usuario.Senha);
     usuarioDb.EditadoData = DateTime.Now;
 
     ganajoMiniContext.SavedChanges += (s, e) =>
@@ -94,16 +95,15 @@ app.MapGet("/login", async ([FromQuery] string email, [FromQuery] string senha) 
     if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
         return Results.NoContent();
 
-    var usuario = await ganajoMiniContext.Usuarios.FirstOrDefaultAsync(u => email.Equals(u.Email) && senha.Equals(u.Senha));
+    var usuario = await ganajoMiniContext.Usuarios.FirstOrDefaultAsync(u => email.Equals(u.Email));
 
-    if(usuario == null)
+    if (usuario == null || !BCrypt.Net.BCrypt.Verify(senha, usuario.Senha))
     {
-        return Results.NotFound("Usuario/senha inválidos...");
+        return Results.NotFound("Usuario/senha invï¿½lidos...");
     }
 
     return Results.Ok(usuario);
 });
-
 
 if (app.Environment.IsDevelopment())
 {
