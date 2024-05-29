@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { PieChart  } from '@mui/x-charts/PieChart';
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { PieChart } from '@mui/x-charts/PieChart';
 import StatisticCard from './Components/StatisticCard.tsx';
 import { Gauge } from '@mui/x-charts/Gauge';
 import styles from './StatisticsComponent.module.scss';
@@ -14,27 +15,29 @@ import { StatisticsDTO } from '../../DTOs/Statistics.ts';
 import formatTruncateValue from '../../Utils/formatTruncateValue.ts';
 import { PieValueType } from '@mui/x-charts/models';
 import { toast } from 'react-toastify';
+import { FormaPagamento } from '../../DTOs/FormaPagamento.ts';
 const StatisticsComponent = () => {
     const [start, setStart] = React.useState<Dayjs>(dayjs(new Date().toString()));
     const [end, setEnd] = React.useState<Dayjs>(dayjs(new Date().toString()));
+    const [metodo, setMetodo] = React.useState<FormaPagamento>(0);
     const [statistics, setStatistics] = React.useState<StatisticsDTO>();
     const [topVendidos, setTopVendidos] = React.useState<PieValueType[]>();
     const [topCategorias, setTopCategorias] = React.useState<PieValueType[]>();
     const [topPedidosStatus, setTopPedidosStatus] = React.useState<PieValueType[]>();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    
+
     const getStatisticsAsync = useCallback(async () => {
         try {
             setIsLoading(true)
-            const statisticsDb = await getStatistics(start.format(), end.format());
+            const statisticsDb = await getStatistics(start.format(), end.format(), metodo);
             setStatistics(statisticsDb);
-        }catch(ex){
+        } catch (ex) {
             toast.error(ex);
-        }finally{
+        } finally {
             setIsLoading(false);
         }
-        
-    }, [end, start]);
+
+    }, [end, start, metodo]);
 
     useEffect(() => {
         const statistics = async () => {
@@ -45,9 +48,9 @@ const StatisticsComponent = () => {
 
     useEffect(() => {
         setTopVendidos(statistics?.topProdutos.map(m => {
-            const produto : PieValueType = {
+            const produto: PieValueType = {
                 id: m.id,
-                value: Number(m.value), 
+                value: Number(m.value),
                 label: `${m.key}: ${m.value}`
             }
             return produto;
@@ -57,9 +60,9 @@ const StatisticsComponent = () => {
 
     useEffect(() => {
         setTopCategorias(statistics?.topCategorias.map(m => {
-            const categoria : PieValueType = {
+            const categoria: PieValueType = {
                 id: m.id,
-                value: Number(m.value), 
+                value: Number(m.value),
                 label: `${m.key}: ${m.value}`
             }
             return categoria;
@@ -69,9 +72,9 @@ const StatisticsComponent = () => {
 
     useEffect(() => {
         setTopPedidosStatus(statistics?.topStatusPedidos.map(m => {
-            const statusPedido : PieValueType = {
+            const statusPedido: PieValueType = {
                 id: m.id,
-                value: Number(m.value), 
+                value: Number(m.value),
                 label: `${m.key}: ${m.value}`
             }
             return statusPedido;
@@ -80,48 +83,62 @@ const StatisticsComponent = () => {
     }, [setTopPedidosStatus, statistics])
 
 
-  return (
-    <div className={styles.container}>
-        <div>
-            <h1>Ganajo Overview </h1>
-        </div>
-        <div className={styles.statistics}>
+    return (
+        <div className={styles.container}>
             <div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateTimePicker
-                        label="Começo"
-                        defaultValue={dayjs()}
-                        value={start}
-                        onChange={(e) => setStart(e ?? dayjs(new Date().toString()))}
-                    />  
-                    <DateTimePicker
-                        label="Fim"
-                        defaultValue={dayjs()}
-                        value={end}
-                        onChange={(e) => setEnd(e ?? dayjs(new Date().toString()))}
-                    />
-                </LocalizationProvider>
+                <h1>Ganajo Overview </h1>
+            </div>
+            <div className={styles.statistics}>
+                <div className={styles.inputContainer}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateTimePicker
+                            label="Começo"
+                            defaultValue={dayjs()}
+                            value={start}
+                            onChange={(e) => setStart(e ?? dayjs(new Date().toString()))}
+                        />
+                        <DateTimePicker
+                            label="Fim"
+                            defaultValue={dayjs()}
+                            value={end}
+                            onChange={(e) => setEnd(e ?? dayjs(new Date().toString()))}
+                        />
+                    </LocalizationProvider>
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel id="metodo-pagamento-label">Forma de Pagamento</InputLabel>
+                        <Select
+                            labelId="metodo-pagamento-label"
+                            value={metodo}
+                            onChange={(e) => setMetodo(e.target.value as FormaPagamento)}
+                        >
+                            <MenuItem value={FormaPagamento.Dinheiro}>Dinheiro</MenuItem>
+                            <MenuItem value={FormaPagamento.Cartao}>Cartão</MenuItem>
+                            <MenuItem value={FormaPagamento.VA}>Vale</MenuItem>
+                            <MenuItem value={FormaPagamento.Pix}>Pix</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
             </div>
             {
-                isLoading ? <CircularProgress size={'10rem'}/> :
-                (
-                    <div className={styles.statistics}>
-                        <StatisticCard>
-                            <h1>Vendas R$</h1>
-                            <Gauge text={({ value, valueMax }) => `R$ ${value} / ${valueMax}`}  height={200} value={formatTruncateValue(statistics?.vendas ?? 0, 2)} valueMin={0} valueMax={10000} />
-                        </StatisticCard>
-                        <Grid sx={{ flexDirection: { xs: 'column', md: "row"} }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                            <Grid item xs={12} md={6}>
-                                <StatisticCard>
-                                    <h1>Top 3 mais vendidos</h1>
+                isLoading ? <CircularProgress size={'10rem'} /> :
+                    (
+                        <div className={styles.statistics}>
+                            <StatisticCard>
+                                <h1>Vendas R$</h1>
+                                <Gauge text={({ value, valueMax }) => `R$ ${value} / ${valueMax}`} height={200} value={formatTruncateValue(statistics?.vendas ?? 0, 2)} valueMin={0} valueMax={10000} />
+                            </StatisticCard>
+                            <Grid sx={{ flexDirection: { xs: 'column', md: "row" } }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                <Grid item xs={12} md={6}>
+                                    <StatisticCard>
+                                        <h1>Top 3 mais vendidos</h1>
                                         <PieChart
-                                            margin={{ top: 150, bottom: 0, left: 0, right:0 }}
+                                            margin={{ top: 150, bottom: 0, left: 0, right: 0 }}
                                             slotProps={{
                                                 legend: {
                                                     direction: 'row', // Display legend items in a row
                                                     position: {
-                                                    vertical: 'top', // Place the legend at the bottom
-                                                    horizontal: 'middle', // Center the legend horizontally
+                                                        vertical: 'top', // Place the legend at the bottom
+                                                        horizontal: 'middle', // Center the legend horizontally
                                                     },
                                                     padding: 0, // No padding around the legend
                                                 },
@@ -135,57 +152,57 @@ const StatisticsComponent = () => {
                                                 startAngle: -90,
                                                 endAngle: 180,
                                                 cy: 30,
-                                                },
+                                            },
                                             ]}
                                             height={280}
                                         />
-                                </StatisticCard>
+                                    </StatisticCard>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <StatisticCard>
+                                        <div className={styles.charts}>
+                                            <h1>Top 3 Categorias</h1>
+                                            <PieChart
+                                                margin={{ top: 150, bottom: 0, left: 0, right: 0 }}
+                                                slotProps={{
+                                                    legend: {
+                                                        direction: 'row', // Display legend items in a row
+                                                        position: {
+                                                            vertical: 'top', // Place the legend at the bottom
+                                                            horizontal: 'middle', // Center the legend horizontally
+                                                        },
+                                                        padding: 0, // No padding around the legend
+                                                    },
+                                                }}
+                                                series={[{
+                                                    data: topCategorias ?? [],
+                                                    innerRadius: 10,
+                                                    outerRadius: 80,
+                                                    paddingAngle: 5,
+                                                    cornerRadius: 5,
+                                                    startAngle: -90,
+                                                    endAngle: 180,
+                                                    cy: 30
+                                                },
+                                                ]}
+                                                height={280}
+                                            />
+                                        </div>
+                                    </StatisticCard>
+                                </Grid>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <StatisticCard>
                                     <div className={styles.charts}>
-                                        <h1>Top 3 Categorias</h1>
-                                        <PieChart
-                                            margin={{ top: 150, bottom: 0, left: 0, right:0 }}
-                                            slotProps={{
-                                                legend: {
-                                                    direction: 'row', // Display legend items in a row
-                                                    position: {
-                                                    vertical: 'top', // Place the legend at the bottom
-                                                    horizontal: 'middle', // Center the legend horizontally
-                                                    },
-                                                    padding: 0, // No padding around the legend
-                                                },
-                                            }}
-                                            series={[{
-                                                data: topCategorias ?? [],
-                                                innerRadius: 10,
-                                                outerRadius: 80,
-                                                paddingAngle: 5,
-                                                cornerRadius: 5,
-                                                startAngle: -90,
-                                                endAngle: 180,
-                                                cy: 30
-                                                },
-                                            ]}
-                                            height={280}
-                                        />
-                                    </div>
-                                </StatisticCard>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                                <StatisticCard>
-                                    <div className={styles.charts}>
                                         <h1>Status dos Pedidos</h1>
                                         <PieChart
-                                            margin={{ top: 150, bottom: 0, left: 0, right:0 }}
+                                            margin={{ top: 150, bottom: 0, left: 0, right: 0 }}
                                             slotProps={{
                                                 legend: {
                                                     direction: 'row', // Display legend items in a row
                                                     position: {
-                                                    vertical: 'top', // Place the legend at the bottom
-                                                    horizontal: 'middle', // Center the legend horizontally
+                                                        vertical: 'top', // Place the legend at the bottom
+                                                        horizontal: 'middle', // Center the legend horizontally
                                                     },
                                                     padding: 0, // No padding around the legend
                                                 },
@@ -199,50 +216,48 @@ const StatisticsComponent = () => {
                                                 startAngle: -90,
                                                 endAngle: 180,
                                                 cy: 30
-                                                },
+                                            },
                                             ]}
                                             height={280}
                                         />
                                     </div>
                                 </StatisticCard>
                             </Grid>
-                        <Grid container rowSpacing={0} columnSpacing={{ xs: 0, sm: 0, md: 0 }}>
-                            <Grid item xs={12} md={6}>
-                                <StatisticCard>
-                                    <h4>Clientes</h4>
-                                    <Gauge
-                                    text={({ value, valueMax }) => `${value} / ${valueMax}`} 
-                                    height={120} 
-                                    value={statistics?.qtdClientes} 
-                                    valueMin={0} 
-                                    valueMax={200} />
-                                </StatisticCard>
+                            <Grid container rowSpacing={0} columnSpacing={{ xs: 0, sm: 0, md: 0 }}>
+                                <Grid item xs={12} md={6}>
+                                    <StatisticCard>
+                                        <h4>Clientes</h4>
+                                        <Gauge
+                                            text={({ value, valueMax }) => `${value} / ${valueMax}`}
+                                            height={120}
+                                            value={statistics?.qtdClientes}
+                                            valueMin={0}
+                                            valueMax={200} />
+                                    </StatisticCard>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <StatisticCard>
+                                        <h4>Bairros disponiveis</h4>
+                                        <Gauge text={({ value, valueMax }) => `${value} / ${valueMax}`} height={120} value={statistics?.qtdBairros} valueMin={0} valueMax={100} />
+                                    </StatisticCard>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <StatisticCard>
+                                        <h4>Produtos</h4>
+                                        <Gauge text={({ value, valueMax }) => `${value} / ${valueMax}`} height={200} value={statistics?.qtdProdutos} valueMin={0} valueMax={125} />
+                                    </StatisticCard>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <StatisticCard>
+                                        <h4>Preço médio</h4>
+                                        <Gauge text={({ value, valueMax }) => `R$ ${value} / ${valueMax}`} height={200} value={formatTruncateValue(statistics?.precoMedio ?? 0, 2)} valueMin={0} valueMax={125} />
+                                    </StatisticCard>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <StatisticCard>
-                                    <h4>Bairros disponiveis</h4>
-                                    <Gauge text={({ value, valueMax }) => `${value} / ${valueMax}`} height={120} value={statistics?.qtdBairros} valueMin={0} valueMax={100} />
-                                </StatisticCard>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <StatisticCard>
-                                    <h4>Produtos</h4>
-                                    <Gauge text={({ value, valueMax }) => `${value} / ${valueMax}`} height={200} value={statistics?.qtdProdutos} valueMin={0} valueMax={125} />
-                                </StatisticCard>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <StatisticCard>
-                                    <h4>Preço médio</h4>
-                                    <Gauge text={({ value, valueMax }) => `R$ ${value} / ${valueMax}`} height={200} value={formatTruncateValue(statistics?.precoMedio ?? 0, 2)} valueMin={0} valueMax={125} />
-                                </StatisticCard>
-                            </Grid>
-                        </Grid>
-                    </div>
-                )
+                        </div>
+                    )
             }
-        
         </div>
-    </div>
   )
 }
 

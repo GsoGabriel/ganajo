@@ -6,6 +6,7 @@ import { Admin } from "../DTOs/Admin";
 import { PedidoDTO } from "../DTOs/Pedido";
 import { StatusPedido } from "../DTOs/Status";
 import { StatisticsDTO } from './../DTOs/Statistics';
+import { FormaPagamento } from './../DTOs/FormaPagamento.ts';
 
 const isLocalTest = true;
 
@@ -188,11 +189,11 @@ export const postPedidoAsync = async (pedido : PedidoDTO) => {
 
 // STATISTICS AREA
 
-export const getStatistics = async (start : string, end : string) => {
+export const getStatistics = async (start : string, end : string, metodo : FormaPagamento) => {
   try {
     const options = {
       method: 'GET',
-      url: `${BASE_URL}statistics?start=${start}&end=${end}`
+      url: `${BASE_URL}statistics?start=${start}&end=${end}&tipoPagamento=${metodo.valueOf()}`
     };
     const response: AxiosResponse<StatisticsDTO> = await axios(options?.url ?? '', options);
     return response.data;

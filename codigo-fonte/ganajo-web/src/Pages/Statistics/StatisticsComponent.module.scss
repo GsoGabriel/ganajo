@@ -12,3 +12,14 @@
         flex-direction: column;
     }
 }
+
+.inputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px; /* Espaçamento entre os inputs */
+}
+
+.inputContainer > * {
+    flex: 1; /* Opcional: faz com que todos os inputs tenham o mesmo tamanho */
+}
