@@ -40,7 +40,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ background: 'linear-gradient(to bottom, #dcdcdc, #ffffff)', borderBottom: '0.5px solid #ccc', boxShadow: '1px 2px 3px gray' }} elevation={0}>
+    <AppBar position="static" sx={{ background: 'linear-gradient(to bottom, #d6d2d2, #ffffff, #ffffff, #ffffff, #ffffff)', borderBottom: '0.5px solid #ccc', boxShadow: '1px 2px 3px gray' }} elevation={0}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={admin !== undefined ? '/homeAdmin' : '/'}>
@@ -48,7 +48,7 @@ function ResponsiveAppBar() {
           </Link>
           <Box sx={{ flexGrow: 1 }} />
 
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>  
             <IconButton
               size="large"
               aria-label="menu"

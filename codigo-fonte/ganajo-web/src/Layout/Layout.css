@@ -7,10 +7,11 @@
     padding: 0px;
     display: grid;
     grid-row-gap: 20px;
+    background-color: #f1ecec;
   }
   
   footer {
     background-color: #333;
-    color: white;
+    color: #f1ecec;
     padding: 20px;
   }
