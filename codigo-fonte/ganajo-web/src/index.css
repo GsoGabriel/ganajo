@@ -25,6 +25,7 @@ body {
     width: var(--container-width-lg);
     margin-inline: auto;
     max-width: 1920px;
+    background-color: #f1ecec;
 }
 
 /* GENERAL SECTIONS */
@@ -114,7 +115,7 @@ h6 {
 
 .btn.primary {
     background: var(--color-primary);
-    color: white;
+    color: #f1ecec;
 }
 
 .btn.primary:hover {

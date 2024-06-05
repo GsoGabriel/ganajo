@@ -10,7 +10,7 @@
     "@mui/material": "^5.15.17",
     "@mui/types": "^7.2.14",
     "@mui/x-charts": "^7.3.2",
-    "@mui/x-date-pickers": "^7.5.0",
+    "@mui/x-date-pickers": "^7.5.1",
     "@mui/x-date-pickers-pro": "^7.5.0",
     "@tanstack/query-core": "^5.29.0",
     "@tanstack/react-query": "^5.29.2",
