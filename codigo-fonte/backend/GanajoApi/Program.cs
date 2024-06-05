@@ -408,12 +408,12 @@ app.MapPost("/orderProduct", async ([FromBody] PedidoProdutoDTO pedidoProduto, [
 
 #endregion
 #region Overview Statistics
-app.MapGet("/statistics", async ([FromQuery] DateTime start, DateTime end, [FromServices] GanajoDbContext _context) =>
+app.MapGet("/statistics", async ([FromQuery] DateTime start, DateTime end, TipoPagamento tipoPagamento, [FromServices] GanajoDbContext _context) =>
 {
     StatisticsDTO statistics = new StatisticsDTO();
 
     var values = await _context.Pedidos
-                            .Where(w => !w.Removido && w.EditadoData >= start && w.EditadoData <= end)
+                            .Where(w => !w.Removido && w.EditadoData >= start && w.EditadoData <= end && w.TipoPagamento == (int)tipoPagamento)
                             .Include(i => i.PedidoProdutos)
                             .ThenInclude(i => i.Produto)
                             .ToListAsync();

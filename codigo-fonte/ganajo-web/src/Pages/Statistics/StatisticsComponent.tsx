@@ -47,7 +47,7 @@ const StatisticsComponent = () => {
     }, [getStatisticsAsync])
 
     useEffect(() => {
-        setTopVendidos(statistics?.topProdutos.map(m => {
+        setTopVendidos(statistics?.topProdutos?.map(m => {
             const produto: PieValueType = {
                 id: m.id,
                 value: Number(m.value),
@@ -59,7 +59,7 @@ const StatisticsComponent = () => {
     }, [setTopVendidos, statistics])
 
     useEffect(() => {
-        setTopCategorias(statistics?.topCategorias.map(m => {
+        setTopCategorias(statistics?.topCategorias?.map(m => {
             const categoria: PieValueType = {
                 id: m.id,
                 value: Number(m.value),
@@ -71,7 +71,7 @@ const StatisticsComponent = () => {
     }, [setTopCategorias, statistics])
 
     useEffect(() => {
-        setTopPedidosStatus(statistics?.topStatusPedidos.map(m => {
+        setTopPedidosStatus(statistics?.topStatusPedidos?.map(m => {
             const statusPedido: PieValueType = {
                 id: m.id,
                 value: Number(m.value),
@@ -113,7 +113,7 @@ const StatisticsComponent = () => {
                         >
                             <MenuItem value={FormaPagamento.Dinheiro}>Dinheiro</MenuItem>
                             <MenuItem value={FormaPagamento.Cartao}>Cartão</MenuItem>
-                            <MenuItem value={FormaPagamento.VA}>Vale</MenuItem>
+                            <MenuItem value={FormaPagamento.VR}>Vale</MenuItem>
                             <MenuItem value={FormaPagamento.Pix}>Pix</MenuItem>
                         </Select>
                     </FormControl>
