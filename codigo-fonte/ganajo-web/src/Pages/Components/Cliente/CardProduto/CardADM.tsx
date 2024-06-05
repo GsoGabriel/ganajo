@@ -5,16 +5,28 @@ import CardMedia from '@mui/material/CardMedia';
 import ButtonBase from '@mui/material/ButtonBase'; 
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
-import EditProductForm from '../CardProduto/EditProductForm.tsx'; 
-import { Produto } from '../../../../DTOs/Produto.ts';
+import EditProductForm from '../CardProduto/EditProductForm.tsx';
+import { Produto } from '../../../../DTOs/Produto';
 import styles from './CardProduto.module.scss'
 import truncateString from './../../../../Utils/truncateString.ts';
 
 interface ProductCardProps {
-  product: Produto
+  product: Produto;
+  onEdit: (id: number) => void;
+  onSave: (editedProduct: Produto) => void;
+  isEditing: boolean;
+  editedProduct: Produto | null;
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ 
+  product, 
+  onEdit, 
+  onSave, 
+  isEditing, 
+  editedProduct, 
+  onImageChange 
+}: ProductCardProps) {
   const [showEditForm, setShowEditForm] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState<Produto | null>(product);
   const maxLengthToTruncate = 60;
@@ -22,37 +34,40 @@ export default function ProductCard({ product }: ProductCardProps) {
   const openDescription = () => {
     setShowEditForm(true);
     setSelectedProduct(product);
+    onEdit(product.id);
   };
 
   const closeEditForm = () => {
     setShowEditForm(false);
+    onEdit(null);
   };
 
   return (
     <div className={styles.container}>
-      {showEditForm && selectedProduct ? (
+      {isEditing && editedProduct && editedProduct.id === product.id ? (
         <EditProductForm
-          product={selectedProduct}
-          onSave={(editedProduct: Produto) => console.log('Produto editado:', editedProduct)} // Adicione a função onSave aqui
+          product={editedProduct}
+          onSave={onSave}
           onClose={closeEditForm}
+          onImageChange={onImageChange}
         />
       ) : (
         <ButtonBase className={styles.container} sx={{width: '100%'}} component="div" onClick={openDescription}>
           <Card sx={{width: '100%'}}>
             <CardMedia
-              data-id={selectedProduct?.id}
+              data-id={product.id}
               component="img"
-              alt={selectedProduct?.nome}
+              alt={product.nome}
               height="140"
-              image={selectedProduct?.enderecoImagem}
+              image={product.enderecoImagem}
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                {truncateString(selectedProduct?.nome ?? '', maxLengthToTruncate)}
+                {truncateString(product.nome, maxLengthToTruncate)}
               </Typography>
               <div style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between', gap: '5px'}}>
-                <Chip style={{fontSize: '1rem'}} label={`R$ ${selectedProduct?.valor.toFixed(2)}`} color="warning" /> 
-                <Chip style={{fontSize: '1rem'}} label={selectedProduct?.categoria} color="info" /> 
+                <Chip style={{fontSize: '1rem'}} label={`R$ ${product.valor.toFixed(2)}`} color="warning" /> 
+                <Chip style={{fontSize: '1rem'}} label={product.categoria} color="info" /> 
               </div>
             </CardContent>
           </Card>

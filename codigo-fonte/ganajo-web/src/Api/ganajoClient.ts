@@ -1,9 +1,10 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { ClienteDTO } from "../DTOs/Cliente";
 import { Bairro } from "../DTOs/Bairro";
 import { toast } from "react-toastify";
 import { Admin } from "../DTOs/Admin";
 import { PedidoDTO } from "../DTOs/Pedido";
+import { Produto } from "../DTOs/Produto";
 import { StatusPedido } from "../DTOs/Status";
 import { StatisticsDTO } from './../DTOs/Statistics';
 import { FormaPagamento } from './../DTOs/FormaPagamento.ts';
@@ -39,6 +40,14 @@ export function getProductAxiosConfig(id : number){
     method: 'GET',
     url: `${BASE_URL}product/${id}`
   }
+}
+
+export function updateProductAxiosConfig(product: Produto): AxiosRequestConfig {
+  return {
+    method: 'PUT',
+    url: `${BASE_URL}products/${product.id}`,
+    data: product
+  };
 }
 
 // BAIRROS AREA

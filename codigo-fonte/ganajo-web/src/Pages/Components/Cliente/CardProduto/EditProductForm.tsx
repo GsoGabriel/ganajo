@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
+import axios from 'axios'; 
+
 import { Produto } from '../../../../DTOs/Produto';
 import './edit.css';
+
+const isLocalTest = true;
+
+const getBaseUrl = () => {
+  return isLocalTest ? 'https://localhost:7245/product' : 'https://ganajoapi-s3e6uywyma-rj.a.run.app/';
+};
 
 interface EditProductFormProps {
   product: Produto;
@@ -9,7 +17,7 @@ interface EditProductFormProps {
 }
 
 const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onClose }) => {
-  const [editedProduct, setEditedProduct] = useState<Produto>({ ...product }); // Estado para armazenar o produto editado
+  const [editedProduct, setEditedProduct] = useState<Produto>({ ...product });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -19,9 +27,15 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
     }));
   };
 
-  const handleSave = () => {
-    onSave(editedProduct); // Chame a função onSave com o produto editado
-    onClose(); // Feche o formulário após salvar
+  const saveEditedProduct = async () => {
+    try {
+      const baseUrl = getBaseUrl();
+      const response = await axios.put(`${baseUrl}/${editedProduct.id}`, editedProduct);
+      onSave(response.data);
+      onClose();
+    } catch (error) {
+      console.error('Erro ao salvar produto:', error);
+    }
   };
 
   return (
@@ -46,7 +60,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
         <label htmlFor="enderecoImagem">Endereço da Imagem:</label>
         <input type="text" id="enderecoImagem" name="enderecoImagem" value={editedProduct.enderecoImagem} onChange={handleInputChange} />
       </div>
-      <button onClick={handleSave}>Salvar</button>
+      <button onClick={saveEditedProduct}>Salvar</button>
       <button onClick={onClose}>Cancelar</button>
     </div>
   );

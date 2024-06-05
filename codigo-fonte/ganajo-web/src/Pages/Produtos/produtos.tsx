@@ -1,43 +1,56 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Navigate, useNavigate,  } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import generateProducts from './../Home/data.ts';
 import { Produto } from '../../DTOs/Produto.ts';
-import './produtos.css'; 
+import './produtos.css';
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import { useApi } from '../../Api/useApi.tsx';
 import { CircularProgress, Grid } from '@mui/material';
 import ProductCard from '../Components/Cliente/CardProduto/CardADM.tsx';
-import { getProductsAxiosConfig } from '../../Api/ganajoClient.ts';
+import { getProductsAxiosConfig, updateProductAxiosConfig } from '../../Api/ganajoClient.ts';
+import axios from 'axios';
 
 const ProductsAdmin = () => {
-
-  const {isLoading, data} = useApi<Produto[]>(getProductsAxiosConfig())
+  const { isLoading, data } = useApi<Produto[]>(getProductsAxiosConfig());
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
   const navigate = useNavigate();
   
-  const searchingHandleCallBack = useCallback((value : string) => {
+  const searchingHandleCallBack = useCallback((value: string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
   }, [data]);
 
   useEffect(() => {
     setScreenItems(data ?? []);
-  }, [data])
+  }, [data]);
 
   const handleAddNewProduct = () => {
-    navigate('/addProdutos')
+    navigate('/addProdutos');
   };
 
   const handleEditProduct = (productId: number) => {
+    const productToEdit = data?.find(p => p.id === productId) || null;
     setEditingItemId(productId);
+    setEditedProduct(productToEdit);
   };
 
-  const handleSaveProduct = (editedProduct: Produto) => {
-    console.log('Produto editado:', editedProduct);
-    setEditingItemId(null);
+  const handleSaveProduct = async (editedProduct: Produto) => {
+    try {
+      const response = await axios(updateProductAxiosConfig(editedProduct));
+      console.log('Produto editado:', response.data);
+      setEditingItemId(null);
+      setEditedProduct(null);
+      // Atualiza a lista de produtos após a edição
+      const updatedData = data?.map(p => (p.id === editedProduct.id ? editedProduct : p));
+      setScreenItems(updatedData);
+    } catch (error) {
+      console.error('Erro ao editar o produto:', error);
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Implementar lógica para lidar com a mudança de imagem
   };
 
   const formatPrice = (price: number) => {
@@ -55,12 +68,19 @@ const ProductsAdmin = () => {
         </div>
       </div>
       <div className="products">
-      {
-        isLoading ? <CircularProgress size={'10rem'} /> :
-        screenItens?.map(m => (
-            <ProductCard product={m}/> 
-        ))
-      }
+        {isLoading ? <CircularProgress size={'10rem'} /> :
+          screenItens?.map(m => (
+            <ProductCard 
+              key={m.id}
+              product={m}
+              onEdit={() => handleEditProduct(m.id)}
+              onSave={handleSaveProduct}
+              isEditing={editingItemId === m.id}
+              editedProduct={editedProduct}
+              onImageChange={handleImageChange}
+            />
+          ))
+        }
       </div>
     </div>
   );
