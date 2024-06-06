@@ -1,5 +1,6 @@
 export interface StatisticsDTO {
     vendas: number;
+    vendasTotal: number;
     topCategorias: Statistic[];
     topStatusPedidos: Statistic[];
     topProdutos: Statistic[];

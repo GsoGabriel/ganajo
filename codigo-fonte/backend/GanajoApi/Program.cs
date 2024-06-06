@@ -413,10 +413,15 @@ app.MapGet("/statistics", async ([FromQuery] DateTime start, DateTime end, TipoP
     StatisticsDTO statistics = new StatisticsDTO();
 
     var values = await _context.Pedidos
-                            .Where(w => !w.Removido && w.EditadoData >= start && w.EditadoData <= end && w.TipoPagamento == (int)tipoPagamento)
+                            .Where(w => !w.Removido && w.EditadoData >= start && w.EditadoData <= end)
                             .Include(i => i.PedidoProdutos)
                             .ThenInclude(i => i.Produto)
                             .ToListAsync();
+
+    
+    statistics.VendasTotal = values.Sum(s => s.ValorTotal);
+
+    values = values.Where(w => w.TipoPagamento == (int)tipoPagamento).ToList();
 
     statistics.Vendas = values.Sum(s => s.ValorTotal);
 

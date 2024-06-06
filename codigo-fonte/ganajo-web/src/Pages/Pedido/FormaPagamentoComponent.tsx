@@ -20,7 +20,7 @@ const {tipoPagamento, setTipoPagamento} = usePedidoContext();
         >
             <MenuItem value={FormaPagamento.Pix}>Pix</MenuItem>
             <MenuItem value={FormaPagamento.Cartao}>Cartão</MenuItem>
-            <MenuItem value={FormaPagamento.VA}>VA</MenuItem>
+            <MenuItem value={FormaPagamento.VR}>VA</MenuItem>
             <MenuItem value={FormaPagamento.Dinheiro}>Dinheiro</MenuItem>
         </Select>
     </FormControl>

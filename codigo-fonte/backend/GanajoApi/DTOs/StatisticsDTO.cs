@@ -3,6 +3,7 @@
     public class StatisticsDTO
     {
         public double Vendas { get; set; }
+        public double VendasTotal { get; set; }
 
         public Statistic[] TopCategorias { get; set; }
         public Statistic[] TopStatusPedidos { get; set; }

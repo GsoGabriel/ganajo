@@ -17,7 +17,7 @@ import { PieValueType } from '@mui/x-charts/models';
 import { toast } from 'react-toastify';
 import { FormaPagamento } from '../../DTOs/FormaPagamento.ts';
 const StatisticsComponent = () => {
-    const [start, setStart] = React.useState<Dayjs>(dayjs(new Date().toString()));
+    const [start, setStart] = React.useState<Dayjs>(dayjs(new Date().setHours(-(24 * 30)))); // 30 days before
     const [end, setEnd] = React.useState<Dayjs>(dayjs(new Date().toString()));
     const [metodo, setMetodo] = React.useState<FormaPagamento>(0);
     const [statistics, setStatistics] = React.useState<StatisticsDTO>();
@@ -82,6 +82,18 @@ const StatisticsComponent = () => {
 
     }, [setTopPedidosStatus, statistics])
 
+    const getTipoPagamentoByType = (formaPagamento : FormaPagamento) => {
+        switch(formaPagamento){
+            case FormaPagamento.Cartao:
+                return "Cartão";
+            case FormaPagamento.Dinheiro:
+                return "Dinheiro";   
+            case FormaPagamento.Pix:
+                    return "Pix";
+            case FormaPagamento.VR:
+                return "Vale";
+        }
+    }
 
     return (
         <div className={styles.container}>
@@ -124,8 +136,9 @@ const StatisticsComponent = () => {
                     (
                         <div className={styles.statistics}>
                             <StatisticCard>
-                                <h1>Vendas R$</h1>
-                                <Gauge text={({ value, valueMax }) => `R$ ${value} / ${valueMax}`} height={200} value={formatTruncateValue(statistics?.vendas ?? 0, 2)} valueMin={0} valueMax={10000} />
+                                <h1>Vendas por {getTipoPagamentoByType(metodo)} / Vendas no Total</h1>
+                                <h1>{formatTruncateValue((formatTruncateValue(statistics?.vendas ?? 0, 2) ?? 0) / formatTruncateValue(statistics?.vendasTotal ?? 0, 2) * 100, 2)} %</h1>
+                                <Gauge text={({ value, valueMax }) => `R$ ${value} / R$ ${valueMax}`} height={250} value={formatTruncateValue(statistics?.vendas ?? 0, 2)} valueMin={0} valueMax={formatTruncateValue(statistics?.vendasTotal ?? 0, 2)} />
                             </StatisticCard>
                             <Grid sx={{ flexDirection: { xs: 'column', md: "row" } }} container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                 <Grid item xs={12} md={6}>
