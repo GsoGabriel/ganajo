@@ -12,4 +12,4 @@
   # Login Admin
   ![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/blob/main/documentos/img/IF-login-admin.png)
   # Cardapio Editável
-  ![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/blob/main/documentos/img/IF-editar-produto.png)
+  ![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/blob/main/documentos/img/editarProduto.png)
