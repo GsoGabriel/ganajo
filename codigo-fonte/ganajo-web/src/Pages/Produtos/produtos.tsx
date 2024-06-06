@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import generateProducts from './../Home/data.ts';
-import { Produto } from '../../DTOs/Produto.ts';
+import { useNavigate } from 'react-router-dom';
+import { Produto } from '../../DTOs/Produto';
 import './produtos.css';
 import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import { useApi } from '../../Api/useApi.tsx';
-import { CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, Modal, Box } from '@mui/material';
 import ProductCard from '../Components/Cliente/CardProduto/CardADM.tsx';
 import { getProductsAxiosConfig, updateProductAxiosConfig } from '../../Api/ganajoClient.ts';
 import axios from 'axios';
+import EditProductForm from '../Components/Cliente/CardProduto/EditProductForm.tsx';
 
 const ProductsAdmin = () => {
   const { isLoading, data } = useApi<Produto[]>(getProductsAxiosConfig());
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
-  const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   
   const searchingHandleCallBack = useCallback((value: string) => {
@@ -31,22 +31,27 @@ const ProductsAdmin = () => {
 
   const handleEditProduct = (productId: number) => {
     const productToEdit = data?.find(p => p.id === productId) || null;
-    setEditingItemId(productId);
     setEditedProduct(productToEdit);
+    setIsModalOpen(true);
   };
 
   const handleSaveProduct = async (editedProduct: Produto) => {
     try {
       const response = await axios(updateProductAxiosConfig(editedProduct));
       console.log('Produto editado:', response.data);
-      setEditingItemId(null);
       setEditedProduct(null);
+      setIsModalOpen(false);
       // Atualiza a lista de produtos após a edição
       const updatedData = data?.map(p => (p.id === editedProduct.id ? editedProduct : p));
       setScreenItems(updatedData);
     } catch (error) {
       console.error('Erro ao editar o produto:', error);
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditedProduct(null);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,14 +79,26 @@ const ProductsAdmin = () => {
               key={m.id}
               product={m}
               onEdit={() => handleEditProduct(m.id)}
-              onSave={handleSaveProduct}
-              isEditing={editingItemId === m.id}
-              editedProduct={editedProduct}
-              onImageChange={handleImageChange}
             />
           ))
         }
       </div>
+      <Modal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="edit-form-container">
+          {editedProduct && (
+            <EditProductForm
+              product={editedProduct}
+              onSave={handleSaveProduct}
+              onClose={handleCloseModal}
+            />
+          )}
+        </Box>
+      </Modal>
     </div>
   );
 };
