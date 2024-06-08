@@ -27,15 +27,18 @@ const string PEDIDO_REALTIME = "PEDIDO_REALTIME";
 // ENDERECO DA APLICAÇÃO REACT (WEB)
 const string address = "http://localhost:3000";
 
+// ENDERECO FRONT (WEB)
+const string frontAddress = "https://ganajo.vercel.app";
+
 builder.Services.AddSignalR();
 builder.Services.AddScoped<GanajoDbContext>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: GANAJO_ORIGIN,
+    options.AddDefaultPolicy(
                       policy =>
                       {
-                          policy.WithOrigins(address)
+                          policy.WithOrigins(frontAddress)
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
@@ -44,8 +47,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseRouting()
-   .UseCors(GANAJO_ORIGIN);
+app.UseRouting();
+
+app.UseCors();
+
+app.UseAuthorization();
 
 app.MapHub<RealTimeHub>("/realtime");
 
