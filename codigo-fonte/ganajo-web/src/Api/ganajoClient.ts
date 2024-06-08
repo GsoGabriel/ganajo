@@ -31,7 +31,10 @@ export const BASE_URL_AUTH = getBaseUrlAuthApi();
 export function getProductsAxiosConfig(){
     return {
       method: 'GET',
-      url: `${BASE_URL}products`
+      url: `${BASE_URL}products` ,
+      headers: {
+        'Access-Control-Allow-Origin': '*', 
+      }
     }
 }
 
