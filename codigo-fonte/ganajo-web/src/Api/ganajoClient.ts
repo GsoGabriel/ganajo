@@ -9,7 +9,7 @@ import { StatusPedido } from "../DTOs/Status";
 import { StatisticsDTO } from './../DTOs/Statistics';
 import { FormaPagamento } from './../DTOs/FormaPagamento.ts';
 
-const isLocalTest = true;
+const isLocalTest = false;
 
 const getBaseUrl = () => {
   return isLocalTest ? 'https://localhost:7245/' : 'https://ganajoapi-s3e6uywyma-rj.a.run.app/'
