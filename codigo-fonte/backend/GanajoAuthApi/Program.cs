@@ -15,22 +15,28 @@ const string GANAJO_ORIGIN_AUTH = "ganajoOriginAuth";
 // ENDERECO DA APLICA��O REACT (WEB)
 const string address = "http://localhost:3000";
 
+// ENDERECO FRONT (WEB)
+const string frontAddress = "https://ganajo.vercel.app";
+
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy(name: GANAJO_ORIGIN_AUTH,
-					  policy =>
-					  {
-						  policy.WithOrigins(address)
-							.AllowAnyHeader()
-							.AllowAnyMethod()
-							.AllowCredentials();
-					  });
+    options.AddDefaultPolicy(
+                      policy =>
+                      {
+                          policy.WithOrigins(frontAddress)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                      });
 });
 
 var app = builder.Build();
 
-app.UseRouting()
-   .UseCors(GANAJO_ORIGIN_AUTH);
+app.UseRouting();
+
+app.UseCors();
+
+app.UseAuthorization();
 
 var ganajoMiniContext = new GanajoMiniDbContext();
 

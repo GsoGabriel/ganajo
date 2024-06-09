@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Produto } from '../../../../DTOs/Produto';
 import './edit.css';
 
-const isLocalTest = true;
+const isLocalTest = false;
 
 const getBaseUrl = () => {
   return isLocalTest ? 'https://localhost:7245/product' : 'https://ganajoapi-s3e6uywyma-rj.a.run.app/';
