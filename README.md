@@ -6,7 +6,7 @@
 
 `2024/01`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+O site está disponível em https://ganajo.vercel.app/
 
 ## Integrantes
  - Bruno de Melo Ruas
