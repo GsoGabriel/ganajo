@@ -28,7 +28,10 @@ const string PEDIDO_REALTIME = "PEDIDO_REALTIME";
 const string address = "http://localhost:3000";
 
 // ENDERECO FRONT (WEB)
-const string frontAddress = "https://ganajo.vercel.app";
+const string frontAddressVercel = "https://ganajo.vercel.app";
+
+// ENDERECO FRONT (WEB)
+const string frontAddress = "https://www.ganajo.com.br";
 
 builder.Services.AddSignalR();
 builder.Services.AddScoped<GanajoDbContext>();
@@ -38,7 +41,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
                       policy =>
                       {
-                          policy.WithOrigins(frontAddress)
+                          policy.WithOrigins(frontAddress, frontAddressVercel, address)
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
