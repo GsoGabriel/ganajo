@@ -8,7 +8,7 @@ O desenvolvimento do sistema de pedidos online para restaurantes seguirá uma ab
 | Ambiente | Plataforma | Link de Acesso |
 |----------|------------|----------------|
 | Repositório de código | GitHub | [Link GitLab](#) |
-| Gerenciamento do projeto | GitUhb Projects | [Ganajo](#) |
+| Gerenciamento do projeto | GitHub Projects | [Ganajo](#) |
 | Desenvolvimento da aplicação web | Site do Restaurante | [Link do Site](#) |
 
 ## Controle de Versão:
