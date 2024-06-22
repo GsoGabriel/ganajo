@@ -17,6 +17,7 @@ const ProductsAdmin = () => {
   const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
   const [deleteProduct, setDeleteProduct] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] = useState(false);
   const navigate = useNavigate();
   
   const searchingHandleCallBack = useCallback((value: string) => {
@@ -54,6 +55,10 @@ const ProductsAdmin = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditedProduct(null);
+  };
+
+  const handleCloseDeleteProductModal = () => {
+    setDeleteProduct(false);
   };
 
   const handleDeleteProduct = () => {
@@ -105,9 +110,16 @@ const ProductsAdmin = () => {
             />
           )}
         </Box>
+      </Modal>
+      <Modal
+        open={isDeleteProductModalOpen}
+        onClose={handleCloseDeleteProductModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
         <Box className="edit-form-container">
           {deleteProduct && (
-            <DeleteProductForm onClose={undefined} onDelete={undefined} />
+            <DeleteProductForm onClose={handleCloseDeleteProductModal} onDelete={undefined} />
           )}
         </Box>
       </Modal>
