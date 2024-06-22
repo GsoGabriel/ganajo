@@ -9,16 +9,21 @@ import ProductCard from '../Components/Cliente/CardProduto/CardADM.tsx';
 import { getProductsAxiosConfig, updateProductAxiosConfig } from '../../Api/ganajoClient.ts';
 import axios from 'axios';
 import EditProductForm from '../Components/Cliente/CardProduto/EditProductForm.tsx';
-import DeleteProductForm from '../Components/Cliente/CardProduto/DeleteProductForm.tsx';
 
 const ProductsAdmin = () => {
-  const { isLoading, data } = useApi<Produto[]>(getProductsAxiosConfig());
+  const [version, setVersion] = useState(0);
+  const { data, isLoading } = useApi<Produto[]>({
+    ...getProductsAxiosConfig(),
+    params: { version }, // Passando a versão como parâmetro
+  });
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
-  const [deleteProduct, setDeleteProduct] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const refreshData = () => {
+    setVersion(version + 1); // Incrementar a versão para forçar a atualização
+  };
   
   const searchingHandleCallBack = useCallback((value: string) => {
     setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
@@ -45,6 +50,7 @@ const ProductsAdmin = () => {
       setEditedProduct(null);
       setIsModalOpen(false);
       // Atualiza a lista de produtos após a edição
+      refreshData();
       const updatedData = data?.map(p => (p.id === editedProduct.id ? editedProduct : p));
       setScreenItems(updatedData);
     } catch (error) {
