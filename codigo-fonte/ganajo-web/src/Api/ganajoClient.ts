@@ -44,8 +44,8 @@ export function getProductAxiosConfig(id : number){
 
 export function updateProductAxiosConfig(product: Produto): AxiosRequestConfig {
   return {
-    method: 'PUT',
-    url: `${BASE_URL}products/${product.id}`,
+    method: 'POST',
+    url: `${BASE_URL}product`,
     data: product
   };
 }
@@ -57,10 +57,10 @@ export const postProductAxiosConfig = async (addProductData: Produto) => {
       url: `${BASE_URL}product/`,
       data: addProductData
     };
-    const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
+    const response: AxiosResponse<Produto> = await axios(options?.url ?? '', options);
     return response.data;
   } catch(error) {
-    throw new Error('Erro ao criar bairro');
+    throw new Error('Erro ao criar produto');
   }
 }
 
