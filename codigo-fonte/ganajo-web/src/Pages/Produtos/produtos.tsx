@@ -57,14 +57,6 @@ const ProductsAdmin = () => {
     setEditedProduct(null);
   };
 
-  const handleCloseDeleteProductModal = () => {
-    setDeleteProduct(false);
-  };
-
-  const handleDeleteProduct = () => {
-    setDeleteProduct(true);
-  };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Implementar lógica para lidar com a mudança de imagem
   };
@@ -106,20 +98,7 @@ const ProductsAdmin = () => {
               product={editedProduct}
               onSave={handleSaveProduct}
               onClose={handleCloseModal}
-              onDelete={handleDeleteProduct}
             />
-          )}
-        </Box>
-      </Modal>
-      <Modal
-        open={isDeleteProductModalOpen}
-        onClose={handleCloseDeleteProductModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="edit-form-container">
-          {deleteProduct && (
-            <DeleteProductForm onClose={handleCloseDeleteProductModal} onDelete={undefined} />
           )}
         </Box>
       </Modal>
