@@ -64,7 +64,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
 
   const saveEditedProduct = async () => {
     try {
-      const response = updateProductAxiosConfig(editedProduct);
+      const response = await axios(updateProductAxiosConfig(editedProduct));
       onSave(response.data);
       onClose();
       toast.success('Produto atualizado com sucesso!', { autoClose: 2000 });
