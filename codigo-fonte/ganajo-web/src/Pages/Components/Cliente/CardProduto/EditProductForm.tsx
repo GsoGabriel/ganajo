@@ -5,6 +5,7 @@ import { NumericFormat, NumericFormatProps } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { Produto } from '../../../../DTOs/Produto';
 import './edit.css';
+import { updateProductAxiosConfig } from '../../../../Api/ganajoClient';
 
 const isLocalTest = false;
 
@@ -63,8 +64,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
 
   const saveEditedProduct = async () => {
     try {
-      const baseUrl = getBaseUrl();
-      const response = await axios.put(`${baseUrl}/${product.id}`, editedProduct);
+      const response = updateProductAxiosConfig(editedProduct);
       onSave(response.data);
       onClose();
       toast.success('Produto atualizado com sucesso!', { autoClose: 2000 });
