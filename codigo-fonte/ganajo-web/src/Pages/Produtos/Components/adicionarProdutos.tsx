@@ -10,8 +10,8 @@ import Button from "@mui/material/Button";
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { postProductAxiosConfig } from "../../../Api/ganajoClient";
-import { Produto } from "../../../DTOs/Produto";
+import { postProductAxiosConfig } from "../../../Api/ganajoClient.ts";
+import { Produto } from "../../../DTOs/Produto.ts";
 
 interface CustomProps {
     onChange: (event: { target: { name: string; value: string } }) => void;
