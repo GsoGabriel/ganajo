@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from './Layout/Layout.tsx';
 import Home from './Pages/Home/Home.tsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import Contato from './Pages/Contato/Contato.tsx';
 import BairrosdeEntrega from './Pages/BairrosDeEntrega/bairrosdeentrega.tsx';
 import MeusPedidos from './Pages/MeusPedidos/MeusPedidos.tsx';
 import Carrinho from './Pages/CarrinhoCompras/CarrinhoComponent.tsx';
@@ -25,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/homeAdmin" element={<MeusPedidos isAdmin={admin !== undefined}/>}/>
             <Route path="/" element={<Home />}/>
+            <Route path="/contato" element={<Contato />}/>
             <Route path="/bairrosdeentrega" element={<BairrosdeEntrega/>} />
             <Route path="/pedidoformulario" element={<PedidoFullComponent/>} />
             <Route path="/Carrinho" element={<Carrinho />} />
