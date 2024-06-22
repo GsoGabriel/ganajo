@@ -6,7 +6,7 @@
 
 `2024/01`
 
-O site está disponível em https://ganajo.vercel.app/
+O site está disponível em https://ganajo.com.br/
 
 ## Integrantes
  - Bruno de Melo Ruas
