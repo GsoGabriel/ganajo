@@ -50,6 +50,20 @@ export function updateProductAxiosConfig(product: Produto): AxiosRequestConfig {
   };
 }
 
+export const postProductAxiosConfig = async (addProductData: Produto) => {
+  try {
+    const options = {
+      method: 'POST',
+      url: `${BASE_URL}product/`,
+      data: addProductData
+    };
+    const response: AxiosResponse<Bairro> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    throw new Error('Erro ao criar bairro');
+  }
+}
+
 // BAIRROS AREA
 export const getBairrosAxiosConfig = () => {
   return {

@@ -2,6 +2,7 @@ import { HubConnection, HubConnectionBuilder, HubConnectionState, IHttpConnectio
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PedidoDTO } from "../DTOs/Pedido";
 import { Admin } from "../DTOs/Admin";
+import { getHubUrl } from "./ganajoClient.ts";
 
 export const setupSignalRConnection = async (connectionHub: string) => {
   const options : IHttpConnectionOptions = {
@@ -35,7 +36,7 @@ export interface GanajoRealTimeProps {
 }
 
 export const useGanajoRealTime = ({pedidoCallBack} : GanajoRealTimeProps) => {
-  const connexaRealTimeAddress = "https://localhost:7245/realtime";
+  const connexaRealTimeAddress = getHubUrl();
   const pedidoRealTimeHub = "PEDIDO_REALTIME";
   const connecting = useRef(false);
   const delaySeconds = useRef(10);

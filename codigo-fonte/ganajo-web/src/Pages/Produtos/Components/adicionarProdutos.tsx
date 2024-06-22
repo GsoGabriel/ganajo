@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { postProductAxiosConfig } from "../../../Api/ganajoClient.ts";
+import { Produto } from "../../../DTOs/Produto.ts";
 
 interface CustomProps {
     onChange: (event: { target: { name: string; value: string } }) => void;
@@ -55,6 +57,15 @@ export default function ProductForm() {
         categoria: ''
     });
 
+    const productData: Produto = {
+      nome: formData.nome,
+      descricao: formData.descricao,
+      valor: formData.valor,
+      enderecoImagem: formData.enderecoImagem,
+      usuarioId: formData.usuarioId,
+      categoria: formData.categoria
+    }
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         let numericValue;
@@ -77,16 +88,9 @@ export default function ProductForm() {
     // }
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const url = 'https://localhost:7245/product';
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-          });
-          if (response.ok) {
+          const response = postProductAxiosConfig(productData);
+          if (await response) {
             toast.success("Produto adicionado com sucesso!")
             setFormData({
                 nome: '',
