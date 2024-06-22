@@ -5,7 +5,7 @@ import { NumericFormat, NumericFormatProps } from 'react-number-format';
 import { useNavigate } from 'react-router-dom';
 import { Produto } from '../../../../DTOs/Produto';
 import './edit.css';
-import { updateProductAxiosConfig } from '../../../../Api/ganajoClient';
+import { updateProductAxiosConfig } from '../../../../Api/ganajoClient.ts';
 
 const isLocalTest = false;
 
