@@ -9,11 +9,13 @@ import ProductCard from '../Components/Cliente/CardProduto/CardADM.tsx';
 import { getProductsAxiosConfig, updateProductAxiosConfig } from '../../Api/ganajoClient.ts';
 import axios from 'axios';
 import EditProductForm from '../Components/Cliente/CardProduto/EditProductForm.tsx';
+import DeleteProductForm from '../Components/Cliente/CardProduto/DeleteProductForm.tsx';
 
 const ProductsAdmin = () => {
   const { isLoading, data } = useApi<Produto[]>(getProductsAxiosConfig());
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
+  const [deleteProduct, setDeleteProduct] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   
@@ -52,6 +54,10 @@ const ProductsAdmin = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditedProduct(null);
+  };
+
+  const handleDeleteProduct = () => {
+    setDeleteProduct(true);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +101,13 @@ const ProductsAdmin = () => {
               product={editedProduct}
               onSave={handleSaveProduct}
               onClose={handleCloseModal}
+              onDelete={handleDeleteProduct}
             />
+          )}
+        </Box>
+        <Box className="edit-form-container">
+          {deleteProduct && (
+            <DeleteProductForm onClose={undefined} onDelete={undefined} />
           )}
         </Box>
       </Modal>

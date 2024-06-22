@@ -45,7 +45,7 @@ const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
     },
 );
 
-const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onClose }) => {
+const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onClose, onDelete }) => {
   const navigate = useNavigate();
 
   const [editedProduct, setEditedProduct] = useState<Produto>({ ...product });
@@ -103,6 +103,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
           <input type="text" id="enderecoImagem" name="enderecoImagem" value={editedProduct.enderecoImagem} onChange={handleInputChange} />
         </div>
         <button type="submit">Salvar</button>
+        <button onClick={onDelete}>Deletar</button>
         <button onClick={onClose}>Cancelar</button>
       </form>
     </div>
