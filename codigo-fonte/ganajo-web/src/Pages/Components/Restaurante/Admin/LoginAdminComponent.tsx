@@ -36,7 +36,7 @@ function FormLoginAdminComponent() {
   return (
     <Form className='l-form-login mb-3' onSubmit={handleSubmit}>
       <div className='l-logo  mb-4'>
-        <h2 className="ganajo-title mb-4">Ganajo Admin</h2>
+        <h2 className="ganajo-title mb-4">Ganajo</h2>
         <h4>Entrar</h4>
       </div>
       <Form.Group className="mb-3" controlId="formBasicEmail">
