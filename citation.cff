@@ -1,0 +1,26 @@
+message: Please cite this software using these metadata.
+title: Ganajo projeto extensão restaurante no rio de janeiro
+authors:
+  - family-names: de Melo Ruas
+    given-names: Bruno
+  - family-names: Menezes Soares
+    given-names: Diego
+  - family-names: da Silva Oliveira
+    given-names: Gabriel
+  - family-names: Célio Neves Silva
+    given-names: Lucas
+  - family-names: Gonçalves Duque
+    given-names: Marina
+  - family-names: da Silva Carneiro
+    given-names: Mikaela
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Carlos Oliveira Caetano
+    given-names: João
+keywords:
+  - projganajo
+  - ganajo
+  - restaurante
+repository-code: https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo
+version: 1.0.0
+date-released: 2023-06-23
