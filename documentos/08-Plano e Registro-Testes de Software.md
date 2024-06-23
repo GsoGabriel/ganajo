@@ -1,4 +1,3 @@
-# Plano de Testes de Sofware
 ## RF-001: Apresentar o cardápio de forma clara e intuitiva
 
 ### Teste de clareza do cardápio
@@ -6,7 +5,8 @@
 *Objetivo:* Verificar se o cardápio é apresentado de forma clara e intuitiva.
 *Procedimento:* Acessar a página do cardápio e verificar se todos os itens são exibidos com nome, imagem e preço de forma organizada.
 *Resultado Esperado:* O usuário deve conseguir identificar rapidamente cada item do cardápio, com descrição, imagem e preço.
-![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/09f1ba27-1089-4fc7-86ac-2680b9dd180b)
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/1cafc850-11f0-4c05-a0f9-02b5ae6b4270)
+
 Resultado: Todos os itens foram atendidos.
 
 *Objetivo:* Avaliar a facilidade de navegação no cardápio.
@@ -39,11 +39,16 @@ Resultado: Há uma grande facilidade de adicionar os produtos ao carrinho.
 *Objetivo:* Verificar se o usuário pode escolher entre entrega e retirada.
 *Procedimento:* Simular um pedido e selecionar as opções de entrega e retirada.
 *Resultado Esperado:* O sistema deve permitir a seleção da opção desejada e continuar com o processo de pedido sem problemas.
-####FALTA####
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/2980fbf4-492f-4538-9d0f-5802954c3ad2)
+Resultado: Existe a opção de retirar na loja na hora de selecionar o bairro de entrega.
+
 *Objetivo:* Garantir que a escolha do método de recebimento é confirmada.
 *Procedimento:* Finalizar o pedido com cada método (entrega e retirada) e verificar se a confirmação reflete a escolha correta.
 *Resultado Esperado:* A confirmação do pedido deve mostrar claramente se o pedido é para entrega ou retirada.
-####FALTA####
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/9347fe5e-45b6-4a22-8399-85117063fa83)
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/af14ea05-eee7-4318-a69e-a616b9d43517)
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/25d25608-eacc-4252-960d-c47e63cd56fe)
+Resultado: 
 
 ## RF-004: Inserir endereço para entrega
 
@@ -86,16 +91,21 @@ Resultado: É possivel de forma visualizar todas as formas de pagamentos disponi
 *Procedimento:* Adicionar um novo item ao cardápio e verificar se é exibido corretamente.
 *Resultado Esperado:* O novo item deve aparecer no cardápio com todas as informações corretas.
 
-![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/b2d1e6f0-fedf-47cd-b8d4-2393ca3d9d34)
-![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/9b6fc2b6-f938-49c0-9eff-b01570225a66)
-![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/2c880c16-8deb-4b59-bda2-9d8d66f644cc)
-####FALTA####
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/164cc4e9-b020-4bb1-b83f-9460226f4ad3)
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/f0e8be7e-1c51-464c-89ef-257487b631f1)
+
 
 *Objetivo:* Avaliar a funcionalidade de edição e remoção de itens.
 *Procedimento:* Editar um item existente e remover outro item do cardápio.
 *Resultado Esperado:* As edições devem ser salvas corretamente e o item removido deve desaparecer do cardápio.
-![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/42eab03c-7387-4ba6-a01c-a2fde46e890e)
-####FALTA####
+**Edição de preço**
+
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/55b7f80b-336f-4bb2-8ad6-ca2db7531b99)
+
+**Exclusão**
+
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/9cc4fe9f-e86b-4185-bfae-a5195d3f6c51)
+
 
 ## RF-007: Incluir informações detalhadas sobre cada produto
 
@@ -104,14 +114,16 @@ Resultado: É possivel de forma visualizar todas as formas de pagamentos disponi
 *Objetivo:* Verificar a exibição de informações detalhadas dos produtos.
 *Procedimento:* Selecionar um item do cardápio e visualizar suas informações detalhadas.
 *Resultado Esperado:* As informações devem incluir descrição, ingredientes, preço e qualquer outra informação relevante.
+
 ![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/89ef3be2-d182-4500-9204-f89144b6f582)
 Resultado: Os produtos possuem todas as descrições ao ser clicado.
 
 *Objetivo:* Garantir que as informações dos produtos podem ser atualizadas.
 *Procedimento:* Editar as informações detalhadas de um produto e verificar se as mudanças são refletidas corretamente.
 *Resultado Esperado:* As atualizações devem ser exibidas corretamente na visualização do produto.
-![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/a51e170d-2b18-49e4-9a90-ceb91394549b)
-####FALTA####
+**Edição de preço**
+
+![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/55b7f80b-336f-4bb2-8ad6-ca2db7531b99)
 
 ## RF-008: Centralizar recebimento e processamento de pedidos
 
@@ -146,67 +158,3 @@ Resultado: Dados dos clientes salvos
 ![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2024-1-e5-proj-empext-t4-pmv-ads-2024-1-e5-projganajo/assets/100629069/203dc835-4772-4bf7-87f5-2f96579e7bfb)
 Resultado: Como já havia incluido um pedido e fiz meu cadastro anteriormente. Foi possivel somente conferir os dados para enviar um novo pedido.
 
-
-
-Objetivo do Teste: Teste de Usabilidade
-
-Tarefa: Avaliar a facilidade de uso do aplicativo, identificando possíveis melhorias na interface.
-Métricas: Feedback dos usuários, identificação de áreas de confusão.
-# Registro de Testes de Sofware
-Os registros dos testes serão lançados posteriormente a medida que forem implementados.
-# Plano de Testes de Usabiliade
-
-Objetivo do Teste: Realizar um Pedido
-
-Tarefa: O participante deve selecionar um restaurante, escolher itens do menu e efetuar um pedido.
-Métricas: Tempo para efetuar o pedido, facilidade na seleção de itens, compreensão do processo.
-
-Objetivo do Teste: Acompanhamento do Pedido
-
-Tarefa: Após fazer um pedido, o participante deve acompanhar o status do pedido.
-Métricas: Facilidade em encontrar a seção de acompanhamento, clareza nas informações de status.
-
-Objetivo do Teste: Resolução de Problemas durante o Pedido
-
-Tarefa: Simular um problema durante a realização do pedido e avaliar a capacidade do participante em resolver.
-Métricas: Eficiência na resolução de problemas, compreensão das opções de suporte disponíveis.
-
-Objetivo do Teste: Feedback sobre a Interface
-
-Tarefa: Coletar feedback geral sobre a usabilidade do aplicativo, identificando pontos positivos e áreas de melhoria.
-Métricas: Satisfação geral, sugestões de melhorias, pontos destacados.
-
-Objetivo do Teste: Teste de Performance
-
-Tarefa: Realizar várias ações simultâneas, como navegar pelo menu enquanto faz um pedido, para avaliar a performance do aplicativo.
-Métricas: Tempo de resposta do aplicativo, estabilidade durante ações simultâneas.
-
-Objetivo do Teste: Acessibilidade
-
-Tarefa: Avaliar a acessibilidade do aplicativo para usuários com deficiências visuais ou motoras.
-Métricas: Facilidade de uso com recursos de acessibilidade ativados, identificação de potenciais obstáculos.
-
-Objetivo do Teste: Teste de Compatibilidade
-
-Tarefa: Testar o aplicativo em diferentes dispositivos (smartphones e tablets) e avaliar a consistência da experiência do usuário.
-Métricas: Consistência visual e funcional em diferentes tamanhos de tela.
-
-Objetivo do Teste: Teste de Desempenho de Busca
-
-Tarefa: Utilizar a função de busca para encontrar itens específicos no menu.
-Métricas: Velocidade e precisão da função de busca.
-# Registro de Testes de Usabilidade
-Os registros de testes de usabilidade serão lançados à medida que as etapas de desenvolvimento forem completas.
-
-
-<!--
-# Planos de Testes de Software
-
-Apresente os cenários de testes utilizados na realização dos testes da sua aplicação. Escolha cenários de testes que demonstrem os requisitos sendo satisfeitos.
-
-Enumere quais cenários de testes foram selecionados para teste. Neste tópico o grupo deve detalhar quais funcionalidades avaliadas, o grupo de usuários que foi escolhido para participar do teste e as ferramentas utilizadas.
- 
-# Evidências de Testes de Software
-
-Apresente imagens e/ou vídeos que comprovam que um determinado teste foi executado, e o resultado esperado foi obtido. Normalmente são screenshots de telas, ou vídeos do software em funcionamento.
--->
