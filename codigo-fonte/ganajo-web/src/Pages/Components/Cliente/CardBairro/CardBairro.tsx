@@ -25,7 +25,7 @@ const CardBairro: React.FC<CardBairroProps> = ({ bairro, onEdit, onDelete }) => 
         <ListItemText primary={nomeLabel} />
         <ListItemText primary={precoLabel} />
         <ListItemText primary={cepLabel} />
-        <ListItemText primary={tempoEntrega} />
+        <ListItemText primary={bairro.bairro == "Retirar" ? `Tempo Entrega: 0 min` : tempoEntrega} />
         <IconButton aria-label="edit" onClick={onEdit}>
           <EditIcon />
         </IconButton>
