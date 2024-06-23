@@ -16,9 +16,7 @@ const ProductsAdmin = () => {
   const [produtos, setProdutos] = useState<Produto[]>(data ?? []);
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
-  const [deleteProduct, setDeleteProduct] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
