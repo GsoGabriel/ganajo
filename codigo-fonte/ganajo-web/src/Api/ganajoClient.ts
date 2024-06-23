@@ -64,6 +64,19 @@ export const postProductAxiosConfig = async (addProductData: Produto) => {
   }
 }
 
+export const deleteProductByIdAxiosConfig = async (idProduct: Number) => {
+  try {
+    const options = {
+      method: 'DELETE',
+      url: `${BASE_URL}product/${idProduct}?removido=true`
+    };
+    const response: AxiosResponse<Produto> = await axios(options?.url ?? '', options);
+    return response.data;
+  } catch(error) {
+    throw new Error('Erro no delete de produto.');
+  }
+}
+
 // BAIRROS AREA
 export const getBairrosAxiosConfig = () => {
   return {

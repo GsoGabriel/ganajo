@@ -79,13 +79,15 @@ const Bairros = () => {
         editadoData: currentDate.toISOString()
       }
 
-      const updateBairroData = async() => {
-        const _ = await postBairroAxiosConfig(bairroFormData);
+      if (editedBairroName !== "" || editedBairroCep !== "") {
+        const updateBairroData = async() => {
+          const _ = await postBairroAxiosConfig(bairroFormData);
+        }
+        updateBairroData();
+  
+        setBairros(bairros.concat(bairroFormData));
+        setScreenBairros(bairros.concat(bairroFormData));
       }
-      updateBairroData();
-
-      setBairros(bairros.concat(bairroFormData));
-      setScreenBairros(bairros.concat(bairroFormData));
     }
 
     resetEditedItens();

@@ -43,3 +43,19 @@
     background-color: #0056b3;
   }
   
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o botão Cancelar horizontalmente */
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between; /* Espaça os botões Salvar e Excluir */
+    width: 100%; /* Garante que o grupo ocupe a largura total do contêiner */
+    margin-bottom: 1rem; /* Espaço entre o grupo de botões e o botão Cancelar */
+  }
+  
+  .center-button {
+    align-self: center; /* Centraliza o botão Cancelar horizontalmente */
+  }

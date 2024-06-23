@@ -6,13 +6,14 @@ import SearchAppBar from '../Components/Inputs/InputSearch.tsx';
 import { useApi } from '../../Api/useApi.tsx';
 import { CircularProgress, Modal, Box } from '@mui/material';
 import ProductCard from '../Components/Cliente/CardProduto/CardADM.tsx';
-import { getProductsAxiosConfig, updateProductAxiosConfig } from '../../Api/ganajoClient.ts';
+import { getProductsAxiosConfig, updateProductAxiosConfig, deleteProductByIdAxiosConfig } from '../../Api/ganajoClient.ts';
 import axios from 'axios';
 import EditProductForm from '../Components/Cliente/CardProduto/EditProductForm.tsx';
-import DeleteProductForm from '../Components/Cliente/CardProduto/DeleteProductForm.tsx';
+import { toast } from 'react-toastify';
 
 const ProductsAdmin = () => {
   const { isLoading, data } = useApi<Produto[]>(getProductsAxiosConfig());
+  const [produtos, setProdutos] = useState<Produto[]>(data ?? []);
   const [screenItens, setScreenItems] = useState<Produto[] | undefined>([]);
   const [editedProduct, setEditedProduct] = useState<Produto | null>(null);
   const [deleteProduct, setDeleteProduct] = useState(false);
@@ -20,22 +21,38 @@ const ProductsAdmin = () => {
   const [isDeleteProductModalOpen, setIsDeleteProductModalOpen] = useState(false);
   const navigate = useNavigate();
   
-  const searchingHandleCallBack = useCallback((value: string) => {
-    setScreenItems(data?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
-  }, [data]);
-
   useEffect(() => {
+    setProdutos(data ?? []);
     setScreenItems(data ?? []);
   }, [data]);
+
+  const searchingHandleCallBack = useCallback((value: string) => {
+    setScreenItems(produtos?.filter(f => f.nome.toLowerCase().includes(value.toLowerCase()) || f.descricao.toLowerCase().includes(value.toLowerCase())));
+  }, [produtos]);
 
   const handleAddNewProduct = () => {
     navigate('/addProdutos');
   };
 
-  const handleEditProduct = (productId: number) => {
-    const productToEdit = data?.find(p => p.id === productId) || null;
+  const handleEditProduct = (productId: Number) => {
+    const productToEdit = produtos?.find(p => p.id === productId) || null;
     setEditedProduct(productToEdit);
     setIsModalOpen(true);
+  };
+
+  const handleDeleteProduct = async (productId: Number) => {
+    try {
+      const _ = await deleteProductByIdAxiosConfig(productId);
+      console.log('Produto excluído:');
+      setEditedProduct(null);
+      setIsModalOpen(false);
+      const updatedData = produtos?.filter(p => p.id !== productId);
+      setScreenItems(updatedData);
+      setProdutos(updatedData);
+      toast.success('Produto excluído com sucesso!', { autoClose: 2000 });
+    } catch (error) {
+      console.error('Erro ao deletar produto.')
+    }
   };
 
   const handleSaveProduct = async (editedProduct: Produto) => {
@@ -45,8 +62,9 @@ const ProductsAdmin = () => {
       setEditedProduct(null);
       setIsModalOpen(false);
       // Atualiza a lista de produtos após a edição
-      const updatedData = data?.map(p => (p.id === editedProduct.id ? editedProduct : p));
+      const updatedData = produtos?.map(p => (p.id === editedProduct.id ? editedProduct : p));
       setScreenItems(updatedData);
+      setProdutos(updatedData);
     } catch (error) {
       console.error('Erro ao editar o produto:', error);
     }
@@ -78,13 +96,12 @@ const ProductsAdmin = () => {
       <div className="products">
         {isLoading ? <CircularProgress size={'10rem'} /> :
           screenItens?.map(m => (
-            <ProductCard 
-              key={m.id}
-              product={m}
-              onEdit={() => handleEditProduct(m.id)}
-            />
-          ))
-        }
+            <ProductCard
+            key={m.id}
+            product={m}
+            onEdit={() => handleEditProduct(m.id)}
+          />
+        ))}
       </div>
       <Modal
         open={isModalOpen}
@@ -98,6 +115,7 @@ const ProductsAdmin = () => {
               product={editedProduct}
               onSave={handleSaveProduct}
               onClose={handleCloseModal}
+              onDelete={() => handleDeleteProduct(editedProduct.id)}
             />
           )}
         </Box>
