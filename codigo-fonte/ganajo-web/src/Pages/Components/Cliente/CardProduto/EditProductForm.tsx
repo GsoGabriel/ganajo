@@ -17,6 +17,7 @@ interface EditProductFormProps {
   product: Produto;
   onSave: (editedProduct: Produto) => void;
   onClose: () => void;
+  onDelete: () => void;
 }
 
 const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
@@ -45,7 +46,7 @@ const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
     },
 );
 
-const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onClose }) => {
+const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onClose, onDelete }) => {
   const navigate = useNavigate();
 
   const [editedProduct, setEditedProduct] = useState<Produto>({ ...product });
@@ -73,6 +74,11 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
       toast.error('Erro ao salvar alterações.');
     }
   };
+
+  const handleDelete = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onDelete();
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -102,8 +108,13 @@ const EditProductForm: React.FC<EditProductFormProps> = ({ product, onSave, onCl
           <label htmlFor="enderecoImagem">Endereço da Imagem:</label>
           <input type="text" id="enderecoImagem" name="enderecoImagem" value={editedProduct.enderecoImagem} onChange={handleInputChange} />
         </div>
-        <button type="submit">Salvar</button>
-        <button onClick={onClose}>Cancelar</button>
+        <div className="button-container">
+        <div className="button-group">
+          <button type="submit">Salvar</button>
+          <button onClick={handleDelete}>Excluir</button>
+        </div>
+        <button className="center-button" onClick={onClose}>Cancelar</button>
+      </div>
       </form>
     </div>
   );
